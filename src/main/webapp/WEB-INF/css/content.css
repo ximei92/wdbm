@@ -1,0 +1,87 @@
+@charset "UTF-8";
+
+/********************** inventory check *********************/
+/* pw */
+.pw-p {
+    font-size: 12px;
+    letter-spacing: -1px;
+    color: #7E8299;
+    text-indent: -9px;
+    padding-left: 9px;
+    padding-top: 16px;
+    line-height: 20px;
+}
+.alert-red {
+    font-size: 12px;
+    color: #FF5F5F;
+    background: url('../images/ico_info_alarm.png') no-repeat left center;
+    padding-left: 15px;
+}
+.cont-box .bbs {
+    padding: 0 30px;
+}
+
+.prd-dd-inner {
+    width: 75%;
+    display: flex;
+    align-items: flex-start;
+    border: 1px solid #ebebeb;
+    border-radius: 4px;
+    padding: 15px 20px;
+}
+.prd-dd-inner li {
+    padding-right: 70px;
+}
+.prd-dd-inner li strong, 
+.prd-dd-inner li span {
+    display: block;
+    line-height: 24px;
+}
+.prd-dd-inner li strong {
+    font-weight: 700;
+}
+.add-wrap {
+    width: 100%;
+}
+.tobe-added {
+    border-top: 1px solid #E0E0E0;
+    border-bottom: 1px solid #E0E0E0;
+    margin: 16px 0 6px;
+    padding: 16px 0;
+}
+.tobe-added .added:not(:last-of-type) {
+    margin-bottom: 10px;
+}
+.dl-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border-top: 1px solid #D9D9D9;
+    padding-top: 17px;
+}
+.dl-buttons.line {
+    border-top: 1px solid #EFF2F5;
+}
+
+/* tb-prd-info */
+.tb-prd-info {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+.tb-prd-info.center {
+    justify-content: center;
+}
+.tb-prd-info span {
+    display: inline-block;
+    text-align: left;
+    letter-spacing: 0 !important;
+    min-width: 30px;
+    font-weight: 500;
+    margin-right: 5px;
+}
+.tb-prd-info span.color-green {
+    width: 120px;
+    margin-right: 0;
+}

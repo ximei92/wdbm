@@ -1,0 +1,374 @@
+@charset "UTF-8";
+
+/********************** inventory check *********************/
+/* pw */
+.pw-p {
+	font-size: 12px;
+	letter-spacing: -1px;
+	color: #7E8299;
+	text-indent: -9px;
+	padding-left: 9px;
+	padding-top: 16px;
+	line-height: 20px;
+}
+
+.alert-red {
+	font-size: 12px;
+	color: #FF5F5F;
+	background: url('../images/ico_info_alarm.png') no-repeat left center;
+	padding-left: 15px;
+}
+
+.cont-box .bbs {
+	padding: 0 30px;
+}
+
+.prd-dd-inner {
+	width: 75%;
+	display: flex;
+	align-items: flex-start;
+	border: 1px solid #ebebeb;
+	border-radius: 4px;
+	padding: 15px 20px;
+}
+
+.prd-dd-inner li {
+	padding-right: 70px;
+}
+
+.prd-dd-inner li strong,
+.prd-dd-inner li span {
+	display: block;
+	line-height: 24px;
+}
+
+.prd-dd-inner li strong {
+	font-weight: 700;
+}
+
+.add-wrap {
+	width: 100%;
+}
+
+.tobe-added {
+	border-top: 1px solid #F1F3F5;
+	border-bottom: 1px solid #F1F3F5;
+	margin: 16px 0 6px;
+	padding: 16px 0;
+}
+
+.tobe-added .added:not(:last-of-type) {
+	margin-bottom: 10px;
+}
+
+.tobe-added span {
+	display: inline-block;
+	padding-left: 10px;
+}
+
+.dl-buttons {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	border-top: 1px solid #E0E0E0;
+	padding-top: 17px;
+}
+
+.dl-buttons.line {
+	border-top: 1px solid #EFF2F5;
+}
+
+/* tb-prd-info */
+.tb-prd-info {
+	display: flex;
+	align-items: center;
+	width: 100%;
+}
+
+.tb-prd-info.center {
+	justify-content: center;
+	margin: 0 auto;
+}
+
+.tb-prd-info span {
+	display: inline-block;
+	text-align: left;
+	letter-spacing: 0 !important;
+	min-width: 30px;
+	font-weight: 500;
+	margin-right: 5px;
+}
+
+.tb-prd-info span.color-green {
+	width: 120px;
+	margin-right: 0;
+}
+
+.con-box-num {
+	display: inline-block;
+	border-radius: 6px;
+	background-color: #E9EDF5;
+	margin: 15px 0;
+	padding: 7px 10px 4px;
+}
+
+.con-box-num ul {
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+}
+
+.con-box-num strong {
+	display: block;
+	width: 130px;
+	margin: 0;
+	padding: 3px 0 5px;
+	line-height: 23px;
+	font-size: 14px;
+	color: #464E5F;
+	float: left;
+}
+
+.con-box-num ul li {
+	display: inline-block;
+	padding: 6px 12px 8px;
+	background-color: #F5F5F5;
+	border: 1px solid #C2C2C2;
+	font-size: 14px;
+	border-radius: 4px;
+	margin-right: 10px;
+}
+
+.con-box-num ul li:last-child {
+	margin-right: 0;
+}
+
+/* dashboard */
+.dashboard {
+	display: flex;
+	align-items: stretch;
+	flex-wrap: wrap;
+	gap: 30px;
+}
+
+.dashboard .inner {
+	width: calc(33.33333% - 20px);
+	background-color: #fff;
+	border-radius: 10px;
+	padding: 30px;
+}
+
+.dashboard .inner.btm {
+	width: 100%;
+}
+
+.dashboard .inner .title {
+	display: flex;
+	align-items: flex-end;
+	justify-content: space-between;
+	margin-bottom: 20px;
+}
+
+.dashboard .inner .title h3 {
+	height: 42px;
+	background-repeat: no-repeat;
+	background-position: bottom left;
+	font-size: 18px;
+	color: #000;
+	font-weight: 700;
+	padding: 17px 0 0 50px;
+}
+
+.dashboard .inner:first-of-type .title h3 {
+	background-image: url('../images/ico_dash_01.png');
+}
+
+.dashboard .inner:nth-of-type(2) .title h3 {
+	background-image: url('../images/ico_dash_02.png');
+}
+
+.dashboard .inner:nth-of-type(3) .title h3 {
+	background-image: url('../images/ico_dash_03.png');
+}
+
+.dashboard .inner:nth-of-type(4) .title h3 {
+	background-image: url('../images/ico_dash_04.png');
+}
+
+.dashboard .inner .title>a {
+	display: block;
+	background: url('../images/ico_more.png') no-repeat;
+	padding-left: 15px;
+	font-size: 12px;
+	color: #5E6278;
+}
+
+.b-list.sum tr th:last-of-type,
+.b-list.sum tr td:last-of-type {
+	border-left: 1px solid #3699FF;
+}
+
+.b-list.sum tr td:last-of-type {
+	background-color: #F7F7F7;
+	font-weight: 700;
+}
+
+.b-list.price tr td:first-of-type {
+	border-right: 1px solid #828282;
+}
+
+.b-list.price tr td:last-of-type {
+	border-left: 1px solid #828282;
+}
+
+.b-list.price tbody tr:last-of-type td {
+	border-bottom: 1px solid #3699FF;
+}
+
+.b-list.price2 tr td:first-of-type,
+.b-list.price2 tr td:nth-of-type(2) {
+	border-right: 1px solid #828282;
+}
+
+.b-list.price2 tr td:nth-of-type(6) {
+	border-left: 1px solid #828282;
+}
+
+.b-list.price2 tbody tr:last-of-type td {
+	border-bottom: 1px solid #3699FF;
+}
+
+
+/* alarm */
+.alarm {
+	padding: 0 30px;
+}
+
+.alarm-list>div,
+.alarm-list>div>.lft,
+.alarm-list>div>.rgt {
+	display: flex;
+	align-items: center;
+}
+
+.alarm-list>div {
+	background-color: #fff;
+	border: 1px solid #D7E1E9;
+	justify-content: space-between;
+	margin: 0;
+	margin-top: -1px;
+}
+
+.alarm-list>div .lft>i {
+	display: block;
+	width: 42px;
+	height: 42px;
+	background-position: center center;
+	background-repeat: no-repeat;
+}
+
+.alarm-list>div .lft>i.alarm-01 {
+	background-image: url('../images/ico_alarm_01.png');
+}
+
+.alarm-list>div .lft>i.alarm-02 {
+	background-image: url('../images/ico_alarm_02.png');
+}
+
+.alarm-list>div .lft>i.alarm-03 {
+	background-image: url('../images/ico_alarm_03.png');
+}
+
+.alarm-list>div .lft>i.alarm-04 {
+	background-image: url('../images/ico_alarm_04.png');
+}
+
+.alarm-list>div .lft>i.alarm-05 {
+	background-image: url('../images/ico_alarm_05.png');
+}
+
+.alarm-list>div .lft>i.alarm-06 {
+	background-image: url('../images/ico_alarm_06.png');
+}
+
+.alarm-list>div .lft>i.alarm-07 {
+	background-image: url('../images/ico_alarm_07.png');
+}
+
+.alarm-list>div .lft>i.alarm-08 {
+	background-image: url('../images/ico_alarm_08.png');
+}
+
+.alarm-list>div .lft strong {
+	color: #000;
+	font-size: 14px;
+	margin-left: 15px;
+}
+
+.alarm-list>div .rgt {
+	min-width: 350px
+}
+
+.alarm-list>div .rgt span {
+	display: block;
+	margin-right: 20px;
+	font-size: 14px;
+	color: #828282;
+}
+
+.alarm-list>div .rgt .uk-alert-close {
+	display: block;
+	right: 20px;
+	top: 17px;
+	width: 34px;
+	height: 34px;
+	background: url('../images/btn_del_ico.png') no-repeat center center;
+	opacity: 1;
+}
+
+.alarm-list>div .rgt .uk-alert-close svg {
+	display: none;
+}
+
+.b-list.hs th input {
+	vertical-align: middle;
+	margin-right: 3px;
+}
+
+.b-list.hs th {
+	font-size: 12px;
+	line-height: 17px;
+}
+
+.b-list.hs td {
+	padding: 3px 5px;
+	font-size: 12px;
+}
+
+.b-list.hs tr.blue td {
+	background: #EDF6FF;
+}
+
+.b-list.hs tr.red td {
+	background: #FFEEF0;
+}
+
+.indent-p {
+	color: #181C32;
+	padding: 10px 0 10px 19px;
+	text-indent: -19px;
+	line-height: 24px;
+}
+
+.cannotCh li {
+	display: flex;
+	align-items: center;
+	font-size: 14px;
+	line-height: 24px;
+	padding: 7px 0;
+}
+
+.cannotCh li p:first-of-type {
+	width: 60%;
+}

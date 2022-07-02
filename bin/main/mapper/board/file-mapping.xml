@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- FAQ SQL Mapper -->
+<mapper namespace="com.springbook.mapper.FileMapper">
+	
+	<insert id="insertFile" useGeneratedKeys="true" keyProperty="fileId" >
+		INSERT INTO FILE (
+			 ORIG_NM
+			,LOGI_NM
+			,LOGI_PATH
+			,EXT
+			,SIZE
+			,REG_DATE
+		)VALUES(
+			 #{origNm}
+			,#{pyscNm}
+			,#{pyscPath}
+			,#{fileExt}
+			,#{fileSize}
+			,NOW()
+		)
+	</insert>
+	
+	<!-- 파일 조회 -->
+	<select id="getFileInfo" resultType="Map">
+		SELECT
+			*
+		FROM
+			FILE
+		WHERE
+			FILE_ID = #{fileId}	
+	</select>
+	
+	<!-- 파일 논리삭제 -->
+	<update id="deleteFile">
+		UPDATE
+			FILE
+		SET
+			USEYN = 'N'
+		WHERE
+			FILE_ID = #{fileId}		
+	</update>
+	
+	<!-- 파일 조회 -->
+	<select id="getFileData" resultType="com.springbook.vo.FileVO" parameterType="java.lang.String">
+		SELECT
+			*
+		FROM
+			FILE
+		WHERE
+			FILE_ID = #{fileId}	
+	</select>
+	
+</mapper>
