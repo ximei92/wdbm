@@ -1,5 +1,6 @@
 package com.springbook.etc.service;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -89,9 +90,7 @@ public interface EtcService {
 
 	List<ProductDetailVO> getSafetyList(int i, int contentnum, String key);
 
-	int creditListCount(String keyword);
-
-	List<Map<String, Object>> getCreditList(int i, int contentnum, String keyword);
+	int creditListCount(String keyword, Date startDt, Date endDt);
 
 	List<MemberVO> memberList();
 
@@ -110,5 +109,11 @@ public interface EtcService {
 	int updateTotalDeposit(Map<String, Object> map);
 
 	int historyDelete(String string);
+
+	Map<String, String> searchDepositInfo(String idx);
+
+	int updateDepositHistory(Map<String, Object> map);
+
+	List<Map<String, Object>> getCreditList(int i, int contentnum, String keyword, Date startDt, Date endDt);
 
 }

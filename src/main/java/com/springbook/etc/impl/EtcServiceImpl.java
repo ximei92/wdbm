@@ -1,5 +1,6 @@
 package com.springbook.etc.impl;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -330,21 +331,15 @@ public class EtcServiceImpl implements EtcService {
 	}
 
 	@Override
-	public int creditListCount(String keyword) {
-		// TODO Auto-generated method stub
-		return etcMapper.creditListCount(keyword);
-	}
-
-	@Override
-	public List<Map<String, Object>> getCreditList(int i, int contentnum, String keyword) {
+	public int creditListCount(String keyword, Date startDt, Date endDt) {
 		// TODO Auto-generated method stub
 		Map<String,Object> map = new HashMap<String,Object>();
-		
-		map.put("i", i);
-		map.put("contentnum", contentnum);
+
 		map.put("keyword", keyword);
+		map.put("startDt", startDt);
+		map.put("endDt", endDt);
 		
-		return etcMapper.getCreditList(map);
+		return etcMapper.creditListCount(map);
 	}
 
 	@Override
@@ -405,6 +400,7 @@ public class EtcServiceImpl implements EtcService {
 	@Override
 	public int updateTotalDeposit(Map<String, Object> map) {
 		// TODO Auto-generated method stub
+		System.out.println("updateTotalDDDD===");
 		return etcMapper.updateTotalDeposit(map);
 	}
 
@@ -413,5 +409,33 @@ public class EtcServiceImpl implements EtcService {
 		// TODO Auto-generated method stub
 		return etcMapper.historyDelete(string);
 	}
+
+	@Override
+	public Map<String, String> searchDepositInfo(String idx) {
+		// TODO Auto-generated method stub
+		return etcMapper.searchDepositInfo(idx);
+	}
+
+	@Override
+	public int updateDepositHistory(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		System.out.println("updateTotalDDDD===++++++++++++++++++++++++++++");
+		return etcMapper.updateDepositHistory(map);
+	}
+
+	@Override
+	public List<Map<String, Object>> getCreditList(int i, int contentnum, String keyword, Date startDt, Date endDt) {
+		// TODO Auto-generated method stub
+		Map<String,Object> map = new HashMap<String,Object>();
+		
+		map.put("i", i);
+		map.put("contentnum", contentnum);
+		map.put("keyword", keyword);
+		map.put("startDt", startDt);
+		map.put("endDt", endDt);
+		
+		return etcMapper.getCreditList(map);
+	}
+
 
 }

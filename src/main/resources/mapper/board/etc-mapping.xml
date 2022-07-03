@@ -600,13 +600,19 @@
 	</select>
 	
 	<!--여신관리 개수조회-->
-	<select id="creditListCount" resultType="int" parameterType="java.lang.String">
+	<select id="creditListCount" resultType="int" parameterType="Map">
 		SELECT 
 		COUNT(*)
 		FROM
 		DEPOSIT_HISTORY
 		<if test= "keyword != null and !keyword.equals('')">
     	WHERE COMPANY_NM LIKE CONCAT("%",#{keyword},"%")
+   		</if>
+   		<if test= "keyword != null and !keyword.equals('') and !keyword.equals('') and startDt != null and !startDt.equals('') and endDt != null and !endDt.equals('')">
+    	AND DATE(DEP_DATE) BETWEEN #{startDt} AND #{endDt}
+   		</if>
+   		<if test= "keyword != null and keyword.equals('') and startDt != null and endDt != null">
+    	WHERE DATE(DEP_DATE) BETWEEN #{startDt} AND #{endDt}
    		</if>
 	</select>
 	
@@ -619,6 +625,12 @@
 		INNER JOIN MEMBER MEMBER ON MEMBER.COMPANY_NM = HISTORY.COMPANY_NM
 		<if test= "keyword != null and !keyword.equals('')">
     	WHERE HISTORY.COMPANY_NM LIKE CONCAT("%",#{keyword},"%")
+   		</if>
+   		<if test= "keyword != null and !keyword.equals('') and startDt != null and !startDt.equals('') and endDt != null and !endDt.equals('')">
+    	AND DATE(DEP_DATE) BETWEEN #{startDt} AND #{endDt}
+   		</if>
+   		<if test= "keyword != null and keyword.equals('') and startDt != null and endDt != null">
+    	WHERE DATE(DEP_DATE) BETWEEN #{startDt} AND #{endDt}
    		</if>
    		GROUP BY HISTORY.IDX
 		LIMIT #{i}, #{contentnum}
@@ -727,5 +739,23 @@
 	    WHERE
         IDX = ${list}
 	</delete>
-
+	
+	<!--여신관리 수정페이지 들어가기 -->
+	<select id="searchDepositInfo" resultType="map" parameterType="java.lang.String">
+		SELECT 
+		HISTORY.*, MEMBER.CREDIT_AMOUNT
+		FROM
+		DEPOSIT_HISTORY HISTORY
+		INNER JOIN MEMBER MEMBER ON MEMBER.COMPANY_NM = HISTORY.COMPANY_NM
+		WHERE 
+		IDX = #{idx}
+	</select>
+	
+	<!--입금액 업로드 -->
+	<update id="updateDepositHistory">
+		UPDATE
+		DEPOSIT_HISTORY
+		SET DEP_DATE = #{depDate} ,TOTAL_DEP = #{totalDeposit}, DEP_AMOUNT = #{depAmount} WHERE IDX = #{idx}
+	</update>
+	
 </mapper>

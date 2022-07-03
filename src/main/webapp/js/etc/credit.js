@@ -4,15 +4,29 @@ function historyList(idx){
   var contentnum = $("#contentnum option:selected").val();
   var type = $("#search_item").val();
   var keyword = $("#keyword").val();
+  var startDate = $("#startDate").val();
+  var endDate = $("#endDate").val();
+  var result = new Date(endDate);
+  	  result.setDate(result.getDate() + 1);
+  	  endDate = result.toISOString();
+  if(!startDate && endDate){
+	  alert('시작날짜를 입력해주세요.');
+	  return;
+  }
 
+  if(startDate && !endDate){
+	  alert('종료날짜를 입력해주세요.');
+	  return;
+  }
+  
   if(contentnum == 10){
-    location.href="creditList.do?pagenum="+pagenum+"&contentnum="+contentnum+"&keyword="+keyword;
+    location.href="creditList.do?pagenum="+pagenum+"&contentnum="+contentnum+"&keyword="+keyword+"&startDate="+startDate+"&endDate="+endDate;
 
   }else if(contentnum == 20){
-    location.href="creditList.do?pagenum="+pagenum+"&contentnum="+contentnum+"&keyword="+keyword;
+    location.href="creditList.do?pagenum="+pagenum+"&contentnum="+contentnum+"&keyword="+keyword+"&startDate="+startDate+"&endDate="+endDate;
 
   }else if(contentnum == 30){
-    location.href="creditList.do?pagenum="+pagenum+"&contentnum="+contentnum+"&keyword="+keyword;
+    location.href="creditList.do?pagenum="+pagenum+"&contentnum="+contentnum+"&keyword="+keyword+"&startDate="+startDate+"&endDate="+endDate;
   }
 }
 
@@ -44,6 +58,43 @@ function page(idx){
 	});	
 }
 
+function updateDeposit(){
+	var idx = $("#idx").val();
+	var depDate = $("#depDate").val();
+	var orginDep = $("#orginDep").val();
+	var depAmount = parseInt($("#depAmount").val().replace(",",""));
+	var totalDeposit = parseInt($("#totalDeposit").val().replace(",",""));
+	var companyNm = $("#compnayNm").val();
+	
+	changeAmount = depAmount - orginDep;
+	totalDeposit= totalDeposit + changeAmount;
+
+	if(!depDate){
+		alert("입금일을 입력해주세요");
+		return;
+	}
+	console.log(depAmount);
+	if(!depAmount){
+		alert("입금액을 입력해주세요");
+		return;
+	}
+	
+	$.ajax({
+		url: "updateDepositHistory.do",
+		data: {"idx":idx,"depDate":depDate,"depAmount":depAmount,"totalDeposit":totalDeposit,"companyNm":companyNm},
+		type: "POST",
+		success : function(data){
+			alert("등록되었습니다.");
+ 	    	location.href = "creditList.do";
+		},
+		error : function(){
+			alert("에러가 발생했습니다.");		
+		}
+	});		
+	
+	
+	
+}
 
 function selectCompany(){
 	var pagenum = document.getElementsByClassName("active")[0];
@@ -106,8 +157,6 @@ function searchCreditInfo(companyNm){
 		data: {"keyword":companyNm},
 		type: "POST",
 		success : function(data){
-			console.log(data.TOTAL_ORDER.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g,","));
-			console.log(data);
 			$("#compnayNm").val(companyNm);
 			$("#totalOrder").val(data.TOTAL_ORDER.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g,","));
 			$("#totalDeposit").val(data.TOTAL_DEPOSIT.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g,","));

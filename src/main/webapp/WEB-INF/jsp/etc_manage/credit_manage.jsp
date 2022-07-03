@@ -93,14 +93,12 @@
 					<div class="rows d-flex between">
 						<!-- search -->
 						<div class="board-search-box">
-							<form name="" method="post">
 								<input type="date" class="wd140p" id="startDate">
                                 <span class="txt"> ~ </span>
 								<input type="date" class="wd140p" id="endDate">
 								<i></i>
 								<input type="text" name="search_order" class="search-word" placeholder="Search" id="keyword">
-								<button class="bbs-search-btn" title="검색" onclick=searchHistory()>검색</button>
-							</form>
+								<button class="bbs-search-btn" title="검색" onclick=historyList()>검색</button>
 						</div>
 						<!-- button -->
 						<div class="d-flex right wd40 gap10">
@@ -142,8 +140,9 @@
 									<td><input type="checkbox" name="chk" value="${list[status.index]['IDX']}"></td>
 										<fmt:parseDate value="${list[status.index]['DEP_DATE']}" pattern="yyyy-MM-dd" var="parseDateTime" />
 										<fmt:formatDate value="${parseDateTime}" pattern="yyyy-MM-dd" var="depDate" />
-									<td>${depDate}</td>									
-									<td><a href="#" class="tit">${list[status.index]["COMPANY_NM"]}</a></td>
+									<td>${depDate}</td>
+									<c:set var ="idx" value="${list[status.index]['IDX']}"/>									
+									<td><a onclick="location.href='searchDepositInfo.do?idx=${idx}'"class="tit" >${list[status.index]["COMPANY_NM"]}</a></td>
 									<td><fmt:formatNumber value="${list[status.index]['DEP_AMOUNT']}" pattern="#,###" /></td>
 									<td><fmt:formatNumber value='${list[status.index]["CREDIT_AMOUNT"]}' pattern="#,###" /></td>
 									<td><fmt:formatNumber value='${list[status.index]["TOTAL_ORDER"]}' pattern="#,###" /></td>

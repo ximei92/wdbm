@@ -255,6 +255,7 @@
 									<dd>
 	                                    <input type="text" class="wd210p" disabled="disabled" value="${info.id}">
 	                                    <input type="hidden" name="id" id="id" value="${info.id}">
+	                                    <input type="hidden" name="idx" id="id" value="${info.idx}">	                                    
 	                                    <input type="hidden" id="checkId" value="Y">
 	                                    <button type="button" class="btn bg_color2 small" id="check_id_btn">중복확인</button>
 	                                </dd>

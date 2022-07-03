@@ -100,7 +100,7 @@ public interface EtcMapper {
 
 	List<ProductDetailVO> getSafetyList(Map<String, Object> map);
 
-	int creditListCount(String keyword);
+	int creditListCount(Map<String, Object> map);
 
 	List<Map<String, Object>> getCreditList(Map<String, Object> map);
 
@@ -121,5 +121,9 @@ public interface EtcMapper {
 	int updateTotalDeposit(Map<String, Object> map);
 
 	int historyDelete(String string);
+
+	Map<String, String> searchDepositInfo(String idx);
+
+	int updateDepositHistory(Map<String, Object> map);
 
 }

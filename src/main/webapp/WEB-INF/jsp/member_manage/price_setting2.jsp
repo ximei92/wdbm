@@ -37,7 +37,7 @@
                         <c:forEach items="${productNameList}" var="product" varStatus="status">                        
                             <li
                             <c:if test="${product eq keyword}">class="on"</c:if>>
-                            <a onclick="changeProduct('${product}')">${product}</a>
+                            <a onclick=changeProduct("${product}")>${product}</a>
                             </li>
                         </c:forEach>
                         </ul>
@@ -45,10 +45,11 @@
 
 					<!-- table -->
                     <!-- tab 사용시 <div class="bbs mt17 tab-box on"> 아래로 복사  -->
-
-					<div class="bbs mt17 tab-box on">
-						<table class="b-list">
-<%-- 							<c:if test="${product eq list[status.index]['PRODUCT_NM']}">		 --%>				
+                      
+					<div name="${keyword}Div" class="bbs mt17 tab-box on">
+					<c:forEach items="${productNameList}" var="product" varStatus="status">
+						<table class="b-list" name="${product}">
+							<c:if test="${product eq list[status.index]['PRODUCT_NM']}">						
 							<caption></caption>
 							<colgroup>
 								<col class="wd13">
@@ -72,7 +73,7 @@
 							</thead>
 							<tbody>
 							<c:forEach items="${list}" var="data" varStatus="status">
-<%-- 								<c:if test="${product eq list[status.index]['PRODUCT_NM']}">	 --%>
+								<c:if test="${product eq list[status.index]['PRODUCT_NM']}">	
 								<tr class="${list[status.index]['PRODUCT_NM']}" name="${list[status.index]['PRODUCT_NM']}">						
 									<td><input type="checkbox" name="chk" value="Y" >
 										<input type="hidden" name="id" value='${id}'>
@@ -83,11 +84,12 @@
 									<td>${list[status.index]["SIZE"]} (${list[status.index]["HEIGHT"]} x ${list[status.index]["WIDTH"]})</td>
 									<td><input type="text" class="wd100 txt-right" placeholder="0" name="price"> </td>
 								</tr>
-<%-- 								</c:if> --%>
+								</c:if>
 							</c:forEach>
-<%-- 							</c:if> --%>
+							</c:if>
 							</tbody>
 						</table>
+						</c:forEach>
 
 						<!-- pager -->
 						<div class="pager txt-right">
@@ -96,6 +98,7 @@
 						      <option value="20" <c:if test="${page.getContentnum() == 20 }">selected="selected"</c:if> >20 개</option>
 						      <option value="30" <c:if test="${page.getContentnum() == 30 }">selected="selected"</c:if> >30 개</option>
 						    </select>
+
 						    <c:if test="${page.prev}">
                     			<a class="arr prev" href="javascript:pricePage(${page.getStartPage()-1});">이전</a>
                   			</c:if>
@@ -107,6 +110,7 @@
                   			</c:if>                  			
 						</div>
 					</div>
+
 
                     <div class="dl-buttons line">
 						<button class="btn bg_color3 small wd120p">취소</button>

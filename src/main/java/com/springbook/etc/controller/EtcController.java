@@ -1,4 +1,7 @@
 package com.springbook.etc.controller;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -638,12 +641,15 @@ public class EtcController {
 	}
 	
 	@GetMapping("/creditList.do")    
-	public String creditList(Model model,String pagenum, String contentnum, String keyword) {
-		System.out.println("credList./d0pepasdf");
+	public String creditList(Model model,String pagenum, String contentnum, String keyword, String startDate, String endDate) {
+
 		Page pagemaker = new Page();
 		int cpagenum;
 		int ccontentnum;
-		
+		Date startDt = null;
+		Date endDt = null;
+		System.out.println(startDate);
+		System.out.println(endDate);
 		if(pagenum == null || pagenum.length() == 0){
 			cpagenum = 1;
 		} else {
@@ -655,8 +661,22 @@ public class EtcController {
 		} else {
 	        ccontentnum = Integer.parseInt(contentnum);	
 		}
+		
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
-		pagemaker.setTotalcount(etcService.creditListCount(keyword)); // mapper 전체 게시글 개수를 지정한다
+        try {
+    		if(startDate != null){
+    			startDt = formatter.parse(startDate);	
+    		}
+    		if(endDate != null){
+        		endDt = formatter.parse(endDate);	
+    		}
+    		
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        
+		pagemaker.setTotalcount(etcService.creditListCount(keyword,startDt,endDt)); // mapper 전체 게시글 개수를 지정한다
         pagemaker.setPagenum(cpagenum-1);   // 현재 페이지를 페이지 객체에 지정한다 -1 을 해야 쿼리에서 사용할수 있다
         pagemaker.setContentnum(ccontentnum); // 한 페이지에 몇개씩 게시글을 보여줄지 지정한다.
         pagemaker.setCurrentblock(cpagenum); // 현재 페이지 블록이 몇번인지 현재 페이지 번호를 통해서 지정한다.
@@ -667,15 +687,15 @@ public class EtcController {
         pagemaker.setEndPage(pagemaker.getLastblock(),pagemaker.getCurrentblock());
         //마지막 페이지를 마지막 페이지 블록과 현재 페이지 블록 번호로 정한다.
         if(ccontentnum == 10){//선택 게시글 수
-        	List<Map<String, Object>>  list = etcService.getCreditList(pagemaker.getPagenum()*10,pagemaker.getContentnum(),keyword);
-        	 System.out.println(list);
+        	List<Map<String, Object>>  list = etcService.getCreditList(pagemaker.getPagenum()*10,pagemaker.getContentnum(),keyword,startDt,endDt);
+        	System.out.println(list);
             model.addAttribute("list", list);
         }else if(ccontentnum == 20){
-        	List<Map<String, Object>>  list = etcService.getCreditList(pagemaker.getPagenum()*20,pagemaker.getContentnum(), keyword);
-        	 model.addAttribute("list", list);
+        	List<Map<String, Object>>  list = etcService.getCreditList(pagemaker.getPagenum()*20,pagemaker.getContentnum(), keyword,startDt,endDt);
+        	model.addAttribute("list", list);
         }else if(ccontentnum ==30){
-        	List<Map<String, Object>>  list = etcService.getCreditList(pagemaker.getPagenum()*30, pagemaker.getContentnum(), keyword);
-        	 model.addAttribute("list", list);
+        	List<Map<String, Object>>  list = etcService.getCreditList(pagemaker.getPagenum()*30, pagemaker.getContentnum(), keyword,startDt,endDt);
+        	model.addAttribute("list", list);
         }
         
          model.addAttribute("keyword", keyword);
@@ -862,7 +882,7 @@ public class EtcController {
 	public boolean addDepositHistory(String depAmount, String totalDeposit,String companyNm,String totalOrder,String depDate,String credit) {
 		Map<String,Object> map = new HashMap<String,Object>();
 		map.put("depAmount", depAmount.replace(",", ""));
-		map.put("totalDeposit", totalDeposit.replace(",", ""));
+		map.put("totalDeposit", Integer.parseInt(depAmount.replace(",", ""))+Integer.parseInt(totalDeposit.replace(",", "")));
 		map.put("companyNm", companyNm);
 		map.put("totalOrder", totalOrder.replace(",", ""));
 		map.put("depDate", depDate);
@@ -894,5 +914,44 @@ public class EtcController {
 		}
 		
 		return returnVal;
-	}	
+	}
+	
+	//여신관리 수정화면 정보
+	@GetMapping(value= "/searchDepositInfo.do")
+	public String searchDepositInfo(Model model, String idx) {
+		System.out.println(idx);
+		Map<String,String> map= etcService.searchDepositInfo(idx);
+		System.out.println(map);
+        model.addAttribute("list",map);
+
+		return "/etc_manage/deposit_regist";
+	}
+	
+	//여신관리 수정화면 정보
+	@PostMapping("/updateDepositHistory.do")
+	@ResponseBody
+	public boolean updateDepositHistory(Model model, int totalDeposit,String depDate,int depAmount, String idx, String companyNm) {
+		Map<String,Object> map = new HashMap<String,Object>();
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		
+        try {
+    		Date date = formatter.parse(depDate);
+    		map.put("depDate", date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        
+		map.put("depAmount", depAmount);
+		map.put("totalDeposit", totalDeposit);
+		map.put("companyNm", companyNm);
+		map.put("idx", idx);
+		//총 입금액에 추가된 입금액 계산
+		map.put("updateDepositInfo", totalDeposit);
+
+		int updateTotalDep = etcService.updateTotalDeposit(map);
+		int updateDepositHistory = etcService.updateDepositHistory(map);
+		boolean result = updateTotalDep == updateDepositHistory;
+		
+		return result;
+	}
 }

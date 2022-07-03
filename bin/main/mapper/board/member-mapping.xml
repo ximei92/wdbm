@@ -178,9 +178,9 @@
 			LEFT OUTER JOIN PRODUCT PRODUCT ON PRODUCT.PRODUCT_NM = THICKNESS.PRODUCT_NM
 		WHERE  
 		PRODUCT.DEL_YN = 'N'
-<!-- 		<if test= "keyword != null and !keyword.equals('')">
+ 		<if test= "keyword != null and !keyword.equals('')">
     	AND	PRODUCT.PRODUCT_NM = #{keyword}
-   		</if>    -->
+   		</if>
 		LIMIT #{i}, #{contentnum}
 	</select>
 	
@@ -227,5 +227,8 @@
 		(
 		#{companyNm}	
 		)
+		ON DUPLICATE KEY
+		UPDATE
+	    company_nm = #{companyNm}
 	</insert>
 </mapper>

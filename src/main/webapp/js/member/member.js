@@ -2,24 +2,54 @@ function detailSearch(){
 	var	type = $("#search_item").val();
 	var keyword = $("#keyword").val();
 	  
-	location.href="memberList.do?type="+type+"&keyword="+keyword	
+	location.href="memberList.do?type="+type+"&keyword="+keyword;
 }
 
 //가격설정 팝업
 function goPrice(){
-	window.open("priceSetting.do?id="+encodeURI(id),"제품별 단가설정","width=1300, height=800");
+	window.open("priceSetting.do?id="+encodeURI(id),"제품별 단가설정","width=1450, height=800");
 }
 
+//탭메뉴 제품 변경
 function changeProduct(product){
-	console.log(product);
-	var a = $("tbody tr");
-	for(var i = 0; i<a.length; i++){
-		if (a.className == product){
-			a.style.display ="block";
-		} else {
-			a.style.display ="none";
-		}
+
+	  var keyword = keyword;
+		$.ajax({
+			url: "choicePriceSetting.do",
+			data: {"keyword" : product},
+			type: "POST",
+		    dataType:"json",
+		    traditional:true,
+			success : function(data){
+				drawTable(data);
+			},
+			error : function(){
+				alert("에러가 발생했습니다.");		
+			}
+		});
+}
+
+//탭메뉴 결과테이블 그리기
+function drawTable(data){
+//	$("div.")
+	var keyword = data.list[0].PRODUCT_NM;
+	var div = document.getElementsByClassName("bbs mt17 tab-box")[0];
+		div.classList.add("on");
+		div = document.getElementsByClassName("bbs mt17 tab-box on")[0];
+	var tableDiv = $("tbody").empty();
+	
+	for(var i = 0 ; i<data.list.length; i++){
+		var tr = '<tr class="'+data.list[i].PRODUCT_NM+'" name="'+data.list[i].PRODUCT_NM+'">';
+		var td1= '<td><input type="checkbox" name="chk" value="Y"><input type="hidden" name="id" value='+data.list[i].ID+'>';
+		td1 += '<input type="hidden" name="productVal" value='+data.list[i].IDX+'></td>';
+		td1 += '<td>'+data.list[i].PRODUCT_CD+'</td>'; 
+		td1 += '<td>'+data.list[i].THICKNESS+'</td>'; 
+		td1 +='<td> '+ data.list[i].SIZE+ ' ('+data.list[i].HEIGHT +'x'+data.list[i].WIDTH+')</td>'; 
+		td1 += '<td><input type="text" class="wd100 txt-right" placeholder="0" name="price"> </td>'; 
+		 $("tbody").append(tr+td1+"</tr>");
 	}
+	
+
 }
 
 /*콤마작업관련 함수*/
@@ -81,16 +111,16 @@ function pricePage(idx, keyword){
 
 //제품별단가저장
 function savePrice(){
-//	$(".productCd").val();
+
 	var a = $("input[name=productVal]").val();
 	var price = $("input[name=price]").val();
-	
+	console.log(a);
 	var priceLength = $("input[name=price]").length;
 	//배열 생성
 	var arr = new Array(priceLength);
 	//배열에 값 주입
 	for(var i=0; i<priceLength; i++){
-//		var chekObj = document.getElementsByName("checkbox-test")
+		var chekObj = document.getElementsByName("checkbox-test")
 		var priceVal = ", PRICE="+$("input[name=price]").eq(i).val() +"}";
 		var checkVal = '';
 		var idVal = ", ID="+$("input[name=id]").eq(i).val();
@@ -102,9 +132,9 @@ function savePrice(){
 		
 		var replace = checkVal + idVal + priceVal;
 		arr[i] = $("input[name=productVal]").eq(i).val().replace("}", replace).replaceAll("=",":");
-
     }
-	console.log(arr);
+	
+	
 	$.ajax({
 		url: "addPrice.do",
 		data: {"list" : arr},

@@ -1,5 +1,7 @@
 package com.springbook.member.controller;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -45,10 +47,14 @@ public class MemberController {
 	@PostMapping("/addMember.do")
 	@ResponseBody
 	public int addMember(MemberVO vo) {
-//		vo.setCreditAmount(vo.getCreditAmount().replace(",", ""));
+		System.out.println("들어옴");
+		System.out.println(vo.getRole().equals("1"));
+		System.out.println(vo.getRole());
+		vo.setCreditAmount(vo.getCreditAmount().replace(",", ""));
 		int result = memberService.insertMember(vo);
-		if(vo.getRole().equals('1')){
+		if(vo.getRole().equals("1")){
 			//거래처일경우 초기 여신정보 넣어주기
+			System.out.println("initmoneyinfo넣기!");
 			memberService.initMoneyInfo(vo);
 		}
 		return result;
@@ -172,6 +178,60 @@ public class MemberController {
          
 		return "member_manage/price_setting";
 	}
+
+	@PostMapping(value= "/choicePriceSetting.do")
+	@ResponseBody
+	public Map<String, Object> choicePriceSetting(String pagenum, String contentnum, String keyword) {
+		Page pagemaker = new Page();
+		int cpagenum;
+		int ccontentnum;
+		Map<String,Object> map = new HashMap<String,Object>();
+//		if(keyword == null || keyword.length() == 0){
+//			List<String> productNameList = memberService.getProductNameList();
+//
+//			String[] list = productNameList.toString().split(",");
+//			keyword = list[0].replace("[", "");
+//		}
+
+		if(pagenum == null || pagenum.length() == 0){
+			cpagenum = 1;
+		} else {
+	        cpagenum = Integer.parseInt(pagenum);		
+		}
+
+		if(contentnum == null || contentnum.length() == 0){
+			ccontentnum = 10;
+		} else {
+	        ccontentnum = Integer.parseInt(contentnum);	
+		}
+
+		System.out.println(keyword+"popupkeyword");
+		pagemaker.setTotalcount(memberService.typeProductListCount(keyword)); // mapper 전체 게시글 개수를 지정한다
+        pagemaker.setPagenum(cpagenum-1);   // 현재 페이지를 페이지 객체에 지정한다 -1 을 해야 쿼리에서 사용할수 있다
+        pagemaker.setContentnum(ccontentnum); // 한 페이지에 몇개씩 게시글을 보여줄지 지정한다.
+        pagemaker.setCurrentblock(cpagenum); // 현재 페이지 블록이 몇번인지 현재 페이지 번호를 통해서 지정한다.
+        pagemaker.setLastblock(pagemaker.getTotalcount()); // 마지막 블록 번호를 전체 게시글 수를 통해서 정한다.
+
+        pagemaker.prevnext(cpagenum);//현재 페이지 번호로 화살표를 나타낼지 정한다.
+        pagemaker.setStartPage(pagemaker.getCurrentblock()); // 시작 페이지를 페이지 블록번호로 정한다.
+        pagemaker.setEndPage(pagemaker.getLastblock(),pagemaker.getCurrentblock());
+        //마지막 페이지를 마지막 페이지 블록과 현재 페이지 블록 번호로 정한다.
+        if(ccontentnum == 10){//선택 게시글 수
+        	List<MemberVO> list = memberService.getTypeProductList(pagemaker.getPagenum()*10,pagemaker.getContentnum(),keyword);
+    		map.put("list", list);
+    		System.out.println(list);
+        }else if(ccontentnum == 20){
+        	List<MemberVO> list = memberService.getTypeProductList(pagemaker.getPagenum()*20,pagemaker.getContentnum(),keyword);
+        	map.put("list", list);
+        }else if(ccontentnum ==30){
+        	List<MemberVO> list = memberService.getTypeProductList(pagemaker.getPagenum()*30, pagemaker.getContentnum(),keyword);
+        	map.put("list", list);
+        }
+		map.put("page", pagemaker);
+
+         
+		return map;
+	}
 	
 	/*사용자별 제품 가격설정*/
 	@PostMapping("/addPrice.do")
@@ -189,7 +249,6 @@ public class MemberController {
 		if(result != list.length){
 			returnVal = 1;
 		}
-		
 		return returnVal;
 	}
 	

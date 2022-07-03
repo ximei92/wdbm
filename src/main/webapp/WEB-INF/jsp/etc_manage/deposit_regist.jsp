@@ -89,6 +89,8 @@
 		<div id="container">
 			<h2 class="normal">여신 관리</h2>
 			<div id="content">
+			
+				<c:if test="${empty list}">			
 				<!-- view -->
 				<div class="cont-box pt19">
 					<div class="h3-title blue">
@@ -132,6 +134,65 @@
 						<button class="btn bg_color1 small wd120p" onclick=addDeposit()>등록</button>
 					</div>
 				</div>
+				</c:if>
+				
+                <c:if test="${!empty list}">
+<%--                 <c:forEach items="${list}" var="list" varStatus="status">	 --%>			
+				<!-- view -->
+				<div class="cont-box pt19">
+					<div class="h3-title blue">
+						<h3 class="normal"><i class="s-add"></i>입금 등록</h3>
+					</div>
+
+					<article class="inner-1">
+                        <dl class="row col-2">
+                            <dt>거래처 검색<i class="essen"> *</i></dt>
+                            <dd>
+                        	<input type="hidden" value="${list['DEP_AMOUNT']}" id="orginDep">                            	
+                            	<input type="hidden" id="idx" value="${list['IDX']}">
+								<input type="text" class="disable wd310p" placeholder="회사를 검색해주세요." id="compnayNm"
+								value="${list['COMPANY_NM']}">
+                                <button class="btn bg_color2 small" onclick="alert('거래처는 수정할 수 없습니다.')">거래처 검색</button>
+							</dd>
+                        </dl>
+                        <dl class="row col-2">
+                            <dt>입금일 선택 <i class="essen"> *</i></dt>
+                            <fmt:parseDate value="${list['DEP_DATE']}" pattern="yyyy-MM-dd" var="parseDateTime" />
+                            <fmt:formatDate value="${parseDateTime}" pattern="yyyy-MM-dd" var="depDate" />
+                            <dd><input type="date" name="depDate" id="depDate" value="${depDate}"></dd>
+                        </dl>
+                        <dl class="row col-2">
+                            <dt>여신금액 </dt>
+                            <dd><input type="text" class="wd210p disable txt-right" name="credit" readonly="readonly" id="credit"
+                            value=<fmt:formatNumber value="${list['CREDIT_AMOUNT']}" pattern="#,###" />> 원</dd>
+                        </dl>
+                        <dl class="row col-2">
+                            <dt>총 발주금액 (누계) </dt>
+                            <dd><input type="text" class="wd210p disable txt-right" name="totalOrder" readonly="readonly" id="totalOrder"
+                             value=<fmt:formatNumber value="${list['TOTAL_ORDER']}" pattern="#,###" />> 원</dd>
+                        </dl>
+                        <dl class="row col-2">
+                            <dt>총 입금액 (누계) </dt>
+                            <dd><input type="text" class="wd210p disable txt-right" name="totalDeposit" readonly="readonly" id="totalDeposit"
+                             value=<fmt:formatNumber value="${list['TOTAL_DEP']}" pattern="#,###" />> 원</dd>
+                        </dl>
+                        <dl class="row col-2">
+                            <dt>입금액 <i class="essen"> *</i></dt>
+                            <dd><input type="text" class="wd210p txt-right" id="depAmount" required="required" name="depAmount"
+                            oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                             value=<fmt:formatNumber value="${list['DEP_AMOUNT']}" pattern="#,###" />> 원</dd>
+                        </dl>
+                    </article>
+
+
+					<div class="dl-buttons">
+						<button class="btn bg_color3 small wd120p">취소</button>
+						<button class="btn bg_color1 small wd120p" onclick=updateDeposit()>등록</button>
+					</div>
+				</div>
+<%-- 				</c:forEach> --%>
+				</c:if>
+				
 			</div>
 		</div>
 		<!-- s:container -->
@@ -149,7 +210,7 @@
 			<button class="btn small bg_color2 wd90p" title="검색" onclick=page(1)>검색</button>
 		</div>
 		<div class="mo-cont-wrap">
-			<p class="normal">※ 거래처명 더블 클릭 시 선택됩니다.</p>
+			<p class="normal">※ 거래처명 클릭 시 선택됩니다.</p>
 			<div class="bbs">
 				<table class="tb-inner" id="modal">
 					<colgroup>
