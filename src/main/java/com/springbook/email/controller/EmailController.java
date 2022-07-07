@@ -25,7 +25,7 @@ public class EmailController {
 		log.info("userId={}", userId);
 		return new EmailVO(emailService.check(userId)); 
 		
-	}
+	} 
 	
 	/**
 	 * 이메일 전송  
