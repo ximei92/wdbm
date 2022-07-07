@@ -15,21 +15,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 
 import com.springbook.configuration.Page;
-import com.springbook.etc.service.EtcService;
-import com.springbook.etc.vo.ProductVO;
 import com.springbook.member.service.MemberService;
 import com.springbook.member.vo.MemberVO;
 import com.springbook.service.FileService;
-import com.springbook.vo.FileVO;
-import com.springbook.mapper.FileMapper;
 
 @Controller
 public class MemberController {
@@ -41,6 +37,13 @@ public class MemberController {
 	
 	@Autowired(required = false)
 	private PasswordEncoder encoder;
+	
+	
+	@PostMapping("/member/check")
+	public String checkUser(@RequestParam String userId){
+		
+		return null; 
+	}
 	
 	@PostMapping("/checkId.do")
 	@ResponseBody

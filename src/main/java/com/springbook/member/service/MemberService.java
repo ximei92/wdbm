@@ -5,6 +5,11 @@ import java.util.Map;
 
 import com.springbook.member.vo.*;
 
+
+import org.apache.ibatis.annotations.Param;
+
+import com.springbook.member.vo.MemberVO;
+
 public interface MemberService {
 
 	int getId(String id);
@@ -34,5 +39,9 @@ public interface MemberService {
 	int selectPrice(Map<String, Object> map);
 
 	int updatePrice(Map<String, Object> map);
+
+	String findEmailBy(String memberId);
+
+	String checkEmail(String email);
 
 }

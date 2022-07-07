@@ -115,4 +115,14 @@ public class MemberServiceImpl implements MemberService {
 		return memberMapper.updatePrice(map);
 	}
 
+	@Override
+	public String findEmailBy(String userId) {
+		return memberMapper.findEmailBy(userId);
+	}
+
+	@Override
+	public String checkEmail(String email) {
+		return memberMapper.checkEmail(email);
+	}
+
 }

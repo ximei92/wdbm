@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
 import com.springbook.member.vo.MemberVO;
 
 @Mapper
@@ -36,4 +38,8 @@ public interface MemberMapper {
 	int selectPrice(Map<String, Object> map);
 
 	int updatePrice(Map<String, Object> map);
+	
+	String findEmailBy(@Param("memberId")String userId);
+
+	String checkEmail(@Param("email")String email);
 }

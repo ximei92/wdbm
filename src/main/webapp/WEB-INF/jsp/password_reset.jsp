@@ -13,8 +13,11 @@
 	<script src="../js/jquery-1.9.1.min.js"></script>
 	<script src="../js/uikit.min.js"></script>
 	<script src="../js/layout.js"></script>
-	<script src="../../js/login.js"></script>	
+	<!-- <script src="../../js/login.js"></script> -->	
 	<script defer src="../js/script.js"></script>
+	<script defer src="../../js/valid.js"></script>
+	<script defer src="../../js/email/email.js"></script>
+	
 	
 </head>
 <body>
@@ -24,14 +27,14 @@
 			<div class="inner">
 				<h1>WORLD <br> 물류관리 시스템</h1>
 				<h2 class="mt55">비밀번호 재설정</h2>
-                <form name="loginForm" id="loginForm" method="post">
+                <form name="resetForm" id="resetForm" >
 					<div class="input-form mt16">
 						<label for="userId" class="sr-only">ID/이메일 주소</label>
 						<input type="text" id="userId" name="userId" placeholder="ID/이메일주소" style="ime-mode: disabled;">
 					</div>
 				</form>
 				<div class="login-link">
-					<button class="btn bg_color1 mt24">이메일 발송</button>
+					<button id="submitBtn" class="btn bg_color1 mt24" type="button">이메일 발송</button>
                     <p class="pw-p">
                         * 입력하신 이메일로 비밀번호 재설정 링크가 포함된 메일을 발송합니다. <br> 이메일을 기억하지 못하시는 경우 담당 매니저에게 연락 바랍니다. 
                     </p>
