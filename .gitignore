@@ -1,3 +1,11 @@
+/target/
+/.classpath
+/*.project
+/.settings
+/*.springBeans
+/*.bin
+/*.pdf
+=======
 # Created by https://www.toptal.com/developers/gitignore/api/eclipse,gradle,git,java,windows
 # Edit at https://www.toptal.com/developers/gitignore?templates=eclipse,gradle,git,java,windows
 
@@ -158,3 +166,4 @@ gradle-app.setting
 .classpath
 
 # End of https://www.toptal.com/developers/gitignore/api/eclipse,gradle,git,java,windows
+>>>>>>> b4e1c4247d56fd09bd3c5632f3962fc5990f81d4

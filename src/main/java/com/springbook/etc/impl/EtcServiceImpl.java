@@ -101,7 +101,7 @@ public class EtcServiceImpl implements EtcService {
 	}
 
 	@Override
-	public List<ProductThicknessVO> getThicknessList(int i, int contentnum, String type, String keyword) {
+	public List<Map<String, Object>> getThicknessList(int i, int contentnum, String type, String keyword) {
 		// TODO Auto-generated method stub
 		Map<String,Object> map = new HashMap<String,Object>();
 		
@@ -290,7 +290,7 @@ public class EtcServiceImpl implements EtcService {
 	}
 
 	@Override
-	public List<ProductThicknessVO> getThicknessInfo(String idx) {
+	public List<Map<String, Object>> getThicknessInfo(String idx) {
 		// TODO Auto-generated method stub
 		return etcMapper.getThicknessInfo(idx);
 	}
@@ -302,7 +302,13 @@ public class EtcServiceImpl implements EtcService {
 	}
 
 	@Override
-	public List<ProductDetailVO> getDetailInfo(String idx) {
+	public List<Map<String, Object>> getSizeInfo(String idx) {
+		// TODO Auto-generated method stub
+		return etcMapper.getSizeInfo(idx);
+	}
+	
+	@Override
+	public List<Map<String, Object>> getDetailInfo(String idx) {
 		// TODO Auto-generated method stub
 		return etcMapper.getDetailInfo(idx);
 	}
@@ -349,22 +355,58 @@ public class EtcServiceImpl implements EtcService {
 	}
 
 	@Override
-	public List<WarehouseInventoryVO> getInventoryHistory(int i, int contentnum) {
+	public List<Map<String,Object>> getInventoryHistory(int i, int contentnum, String productCd, String warehouseIdx,String thickness, String size) {
 		// TODO Auto-generated method stub
 		// TODO Auto-generated method stub
 		Map<String,Object> map = new HashMap<String,Object>();
+		//검색조건 null값은 공백처리
+		if(productCd == null || productCd.equals("")){
+			productCd ="null0";
+		}
+		if(warehouseIdx == null || warehouseIdx.equals("")){
+			warehouseIdx ="null0";
+		}
+		if(thickness == null || thickness.equals("")){
+			thickness ="null0";
+		}
+		if(size == null || size.equals("")){
+			size ="null0";
+		}
 		
 		map.put("i", i);
 		map.put("contentnum", contentnum);
-//		map.put("keyword", keyword);
-		
+		map.put("productCd", productCd);
+		map.put("warehouseIdx", warehouseIdx);
+		map.put("thickness", thickness);
+		map.put("size", size);
+System.out.println("map====");
+System.out.println(map);
 		return etcMapper.getInventoryHistory(map);
 	}
 
+	//검색조건이 있을 떄 창고 재고 갯수조회
 	@Override
-	public int inventoryHistoryCount() {
+	public int inventoryHistoryCount( String productCd, String warehouseIdx,String thickness, String size) {
 		// TODO Auto-generated method stub
-		return etcMapper.inventoryHistoryCount();
+		Map<String,Object> map = new HashMap<String,Object>();
+		if(productCd == null || productCd.equals("")){
+			productCd ="null0";
+		}
+		if(warehouseIdx == null || warehouseIdx.equals("")){
+			warehouseIdx ="null0";
+		}
+		if(thickness == null || thickness.equals("")){
+			thickness ="null0";
+		}
+		if(size == null || size.equals("")){
+			size ="null0";
+		}
+		
+		map.put("productCd", productCd);
+		map.put("warehouseIdx", warehouseIdx);
+		map.put("thickness", thickness);
+		map.put("size", size);
+		return etcMapper.inventoryHistoryCount(map);
 	}
 
 	@Override
@@ -437,5 +479,49 @@ public class EtcServiceImpl implements EtcService {
 		return etcMapper.getCreditList(map);
 	}
 
+	@Override
+	public int updateProductSize(ProductSizeVO vo) {
+		// TODO Auto-generated method stub
+		return etcMapper.updateProductSize(vo);
+	}
+
+	@Override
+	public List<Map<String, Object>> getInventoryHistoryAll(int i, int contentnum, String productCd,
+			String warehouseIdx, String thickness, String size) {
+		// TODO Auto-generated method stub
+		Map<String,Object> map = new HashMap<String,Object>();
+		
+		map.put("i", i);
+		map.put("contentnum", contentnum);
+		
+		return etcMapper.getInventoryHistoryAll(map);
+	}
+
+	@Override
+	public int inventoryHistoryAllCount() {
+		// TODO Auto-generated method stub
+		return etcMapper.inventoryHistoryAllCount();
+	}
+
+	@Override
+	public int inventoryStatusCount(String productCd, String warehouseIdx) {
+		// TODO Auto-generated method stub
+		Map<String,Object> map = new HashMap<String,Object>();
+		
+		map.put("productCd", productCd);
+		map.put("warehouseIdx", warehouseIdx);
+		return etcMapper.inventoryStatusCount(map);
+	}
+
+	@Override
+	public List<Map<String, Object>> getInventoryStatus(int i, int contentnum, String productCd, String warehouseIdx) {
+		// TODO Auto-generated method stub
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("i", i);
+		map.put("contentnum", contentnum);
+		map.put("productCd", productCd);
+		map.put("warehouseIdx", warehouseIdx);
+		return etcMapper.getInventoryStatus(map);
+	}
 
 }

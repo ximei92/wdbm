@@ -28,7 +28,7 @@ public interface EtcService {
 
 	int typeDelete(String list);
 
-	List<ProductThicknessVO> getThicknessList(int i, int contentnum, String type, String keyword);
+	List<Map<String, Object>> getThicknessList(int i, int contentnum, String type, String keyword);
 
 	int thicknessListCount(String type, String keyword);
 
@@ -78,11 +78,13 @@ public interface EtcService {
 
 	int updateProductType(ProductVO vo);
 
-	List<ProductThicknessVO> getThicknessInfo(String idx);
+	List<Map<String, Object>> getThicknessInfo(String idx);
 
 	int updateProductThickness(ProductThicknessVO vo);
 
-	List<ProductDetailVO> getDetailInfo(String idx);
+	List<Map<String, Object>> getSizeInfo(String idx);
+	
+	List<Map<String, Object>> getDetailInfo(String idx);
 
 	int updateProductDetail(com.springbook.etc.vo.ProductDetailVO vo);
 
@@ -94,9 +96,7 @@ public interface EtcService {
 
 	List<MemberVO> memberList();
 
-	List<WarehouseInventoryVO> getInventoryHistory(int i, int contentnum);
-
-	int inventoryHistoryCount();
+	int inventoryHistoryCount(String productCd, String warehouseIdx, String thickness, String size);
 
 	int selectCompanyCount(String keyword);
 
@@ -115,5 +115,19 @@ public interface EtcService {
 	int updateDepositHistory(Map<String, Object> map);
 
 	List<Map<String, Object>> getCreditList(int i, int contentnum, String keyword, Date startDt, Date endDt);
+
+	int updateProductSize(ProductSizeVO vo);
+
+	List<Map<String, Object>> getInventoryHistory(int i, int contentnum, String productCd, String warehouseIdx,
+			String thickness, String size);
+
+	List<Map<String, Object>> getInventoryHistoryAll(int i, int contentnum, String productCd, String warehouseIdx,
+			String thickness, String size);
+
+	int inventoryHistoryAllCount();
+
+	int inventoryStatusCount(String productCd, String warehouseIdx);
+
+	List<Map<String, Object>> getInventoryStatus(int i, int contentnum, String productCd, String warehouseIdx);
 
 }

@@ -38,7 +38,7 @@ public interface EtcMapper {
 
 	int typeDelete(String list);
 
-	List<ProductThicknessVO> getThicknessList(Map<String, Object> map);
+	List<Map<String, Object>> getThicknessList(Map<String, Object> map);
 
 	int thicknessListCount(Map<String, Object> map);
 
@@ -88,11 +88,11 @@ public interface EtcMapper {
 
 	int updateProductType(ProductVO vo);
 
-	List<ProductThicknessVO> getThicknessInfo(String idx);
+	List<Map<String, Object>> getThicknessInfo(String idx);
 
 	int updateProductThickness(ProductThicknessVO vo);
 
-	List<ProductDetailVO> getDetailInfo(String idx);
+	List<Map<String, Object>> getDetailInfo(String idx);
 
 	int updateProductDetail(ProductDetailVO vo);
 
@@ -106,9 +106,9 @@ public interface EtcMapper {
 
 	List<MemberVO> memberList();
 
-	List<WarehouseInventoryVO> getInventoryHistory(Map<String, Object> map);
+	List<Map<String, Object>> getInventoryHistory(Map<String, Object> map);
 
-	int inventoryHistoryCount();
+	int inventoryHistoryCount(Map<String, Object> map);
 
 	int selectCompanyCount(String keyword);
 
@@ -125,5 +125,17 @@ public interface EtcMapper {
 	Map<String, String> searchDepositInfo(String idx);
 
 	int updateDepositHistory(Map<String, Object> map);
+
+	List<Map<String, Object>> getSizeInfo(String idx);
+
+	int updateProductSize(ProductSizeVO vo);
+
+	List<Map<String, Object>> getInventoryHistoryAll(Map<String, Object> map);
+
+	int inventoryHistoryAllCount();
+
+	int inventoryStatusCount(Map<String, Object> map);
+
+	List<Map<String, Object>> getInventoryStatus(Map<String, Object> map);
 
 }

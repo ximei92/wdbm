@@ -101,10 +101,10 @@
                         <dl class="row col-2">
                             <dt>창고 <i class="essen"> *</i></dt>
                             <dd>
-								<select name="warehouse" id="warehouse" class="wd210p" required="required">
-									<option value="">--선택--</option>
+								<select name="warehouseIdx" id="warehouse" class="wd210p" required="required">
+									<option value="0">--선택--</option>
 									<c:forEach items="${warehouse}" var="warehouse" varStatus="status">
-									<option value="${warehouse.warehouse}">${warehouse.warehouse}</option>
+									<option value="${warehouse.warehouseIdx}" > ${warehouse.warehouse}</option>
 									</c:forEach>
 								</select>
                             </dd>
@@ -112,10 +112,10 @@
                         <dl class="row col-2">
                             <dt>제품명 <i class="essen"> *</i></dt>
                             <dd>
-								<select name="productCd" id="productNm" class="wd210p" onchange=detailNmChange() required="required">
-									<option value="">--선택--</option>
+								<select name="productCd" id="productCd" class="wd210p" onchange=detailNmChange() required="required">
+									<option value="0">--선택--</option>
 									<c:forEach items="${productList}" var="list" varStatus="status">
-									<option id="productOpt" value="${list.productCd}">${list.productNm}</option>
+									<option id="productOpt" value="${list.productCd}"> ${list.productNm}</option>
 									</c:forEach>
 								</select>
 							</dd>

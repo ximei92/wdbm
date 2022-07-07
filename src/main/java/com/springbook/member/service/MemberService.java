@@ -1,6 +1,10 @@
 package com.springbook.member.service;
 
 import java.util.List;
+import java.util.Map;
+
+import com.springbook.member.vo.*;
+
 
 import org.apache.ibatis.annotations.Param;
 
@@ -26,11 +30,15 @@ public interface MemberService {
 
 	List<String> getProductNameList();
 
-	int addPrice(String string);
+	int addPrice(Map<String, Object> map);
 
 	int memberDelete(String string);
 
 	int initMoneyInfo(MemberVO vo);
+
+	int selectPrice(Map<String, Object> map);
+
+	int updatePrice(Map<String, Object> map);
 
 	String findEmailBy(String memberId);
 

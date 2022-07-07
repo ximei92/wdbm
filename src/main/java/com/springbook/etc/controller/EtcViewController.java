@@ -26,6 +26,7 @@ public class EtcViewController {
 	private PasswordEncoder encoder;
 	
 	@GetMapping(value= "/goJoinInquiry.do")
+	 
 	public String goJoinInquiry() {
 		return "/join_inquiry";
 	}

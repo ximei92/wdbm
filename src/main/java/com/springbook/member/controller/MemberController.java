@@ -2,15 +2,23 @@ package com.springbook.member.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -131,8 +139,7 @@ public class MemberController {
 		Page pagemaker = new Page();
 		int cpagenum;
 		int ccontentnum;
-		
-		model.addAttribute("id", id);
+
 		if(keyword == null || keyword.length() == 0){
 			List<String> productNameList = memberService.getProductNameList();
 			model.addAttribute("productNameList", productNameList);
@@ -236,17 +243,29 @@ public class MemberController {
 	/*사용자별 제품 가격설정*/
 	@PostMapping("/addPrice.do")
 	@ResponseBody
-	public int addPrice(HttpServletRequest request) {
-		String[] list = request.getParameterValues("list");
-		System.out.println(list);
+	public int  addPrice(@RequestBody List<Map<String, Object>> map) {
+		
+		System.out.println(map.get(0).get("price"));
+		
+		
+		
 		int result = 0;
 		
-		for(int i=0; i<list.length; i++){
-			result += memberService.addPrice(list[i]);
+		for(int i=0; i<map.size(); i++){
+			int update = memberService.selectPrice(map.get(i));
+			System.out.println(update+"update결과...!");
+			if(update == 1){
+				System.out.println(map.get(i));
+				result += memberService.updatePrice(map.get(i));
+				System.out.println(result);
+			} else {
+				result += memberService.addPrice(map.get(i));				
+			}
+
 		}
 		
 		int returnVal = 0;
-		if(result != list.length){
+		if(result != map.size()){
 			returnVal = 1;
 		}
 		return returnVal;

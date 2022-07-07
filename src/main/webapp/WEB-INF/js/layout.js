@@ -1,3 +1,5 @@
+cpmsp;asdfasdf
+
 function fileChange() {
 	var fileTarget = $('.filebox .upload_hidden');
 	fileTarget.on('change', function () { // 값이 변경되면

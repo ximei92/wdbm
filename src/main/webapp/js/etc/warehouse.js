@@ -7,55 +7,66 @@ function inventoryHistoryPage(idx){
 
   if(contentnum == 10){
     location.href="goInvetoryManage.do?pagenum="+pagenum+"&contentnum="+contentnum+"&keyword="+keyword;
-
   }else if(contentnum == 20){
     location.href="goInvetoryManage.do?pagenum="+pagenum+"&contentnum="+contentnum+"&keyword="+keyword;
-
   }else if(contentnum == 30){
     location.href="goInvetoryManage.do?pagenum="+pagenum+"&contentnum="+contentnum+"&keyword="+keyword;
-  }
+  }  
 }
 
 /*제품명 바뀔 때 두께 조회해오기*/
 function detailNmChange(){
-	var name = $("#productNm option:checked").text();
 	
+	var name = $("#productCd").val();
+	$("#thickness").children().remove();
+	$("#size").children().remove();
 	$.ajax({
 		url: "selectDetailThickness.do",
 		data: {"name":name},
 		type: "POST",
 		success : function(data){
-//			onchange=detailThicknessChange()
-			//옵션창 초기화
-			console.log(data);
-	    	$("#thickness").children().remove();
-	    	$("#thickness").append('<option value="">--선택--</option>');
-	    	$("#size").children().remove();
-	    	$("#size").append('<option value="">--선택--</option>');
+	    	$("#thickness").append('<option value="">제품두께 선택</option>');
+	    	$("#size").append('<option value="">제품사이즈 선택</option>');
 	    	
 		    for (var i in data.thickness) {
 		    	var custom = '';
 		    	if(data.thickness[i].CUSTOM_ORDER == 'Y'){
-		    		continue;
+		    		custom = " (주문제작)";
 		    	}
-		    	var child = "<option value="+data.thickness[i].THICKNESS+">"+data.thickness[i].THICKNESS+custom+"</option>;";
+		    	var child = "<option value="+data.thickness[i].THICKNESS_IDX+">"+data.thickness[i].THICKNESS+custom+"</option>;";
 		    	$("#thickness").append(child);
 		      }
 		    
 		    for (var i in data.size) {
 		    	var custom = '';
 		    	if(data.size[i].CUSTOM_ORDER == 'Y'){
-		    		continue;
+		    		custom = " (주문제작)";
 		    	}
 		    	var size = "("+data.size[i].HEIGHT + "*" + data.size[i].WIDTH +")";
-		    	var child = "<option value="+data.size[i].SIZE+">"+data.size[i].SIZE+' '+size+custom+"</option>;";
+		    	var child = "<option value="+data.size[i].SIZE_IDX+">"+data.size[i].SIZE+size+custom+"</option>;";
 		    	$("#size").append(child);
 		      }
+
+		    if($('#origThickness').length > 0){				
+				$("#thickness").val($("#origThickness").val()).prop("selected", true);
+				$("#size").val($("#origSize").val()).prop("selected", true);	
+		    }
+		    
+			if($("#thicknessKey").val() != ''){
+				$("#thickness").val("16").prop("selected", true);
+			}
+			
+			if( $("#sizeKey").val() != ''){
+				$("#size").val($("#sizeKey").val()).prop("selected", true);
+			}
+
 		},
 		error : function(){
 			alert("에러가 발생했습니다.");		
 		}
 	});
+
+
 }
 
 //파일명체크
@@ -79,6 +90,28 @@ function checkFileName(str){
     }
     
     return true;
+}
+
+//상세검색 초건 초기화
+function resetChoice(){
+	console.log("resetChoice");
+	$("#productCd").val("").prop("selected", true);
+	$("#warehouseIdx").val("").prop("selected", true);
+	$("#thickness").val("").prop("selected", true);
+	$("#size").val("").prop("selected", true);
+}
+
+function inventoryStockSearch(idx){
+
+	var productCd = $("#productCd").val();
+	var warehouseIdx = $("#warehouseIdx").val();
+	var thickness =$("#thickness").val();
+	var size = $("#size").val();
+	var pagenum = idx == undefined? 1:idx ;
+	var contentnum = $("#contentnum option:selected").val();
+
+		location.href="goInvetoryManage.do?pagenum="+pagenum+"&contentnum="+contentnum+"&productCd="+productCd+"&warehouseIdx="+warehouseIdx+"&thickness="+thickness+"&size="+size
+
 }
 
 $(document).ready(function(){
@@ -138,5 +171,11 @@ $(document).ready(function(){
 	    	return;
 	    }
 	});
+	
+	//창고별재고관리 검색어 조건맞을시 검색어 저장되도록 select 박스 체크하기
+	if($("#productCdKey").val() != '' || $("#warehouseIdxKey").val() != ''){
+		detailNmChange();
+	}
+
 	
 })

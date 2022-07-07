@@ -102,15 +102,14 @@
 						<h3 class="normal"><i class="s-add"></i>제품 타입 생성</h3>
 					</div>
 					
-					
-                    <c:if test="${empty info}">
+                    <c:if test="${empty list}">
 					<article class="inner-1">
                         <dl class="row col-2">
                             <dt>제품명 <i class="essen"> *</i></dt>
                             <dd>
-								<select name="productNm" id="productNm" class="wd210p">
-									<c:forEach items="${list}" var="list" varStatus="status">
-									<option value="${list.productNm}">${list.productNm}</option>
+								<select name="productCd" id="productCd" class="wd210p">
+									<c:forEach items="${productList}" var="productList" varStatus="status">
+									<option value="${productList.productCd}">${productList.productNm}</option>
 									</c:forEach>
 								</select>
 							</dd>
@@ -154,33 +153,33 @@
                     </article>
                     </c:if>
 
-                    <c:if test="${!empty info}">
-                    <c:forEach items="${info}" var="info" varStatus="status">
+                    <c:if test="${!empty list}">
+                    <c:forEach items="${list}" var="info" varStatus="status">
 					<article class="inner-1">
 						<input type="hidden" id="update" value="update">
-						<input type="hidden" class="wd210p" name="productIdx" value="${info.productIdx}">
+						<input type="hidden" class="wd210p" name="thicknessIdx" value="${list[0]['THICKNESS_IDX']}">
                         <dl class="row col-2">
                             <dt>제품명 <i class="essen"> *</i></dt>
                             <dd>
-								<select name="productNm" id="productNm" class="wd210p">
-									<c:forEach items="${list}" var="list" varStatus="status">
-									<option value="${list.productNm}" <c:if test="${info.productNm == list.productNm}">selected </c:if>>
-									${list.productNm}</option>
+								<select name="productCd" id="productCd" class="wd210p">
+									<c:forEach items="${productList}" var="productList" varStatus="status">
+									<option value="${productList.productCd}" <c:if test="${list[0]['PRODUCT_CD'] == productList.productCd}">selected </c:if>>
+									${productList.productNm}</option>
 									</c:forEach>
 								</select>
 							</dd>
                         </dl>
                         <dl class="row col-2">
                             <dt>제품 두께 <i class="essen"> *</i></dt>
-                            <dd><input type="text" class="wd210p" name="thickness" value="${info.thickness}" required="required"> T</dd>
+                            <dd><input type="text" class="wd210p" name="thickness" value="${list[0]['THICKNESS']}" required="required"> T</dd>
                         </dl>
                         <dl class="row col-2">
                             <dt>성적서 발급기관</dt>
-                            <dd><input type="text" class="wd330p" name="testInstitute" value="${info.testInstitute}"></dd>
+                            <dd><input type="text" class="wd330p" name="testInstitute" value="${list[0]['TEST_INSTITUTE']}"></dd>
                         </dl>
                         <dl class="row col-2">
                             <dt>성적서 발급번호</dt>
-                            <dd><input type="text" class="wd330p" name="testNum" value="${info.testNum}"></dd>
+                            <dd><input type="text" class="wd330p" name="testNum" value="${list[0]['TEST_NUM']}"></dd>
                         </dl>
                         <dl class="row col-2">
                             <dt class="al-start">준불연 시험성적서</dt>
@@ -201,9 +200,9 @@
                             <dt>주문제작 여부  <i class="essen"> *</i></dt>
                             <dd>
                                 <p class="d-flex wd100 gap10">
-                                    <input type="radio" name="customOrder" value="Y" <c:if test="${info.customOrder == 'Y'}"> checked </c:if>>
+                                    <input type="radio" name="customOrder" value="Y" <c:if test="${list[0]['CUSTOM_ORDER'] == 'Y'}"> checked </c:if>>
                                     <label for="">YES</label>
-                                    <input type="radio" name="customOrder" value="N" <c:if test="${info.customOrder == 'N'}"> checked </c:if>>
+                                    <input type="radio" name="customOrder" value="N" <c:if test="${list[0]['CUSTOM_ORDER'] == 'N'}"> checked </c:if>>
                                     <label for="">NO</label>
                                 </p>
                             </dd>

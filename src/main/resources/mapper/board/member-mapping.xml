@@ -195,12 +195,12 @@
 		height,
 		width,
 		price,
-		use
+		used
 		)
 		VALUES
 		(
 		#{id}, 
-		#{product_cd}, 
+		#{productCd}, 
 		#{thickness}, 
 		#{size}, 
 		#{height}, 
@@ -231,7 +231,29 @@
 		UPDATE
 	    company_nm = #{companyNm}
 	</insert>
+
+	<!--여신관리 단가설정 중복확인 -->
+	<select id="selectPrice" resultType ="int" parameterType="Map">
+		SELECT
+		COUNT(*)
+		FROM
+		PRICE PRICE
+		INNER JOIN PRODUCT PRODUCT ON PRODUCT.PRODUCT_CD = PRICE.PRODUCT_CD
+		WHERE  
+		PRODUCT.DEL_YN = 'N'
+    	AND	PRICE.PRODUCT_CD = #{productCd}
+    	AND	PRICE.THICKNESS = #{thickness}
+    	AND	PRICE.SIZE = #{size}
+    	AND	PRICE.ID = #{id}
+	</select>
 	
+	<!--멤버별가격 수청 -->
+	<update id="updatePrice" parameterType="Map">
+		UPDATE PRICE SET
+		PRICE = #{price}, USED = #{use}
+    	WHERE ID = #{id} AND product_cd = #{productCd} AND thickness = #{thickness} AND size = #{size}
+	</update>
+
 	<!-- 이메일 조회 -->
 	<select id="findEmailBy" parameterType="String" resultType="String">
 		SELECT 

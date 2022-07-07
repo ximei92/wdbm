@@ -39,9 +39,15 @@ function drawTable(data){
 	var tableDiv = $("tbody").empty();
 	
 	for(var i = 0 ; i<data.list.length; i++){
+		console.log(data.list[i]);
+		console.log('tableㄱ밧');
 		var tr = '<tr class="'+data.list[i].PRODUCT_NM+'" name="'+data.list[i].PRODUCT_NM+'">';
-		var td1= '<td><input type="checkbox" name="chk" value="Y"><input type="hidden" name="id" value='+data.list[i].ID+'>';
-		td1 += '<input type="hidden" name="productVal" value='+data.list[i].IDX+'></td>';
+		var td1= '<td><input type="checkbox" name="chk" value="Y">';
+		td1 += '<input type="hidden" name="productCd" value='+data.list[i].PRODUCT_CD+'></td>';
+		td1 += '<input type="hidden" name="thickness" value='+data.list[i].THICKNESS+'></td>';
+		td1 += '<input type="hidden" name="size" value='+data.list[i].SIZE+'></td>';
+		td1 += '<input type="hidden" name="height" value='+data.list[i].HEIGHT+'></td>';
+		td1 += '<input type="hidden" name="width" value='+data.list[i].WIDTH+'></td>';
 		td1 += '<td>'+data.list[i].PRODUCT_CD+'</td>'; 
 		td1 += '<td>'+data.list[i].THICKNESS+'</td>'; 
 		td1 +='<td> '+ data.list[i].SIZE+ ' ('+data.list[i].HEIGHT +'x'+data.list[i].WIDTH+')</td>'; 
@@ -111,37 +117,56 @@ function pricePage(idx, keyword){
 
 //제품별단가저장
 function savePrice(){
+	var table = $(".bbs.mt17.tab-box.on tbody tr");
 
-	var a = $("input[name=productVal]").val();
-	var price = $("input[name=price]").val();
-	console.log(a);
+	var a = $("bbs.mt17.tab-box.on input[name=productVal]").val();
+console.log(a);
+	console.log(table);
 	var priceLength = $("input[name=price]").length;
-	//배열 생성
-	var arr = new Array(priceLength);
-	//배열에 값 주입
-	for(var i=0; i<priceLength; i++){
-		var chekObj = document.getElementsByName("checkbox-test")
-		var priceVal = ", PRICE="+$("input[name=price]").eq(i).val() +"}";
-		var checkVal = '';
-		var idVal = ", ID="+$("input[name=id]").eq(i).val();
-		if($("input:checkbox[name=chk]").eq(i).is(":checked")){
-			checkVal = ', USE="Y"';
-		} else {
-			checkVal = ', USE="N"';
-		}
-		
-		var replace = checkVal + idVal + priceVal;
-		arr[i] = $("input[name=productVal]").eq(i).val().replace("}", replace).replaceAll("=",":");
+	for(var i=0; i<table.length; i++){
+		console.log($(".bbs.mt17.tab-box.on tbody tr").children().eq(i).text());
+
     }
-	
+	var parentId = window.opener.document.getElementById("id").value;
+	//배열 생성
+	var arr = new Array();
+	//배열에 값 주입
+	for(var i=0; i<table.length; i++){
+		console.log(table.length);
+		if($(".bbs.mt17.tab-box.on tbody tr input[type=checkbox]").eq(i).is(":checked")){
+			checkVal = 'Y';
+		} else {
+			checkVal = 'N';
+		}
+		var object= new Object();
+		object.productCd = $(".bbs.mt17.tab-box.on tbody tr input[name=productCd]").eq(i).val();
+		object.thickness =  $(".bbs.mt17.tab-box.on tbody tr input[name=thickness]").eq(i).val();
+		object.size =  $(".bbs.mt17.tab-box.on tbody tr input[name=size]").eq(i).val();
+		object.height =  $(".bbs.mt17.tab-box.on tbody tr input[name=height]").eq(i).val();
+		object.width =  $(".bbs.mt17.tab-box.on tbody tr input[name=width]").eq(i).val();
+		object.price =  $(".bbs.mt17.tab-box.on tbody tr input[name=price]").eq(i).val();
+		console.log('price');
+		console.log(object.price);
+		object.id = parentId;
+		object.use = checkVal;
+		arr.push(object);
+
+    }
+	console.log(arr);
+	var jsonData = JSON.stringify(arr);
+	jQuery.ajaxSettings.traditional = true;
 	
 	$.ajax({
 		url: "addPrice.do",
-		data: {"list" : arr},
+		data: jsonData,
 		type: "POST",
-        dataType:"json",
+		contentType: 'application/json',
         traditional:true,
 		success : function(data){
+			console.log(data);
+			if(data==0){
+				alert("저장되었습니다.");
+			}
 		},
 		error : function(){
 			alert("에러가 발생했습니다.");		
@@ -174,8 +199,10 @@ function getMemberInfo(id,role){
 			alert("에러가 발생했습니다.");		
 		}
 	});	
-	
-	
+}
+
+function closePopup(){
+	window.close();
 }
 
 function checkId(){
@@ -316,8 +343,11 @@ $(document).ready(function(){
 	$("#income_check").change(function(){
         if($("#income_check").is(":checked")){
         	$("#income_message").removeClass("disable");
+        	$("#income_message" ).prop('readonly', false);
         }else{
         	$("#income_message").addClass("disable");
+        	$("#income_message").val("");
+        	$("#income_message" ).prop('readonly', true);
         }
 	});
 

@@ -6,8 +6,8 @@ import lombok.Data;
 
 @Data
 public class WarehouseVO {
-	private int fildId;
+	private int fileId;
 	private String warehouse;
 	private Date regDate;
-	private int idx;
+	private int warehouseIdx;
 }
