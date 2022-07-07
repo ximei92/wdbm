@@ -93,7 +93,7 @@
 	            <c:forEach items="${warehouse}" var="warehouse" varStatus="status">                        
 	                <li
 	                <c:if test="${warehouse.warehouseIdx eq warehouseKey}">class="on"</c:if>>
-	                <a >${warehouse.warehouse}창고</a>
+	                <a onclick="changeWarehouse('${warehouse.warehouseIdx}')" >${warehouse.warehouse}창고</a>
 	                </li>
 	            </c:forEach>
             </ul>
@@ -105,7 +105,7 @@
                         <c:forEach items="${productNameList}" var="product" varStatus="status">                        
                             <li
                             <c:if test="${product.productCd eq productKey}">class="on"</c:if>>
-                            <a onclick="changeProduct('${product}')">${product.productNm}</a>
+                            <a onclick="changeProduct('${product.productCd}')">${product.productNm}</a>
                             </li>
                         </c:forEach>
                         </ul>
