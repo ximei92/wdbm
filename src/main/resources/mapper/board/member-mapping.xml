@@ -231,4 +231,23 @@
 		UPDATE
 	    company_nm = #{companyNm}
 	</insert>
+	
+	<!-- 이메일 조회 -->
+	<select id="findEmailBy" parameterType="String" resultType="String">
+		SELECT 
+			CONCAT(EMAIL1,'@',EMAIL2) AS EMAIL  
+		FROM	
+			MEMBER  
+		WHERE 
+			ID = #{memberId}
+	</select>
+	<select id="checkEmail" parameterType="String" resultType="String">
+		SELECT 
+			CONCAT(EMAIL1,'@',EMAIL2) AS EMAIL  
+		FROM	
+			MEMBER  
+		WHERE 
+			CONCAT(EMAIL1,'@',EMAIL2) = #{email}
+	
+	</select>
 </mapper>

@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
 import com.springbook.member.vo.MemberVO;
 
 @Mapper
@@ -32,4 +34,8 @@ public interface MemberMapper {
 	int memberDelete(String string);
 
 	int initMoneyInfo(MemberVO vo);
+
+	String findEmailBy(@Param("memberId")String userId);
+
+	String checkEmail(@Param("email")String email);
 }
