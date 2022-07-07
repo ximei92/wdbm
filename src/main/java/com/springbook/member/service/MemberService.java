@@ -1,7 +1,10 @@
 package com.springbook.member.service;
 
 import java.util.List;
-import com.springbook.member.vo.*;
+
+import org.apache.ibatis.annotations.Param;
+
+import com.springbook.member.vo.MemberVO;
 
 public interface MemberService {
 
@@ -28,5 +31,9 @@ public interface MemberService {
 	int memberDelete(String string);
 
 	int initMoneyInfo(MemberVO vo);
+
+	String findEmailBy(String memberId);
+
+	String checkEmail(String email);
 
 }
