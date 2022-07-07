@@ -148,15 +148,17 @@
 								</tr>
 							</thead>
 							<tbody>
-							<c:forEach items="${list}" var="list" varStatus="status">
+						
+							<c:forEach items="${list}" var="data" varStatus="status">
 								<tr>
-									<td><input type="checkbox" name="chk" value="${list.productIdx}"></td>
+									<td><input type="checkbox" name="chk" value="${list[status.index]['THICKNESS_IDX']}"></td>
 									<td>${status.index+1}</td>
-									<td><a onclick="location.href='goThicknessRegist.do?idx=${list.productIdx}&fileId=${list.fileId}'"
-									 class="tit">${list.productNm}</a></td>
-									<td>${list.thickness}</td>
-									<td class="txt-left"><a class="tit" href="fileDownload?fileIdx=${list.fileId}">${list.fileNm}</a></td>
-									<c:set var="regDate"><fmt:formatDate value="${list.regDate}" pattern="yyyy-MM-dd" /></c:set>
+									<td><a onclick="location.href='goThicknessRegist.do?idx=${list[status.index]['THICKNESS_IDX']}&fileId=${list[status.index]['FILE_ID']}'"
+									 class="tit">${list[status.index]['PRODUCT_NM']}</a></td>
+									<td>${list[status.index]['THICKNESS']}</td>
+									<td class="txt-left"><a class="tit" href="fileDownload?fileIdx=${list[status.index]['FILE_ID']}">${list[status.index]['FILE_NM']}</a></td>
+										<fmt:parseDate value="${list[status.index]['REG_DATE']}" pattern="yyyy-MM-dd" var="parseDateTime" />
+										<fmt:formatDate value="${parseDateTime}" pattern="yyyy-MM-dd" var="regDate" />
 									<td>${regDate}</td>
 								</tr>
 							</c:forEach>	

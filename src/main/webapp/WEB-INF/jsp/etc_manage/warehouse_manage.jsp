@@ -119,7 +119,7 @@
 							<tbody>
 							<c:forEach items="${list}" var="list" varStatus="status">
 								<tr>
-									<td><input type="checkbox" name="chk" value="${list.idx}"></td>
+									<td><input type="checkbox" name="chk" value="${list.warehouseIdx}"></td>
 									<td>${status.index+1}</td>
 									<td><a href="#" class="tit">${list.warehouse}</a></td>
 									<td><a href="#" class="btn-csv">CSV 다운로드</a></td>

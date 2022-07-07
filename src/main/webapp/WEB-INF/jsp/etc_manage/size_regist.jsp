@@ -101,14 +101,15 @@
 					<div class="h3-title blue">
 						<h3 class="normal"><i class="s-add"></i>제품 사이즈 생성</h3>
 					</div>
-                    
+					
+                    <c:if test="${empty list}">                    
 					<article class="inner-1">
                         <dl class="row col-2">
                             <dt>제품명 <i class="essen"> *</i></dt>
                             <dd>
-								<select name="productNm" id="productNm" class="wd210p">
+								<select name="productCd" id="productCd" class="wd210p">
 									<c:forEach items="${list}" var="list" varStatus="status">
-									<option value="${list.productNm}">${list.productNm}</option>
+									<option value="${list.productCd}">${list.productNm}</option>
 									</c:forEach>
 								</select>
 							</dd>
@@ -137,8 +138,51 @@
                             </dd>
                         </dl>
                     </article>
-
-
+                    </c:if>
+                    
+                    <c:if test="${!empty list}">
+                    <c:forEach items="${list}" var="info" varStatus="status">
+					<article class="inner-1">
+						<input type="hidden" id="update" value="update">
+						<input type="hidden" class="wd210p" name="sizeIdx" value="${list[0]['SIZE_IDX']}">
+                        <dl class="row col-2">
+                            <dt>제품명 <i class="essen"> *</i></dt>
+                            <dd>
+								<select name="productCd" id="productCd" class="wd210p">
+									<c:forEach items="${productList}" var="productList" varStatus="status">
+									<option value="${productList.productCd}" <c:if test="${list[0]['PRODUCT_CD'] == productList.productCd}">selected </c:if>>
+									${productList.productNm}</option>
+									</c:forEach>
+								</select>
+							</dd>
+                        </dl>
+                        <dl class="row col-2">
+                            <dt>제품 사이즈 <i class="essen"> *</i></dt>
+                            <dd><input type="text" class="wd210p" name="size" required="required" value="${list[0]['SIZE']}" ></dd>
+                        </dl>
+                        <dl class="row col-2">
+                            <dt>길이 x 폭 <i class="essen"> *</i></dt>
+                            <dd>
+                                <input type="text" class="wd80p" name="height" required="required" value="${list[0]['HEIGHT']}" >
+                                <span>×</span>
+                                <input type="text" class="wd80p" name="width" required="required" value="${list[0]['WIDTH']}" >
+                            </dd>
+                        </dl>
+                        <dl class="row col-2">
+                            <dt>주문제작 여부  <i class="essen"> *</i></dt>
+                            <dd>
+                                <p class="d-flex wd100 gap10">
+                                    <input type="radio" name="customOrder" value="Y" <c:if test="${list[0]['CUSTOM_ORDER'] == 'Y'}"> checked </c:if>>
+                                    <label for="">YES</label>
+                                    <input type="radio" name="customOrder" value="N" <c:if test="${list[0]['CUSTOM_ORDER'] == 'N'}"> checked </c:if>>
+                                    <label for="">NO</label>
+                                </p>
+                            </dd>
+                        </dl>
+                    </article>
+                    </c:forEach>
+                    </c:if>
+                    
 					<div class="dl-buttons">
 						<button class="btn bg_color3 small wd120p" type="button">취소</button>
 						<button class="btn bg_color1 small wd120p" type="submit">등록</button>

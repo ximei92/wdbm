@@ -87,10 +87,9 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public int addPrice(String string) {
+	public int addPrice(Map<String, Object> map) {
 		// TODO Auto-generated method stub
-		System.out.println(string);
-		return memberMapper.addPrice(string);
+		return memberMapper.addPrice(map);
 	}
 
 	@Override
@@ -102,6 +101,18 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public int initMoneyInfo(MemberVO vo) {
 		return memberMapper.initMoneyInfo(vo);
+	}
+
+	@Override
+	public int selectPrice(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return memberMapper.selectPrice(map);
+	}
+
+	@Override
+	public int updatePrice(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return memberMapper.updatePrice(map);
 	}
 
 }

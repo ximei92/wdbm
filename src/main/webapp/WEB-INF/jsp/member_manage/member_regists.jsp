@@ -214,7 +214,7 @@
 	                                    </p>
 	                                    <p class="wd100">
 	                                        <!-- 입금 관련 메세지 사용 시 활성화 -->
-	                                        <textarea class="wd50 disable" name="incomeMessage" id="income_message"></textarea>
+	                                        <textarea class="wd50 disable" name="incomeMessage" id="income_message" readonly="readonly"></textarea>
 	                                    </p>
 	                                </dd>
 								</dl>

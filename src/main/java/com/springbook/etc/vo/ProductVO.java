@@ -8,6 +8,7 @@ import lombok.Data;
 public class ProductVO {
 	private int fileId;
 	private int productIdx;
+	private int thicknessIdx;
 	private Date regDate;
 	private String productNm;
 	private String productCd;

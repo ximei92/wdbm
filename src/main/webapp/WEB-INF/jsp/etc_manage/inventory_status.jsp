@@ -88,19 +88,26 @@
 		<!-- s:container -->
 		<div id="container">
 			<h2 class="normal">창고별 재고현황</h2>
+
             <ul class="tmenu">
-                <li class="on"><a href="#">인천창고</a></li>
-                <li><a href="#">평택창고</a></li>
-                <li><a href="#">김해창고</a></li>
+	            <c:forEach items="${warehouse}" var="warehouse" varStatus="status">                        
+	                <li
+	                <c:if test="${warehouse.warehouseIdx eq warehouseKey}">class="on"</c:if>>
+	                <a >${warehouse.warehouse}창고</a>
+	                </li>
+	            </c:forEach>
             </ul>
 			<div id="content">
 				<div class="cont-box">
                     <div class="rows">
                         <!-- tab -->
                         <ul class="tabs">
-                            <li class="on"><a href="#none">K5</a></li>
-                            <li><a href="#none">비KS</a></li>
-                            <li><a href="#none">심재</a></li>
+                        <c:forEach items="${productNameList}" var="product" varStatus="status">                        
+                            <li
+                            <c:if test="${product.productCd eq productKey}">class="on"</c:if>>
+                            <a onclick="changeProduct('${product}')">${product.productNm}</a>
+                            </li>
+                        </c:forEach>
                         </ul>
                     </div>
 
@@ -126,28 +133,39 @@
 								</tr>
 							</thead>
 							<tbody>
+							<c:forEach items="${list}" var="list" varStatus="status">
 								<tr>
-									<td>40S-1</td>
-									<td>40</td>
-									<td>S (600 x 1,200)</td>
-									<td>12,000</td>
-									<td>1.5</td>
+									<td>${list.PRODUCT_CD}</td>
+									<td>${list.THICKNESS}</td>
+									<fmt:formatNumber value="${list.HEIGHT}" pattern="#,###" var="height" />
+									<fmt:formatNumber value="${list.WIDTH}" pattern="#,###" var="width" />
+									<td>${list.SIZE} (${height} x ${width})</td>
+									<fmt:formatNumber value="${list.TOTAL_STOCK}" pattern="#,###" var="totla_stock" />
+									<td>${totla_stock}</td>
+									<c:set var="ctn" value="${(list.TOTAL_STOCK-list.SAFETY)/list.PALLET}"/>
+									<td>${ctn}</td>
 								</tr>
+							</c:forEach>	
 							</tbody>
 						</table>
 
 						<!-- pager -->
 						<div class="pager txt-right">
-                            <select name="" id="">
-                                <option value="">10개보기</option>
-                            </select>
-							<a class="arr prev" href="#">이전</a>
-							<strong class="active">1</strong>
-							<a href="#">2</a>
-							<a href="#">3</a>
-							<a href="#">4</a>
-							<a href="#">5</a>
-							<a class="arr next" href="#">다음</a>
+						    <select name="contentnum" id="contentnum" onchange=inventoryStatusPage()>
+						      <option value="10" <c:if test="${page.getContentnum() == 10 }">selected="selected"</c:if> >10 개</option>
+						      <option value="20" <c:if test="${page.getContentnum() == 20 }">selected="selected"</c:if> >20 개</option>
+						      <option value="30" <c:if test="${page.getContentnum() == 30 }">selected="selected"</c:if> >30 개</option>
+						    </select>
+
+						    <c:if test="${page.prev}">
+                    			<a class="arr prev" href="javascript:inventoryStatusPage(${page.getStartPage()-1});">이전</a>
+                  			</c:if>
+                  			<c:forEach begin="${page.getStartPage()}" end="${page.getEndPage()}" var="idx">
+                    			<a href="javascript:inventoryStatusPage(${idx});" <c:if test="${page.pagenum}== ${idx}">class="active"</c:if> >${idx}</a>
+                  			</c:forEach>             			
+							<c:if test="${page.next}">
+                    			<a class="arr next"href="javascript:inventoryStatusPage(${page.getEndPage()+1});">다음</a>
+                  			</c:if>                  			
 						</div>
 					</div>
 

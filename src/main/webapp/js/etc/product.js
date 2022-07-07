@@ -114,16 +114,15 @@ function sizePage(idx){
 
 /*제품상세등록 제품명 바뀔 때 두께 조회해오기*/
 function detailNmChange(){
-	var name = $("#productNm").val();
+	var name = $("#productCd").val();
+	$("#thickness").children().remove();
+	$("#size").children().remove();
 	$.ajax({
 		url: "selectDetailThickness.do",
 		data: {"name":name},
 		type: "POST",
 		success : function(data){
-
-	    	$("#thickness").children().remove();
 	    	$("#thickness").append('<option value="">제품두께 선택</option>');
-	    	$("#size").children().remove();
 	    	$("#size").append('<option value="">제품사이즈 선택</option>');
 	    	
 		    for (var i in data.thickness) {
@@ -131,7 +130,7 @@ function detailNmChange(){
 		    	if(data.thickness[i].CUSTOM_ORDER == 'Y'){
 		    		custom = " (주문제작)";
 		    	}
-		    	var child = "<option value="+data.thickness[i].THICKNESS+">"+data.thickness[i].THICKNESS+custom+"</option>;";
+		    	var child = "<option value="+data.thickness[i].THICKNESS_IDX+">"+data.thickness[i].THICKNESS+custom+"</option>;";
 		    	$("#thickness").append(child);
 		      }
 		    
@@ -141,10 +140,12 @@ function detailNmChange(){
 		    		custom = " (주문제작)";
 		    	}
 		    	var size = "("+data.size[i].HEIGHT + "*" + data.size[i].WIDTH +")";
-		    	var child = "<option value="+data.size[i].SIZE+">"+data.size[i].SIZE+size+custom+"</option>;";
+		    	var child = "<option value="+data.size[i].SIZE_IDX+">"+data.size[i].SIZE+size+custom+"</option>;";
 		    	$("#size").append(child);
 		      }
-		    
+		    console.log($("#origSize").val());
+		    console.log($("#origThickness").val());
+		    console.log("origSizeVAll")
 		    if($('#origThickness').length > 0){				
 				$("#thickness").val($("#origThickness").val()).prop("selected", true);
 				$("#size").val($("#origSize").val()).prop("selected", true);	
@@ -163,7 +164,6 @@ function registsType(fileId, fileNm){
 	form = form + "&fileId=" + fileId+ "&fileNm=" + fileNm;
 	
 	if(update =='update'){
-		console.log('update들어옵');
 		$.ajax({
 			url: "updateProductType.do",
 			data: form,
@@ -219,19 +219,35 @@ function checkFileName(str){
     return true;
 }
 
-function registsThickness(fileId, fileNm){
-	var form = $("form").serialize();
-	var update = $("#update").val();
-	form = form + "&fileId=" + fileId+ "&fileNm=" + fileNm;
+//serializeArray data function
+function objectifyForm(formArray) {
+	var returnArray = {};
+	for (var i = 0; i < formArray.length; i++) {
+		returnArray[formArray[i]['name']] = formArray[i]['value'];
+	}
+	return returnArray;
+}
 	
+function registsThickness(fileId, fileNm){
+	var form = $("form")[0];   
+	
+ 	var formData = new FormData(form);
+	var update = $("#update").val();
+//	var form = document.getElementById('thicknessForm');
+//	var formData = new FormData(form);
+
+	if(fileId != ''){
+		formData.append('fileId', fileId);
+		formData.append('fileNm', fileNm);
+	}
+
 	if(update =='update'){
-		console.log('update');
-		
 		$.ajax({
 			url: "updateProductThickness.do",
-			data: form,
+			data: formData,
 			type: "POST",
-			dataType: "json",
+	       	processData: false,
+	   	    contentType: false,
 			success : function(data){
 				alert("저장에 성공했습니다.");
 				checkUnload = false;
@@ -246,7 +262,8 @@ function registsThickness(fileId, fileNm){
 			url: "addProductThickness.do",
 			data: form,
 			type: "POST",
-			dataType: "json",
+	       	processData: false,
+	   	    contentType: false,
 			success : function(data){
 				alert("저장에 성공했습니다.");
 				checkUnload = false;
@@ -315,7 +332,8 @@ $(document).ready(function(){
 	//두께 폼 제출
 	$("#thicknessForm").submit(function(event){
 		event.preventDefault();
-		var form = $("form")[0];        
+		var form = $("form")[0];   
+		
 	 	var formData = new FormData(form);
 	 	var fileOrigId = $("#origFile").val();
 	 	var fileOrigNm = $("#origFileNm").val();
@@ -334,8 +352,8 @@ $(document).ready(function(){
 			}
 
 			var fileId;
-			console.log(fileOrigId);
 			if(content_files.length > 0){
+
 				fileNm = content_files[0].name;
 				$.ajax({
 			   	      type: "POST",
@@ -352,7 +370,7 @@ $(document).ready(function(){
 						alert("에러가 발생했습니다.");		
 					}
 				});
-			} else if(content_files.length==0 && fileOrigId == undefined){
+			} else if(fileOrigId == undefined && content_files.length == 0 ){
 				registsThickness('');
 			} else {
 				registsThickness(fileOrigId,fileOrigNm);
@@ -365,22 +383,40 @@ $(document).ready(function(){
 	//사이즈 폼 제출
 	$("#sizeForm").submit(function(event){
 		event.preventDefault();
+		var update = $("#update").val();
 		var form = $("form").serialize();
-
-		$.ajax({
-			url: "addProductSize.do",
-			data: form,
-			type: "POST",
-			dataType: "json",
-			success : function(data){
-				alert("저장에 성공했습니다.");
-				checkUnload = false;
-				location.href = "productSize.do";
-			},
-			error : function(){
-				alert("에러가 발생했습니다.");		
-			}
-		});
+		if(update == 'update'){
+			console.log('siezeUpdqtq');
+			$.ajax({
+				url: "updateProductSize.do",
+				data: form,
+				type: "POST",
+				dataType: "json",
+				success : function(data){
+					alert("저장에 성공했습니다.");
+					checkUnload = false;
+					location.href = "productSize.do";
+				},
+				error : function(){
+					alert("에러가 발생했습니다.");		
+				}
+			});			
+		} else {
+			$.ajax({
+				url: "addProductSize.do",
+				data: form,
+				type: "POST",
+				dataType: "json",
+				success : function(data){
+					alert("저장에 성공했습니다.");
+					checkUnload = false;
+					location.href = "productSize.do";
+				},
+				error : function(){
+					alert("에러가 발생했습니다.");		
+				}
+			});
+		}
 		checkUnload = false;
 	});
 	
@@ -397,8 +433,7 @@ $(document).ready(function(){
 				type: "POST",
 				dataType: "json",
 				success : function(data){
-					console.log(data);
-//					alert("저장에 성공했습니다.");
+					alert("저장에 성공했습니다.");
 					checkUnload = false;
 					location.href = "productDetail.do";
 				},

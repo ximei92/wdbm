@@ -119,7 +119,7 @@
 						</div>
 						<!-- button -->
 						<div class="d-flex right wd40 gap10">
-							<button class="btn small disable" id="detailDelete">선택 삭제</button>
+							<button class="btn small disable" id="sizeDelete">선택 삭제</button>
 							<button class="btn small bg_color1 ico add" onclick="location.href='goSizeRegist.do'">사이즈 등록</button>
 						</div>
 					</div>
@@ -155,11 +155,11 @@
 							
 							<c:forEach items="${list}" var="data" varStatus="status">
 								<tr>
-									<td><input type="checkbox" name="chk" value="${list[status.index]['PRODUCT_IDX']}"></td>
+									<td><input type="checkbox" name="chk" value="${list[status.index]['SIZE_IDX']}"></td>
 									<td>${status.index+1}</td>
-									<td><a href="#" class="tit"></a>${list[status.index]["PRODUCT_NM"]}</td>
+									<td>${list[status.index]["PRODUCT_NM"]}</a></td>
 									<td>${list[status.index]["THICKNESS"]}</td>
-									<td>${list[status.index]["SIZE"]}</td>
+									<td><a onclick="location.href='goSizeRegist.do?idx=${list[status.index]['SIZE_IDX']}'" class="tit">${list[status.index]["SIZE"]}</a></td>
 									<td>${list[status.index]["HEIGHT"]}</td>
 									<td>${list[status.index]["WIDTH"]}</td>
 										<fmt:parseDate value="${list[status.index]['REG_DATE']}" pattern="yyyy-MM-dd" var="parseDateTime" />

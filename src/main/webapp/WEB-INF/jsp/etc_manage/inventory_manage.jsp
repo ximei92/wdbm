@@ -91,14 +91,20 @@
             <div id="content">
                 <!-- search box -->
                 <div class="cont-box">
+                <!-- 검색어 select위한 hidden값 -->
+                <input type="hidden" value="${warehouseIdxKey}" id="warehouseIdxKey">
+                <input type="hidden" value="${productCdKey}" id="productCdKey">
+                <input type="hidden" value="${thicknessKey}" id="thicknessKey">
+                <input type="hidden" value="${sizeKey}" id="sizeKey">
                     <article class="inner">
                         <dl class="row col-2">
                             <dt>창고</dt>
                             <dd>
-								<select name="warehouse" id="warehouse" class="wd210p" >
+								<select name="warehouseIdx" id="warehouseIdx" class="wd210p" >
 									<option value="">--선택--</option>
 									<c:forEach items="${warehouse}" var="warehouse" varStatus="status">
-									<option value="${warehouse.warehouse}">${warehouse.warehouse}</option>
+									<option value="${warehouse.warehouseIdx}" <c:if test="${warehouse.warehouseIdx == warehouseIdxKey}"> selected</c:if>>
+									${warehouse.warehouse}</option>
 									</c:forEach>
 								</select>
                             </dd>
@@ -106,10 +112,11 @@
                         <dl class="row col-6">
                             <dt>제품명</dt>
                             <dd>
-								<select name="productCd" id="productNm" class="wd210p" onchange=detailNmChange()>
+								<select name="productCd" id="productCd" class="wd210p" onchange=detailNmChange()>
 									<option value="">--선택--</option>
 									<c:forEach items="${productList}" var="list" varStatus="status">
-									<option id="productOpt" value="${list.productCd}">${list.productNm}</option>
+									<option id="productOpt" value="${list.productCd}"  <c:if test="${list.productCd == productCdKey}"> selected</c:if>>
+									${list.productNm}</option>
 									</c:forEach>
 								</select>
                             </dd>
@@ -132,8 +139,8 @@
                     </article>
 
                     <div class="dl-buttons line mt30">
-                        <button class="btn bg_color3 small wd120p">초기화</button>
-                        <button class="btn bg_color1 small wd120p">검색</button>
+                        <button class="btn bg_color3 small wd120p" onclick=resetChoice()>초기화</button>
+                        <button class="btn bg_color1 small wd120p" onclick=inventoryStockSearch()>검색</button>
                     </div>
                 </div>
 
@@ -172,14 +179,16 @@
                             <tbody>
                             <c:forEach items="${list}" var="list" varStatus="status">
                                 <tr>
-                                	<td><fmt:formatDate value="${list.regDate}" pattern="yyyy-MM-dd"/></td>
-									<td>${list.warehouse}</td>
-									<td>${list.productCd}</td>
-									<td>${list.productNm}</td>
-									<td>${list.thickness}</td>
-									<td>${list.size}</td>
-									<td>${list.stock}</td>
-									<td class="txt-left">${list.reason}</td>
+									<fmt:parseDate value="${list.REG_DATE}" pattern="yyyy-MM-dd" var="parseDateTime" />
+									<fmt:formatDate value="${parseDateTime}" pattern="yyyy-MM-dd" var="regDate" />
+									<td>${regDate}</td>
+									<td>${list.WAREHOUSE}</td>
+									<td>${list.PRODUCT_CD}</td>
+									<td>${list.PRODUCT_NM}</td>
+									<td>${list.THICKNESS}</td>
+									<td>${list.SIZE} (${list.HEIGHT}*${list.WIDTH})</td>
+									<td>${list.STOCK}</td>
+									<td class="txt-left">${list.REASON}</td>
 								</tr>
 							</c:forEach>
                             </tbody>

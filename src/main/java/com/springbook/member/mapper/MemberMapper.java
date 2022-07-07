@@ -27,9 +27,13 @@ public interface MemberMapper {
 
 	List<MemberVO> getTypeProductList(Map<String, Object> map);
 
-	int addPrice(String string);
+	int addPrice(Map<String, Object> map);
 
 	int memberDelete(String string);
 
 	int initMoneyInfo(MemberVO vo);
+
+	int selectPrice(Map<String, Object> map);
+
+	int updatePrice(Map<String, Object> map);
 }

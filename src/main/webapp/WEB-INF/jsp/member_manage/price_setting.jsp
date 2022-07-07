@@ -32,6 +32,7 @@
 					</div>
 
                     <div class="rows mt30">
+                    <input type="hidden" name="id" value=${list[0]["ID"]}>
                         <!-- tab -->
                         <ul class="tabs">
                         <c:forEach items="${productNameList}" var="product" varStatus="status">                        
@@ -75,8 +76,11 @@
 <%-- 								<c:if test="${product eq list[status.index]['PRODUCT_NM']}">	 --%>
 								<tr class="${list[status.index]['PRODUCT_NM']}" name="${list[status.index]['PRODUCT_NM']}">						
 									<td><input type="checkbox" name="chk" value="Y" >
-										<input type="hidden" name="id" value='${id}'>
-										<input type="hidden" name="productVal" value='${list[status.index]}'>
+										<input type="hidden" name="productCd" value="${list[status.index]['PRODUCT_CD']}">
+										<input type="hidden" name="thickness" value="${list[status.index]['THICKNESS']}">
+										<input type="hidden" name="size" value="${list[status.index]['SIZE']}">
+										<input type="hidden" name="height" value="${list[status.index]['HEIGHT']}">
+										<input type="hidden" name="width" value="${list[status.index]['WIDTH']}">
 									</td>
 									<td>${list[status.index]["PRODUCT_CD"]}</td>
 									<td>${list[status.index]["THICKNESS"]}</td>
@@ -109,7 +113,7 @@
 					</div>
 
                     <div class="dl-buttons line">
-						<button class="btn bg_color3 small wd120p">취소</button>
+						<button class="btn bg_color3 small wd120p" onclick=closePopup()>취소</button>
 						<button class="btn bg_color1 small wd120p" onclick=savePrice()>저장</button>
 					</div>
 				</div>

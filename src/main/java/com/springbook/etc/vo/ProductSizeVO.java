@@ -6,10 +6,9 @@ import lombok.Data;
 
 @Data
 public class ProductSizeVO {
-	private int fileId;
-	private int productIdx;
+	private int sizeIdx;
 	private Date regDate;
-	private String productNm;
+	private String productCd;
 	private String size;
 	private String height;
 	private String width;

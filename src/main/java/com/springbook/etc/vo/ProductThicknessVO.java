@@ -6,12 +6,11 @@ import lombok.Data;
 @Data
 public class ProductThicknessVO {
 	private int fileId;
-	private int productIdx;
+	private int thicknessIdx;
 	private Date regDate;
-	private String productNm;
+	private String productCd;
 	private String thickness;
 	private String testInstitute;
 	private String testNum;
 	private String customOrder;
-	private String fileNm;
 }

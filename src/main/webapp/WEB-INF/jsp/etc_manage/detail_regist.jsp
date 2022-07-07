@@ -102,15 +102,15 @@
 						<h3 class="normal"><i class="s-add"></i>제품 상세 설정</h3>
 					</div>
 
-                    <c:if test="${empty info}">                
+                    <c:if test="${empty list}">                
 					<article class="inner-1">
                         <dl class="row col-2">
                             <dt>제품명 <i class="essen"> *</i></dt>
                             <dd>
-								<select name="productNm" id="productNm" class="wd210p" onchange=detailNmChange()>
+								<select name="productCd" id="productCd" class="wd210p" onchange=detailNmChange()>
 									<option value="">--선택--</option>
 									<c:forEach items="${productList}" var="list" varStatus="status">
-									<option value="${list.productNm}">${list.productNm}</option>
+									<option value="${list.productCd}">${list.productNm}</option>
 									</c:forEach>
 								</select>
 							</dd>
@@ -154,25 +154,23 @@
                     </article>
                     </c:if>
 
-                    <c:if test="${!empty info}">
-                    <c:forEach items="${info}" var="info" varStatus="status">                   
+                    <c:if test="${!empty list}">
+                     <c:forEach items="${list}" var="info" varStatus="status">                   
 					<article class="inner-1">
 						<input type="hidden" id="update" value="update">
 						<input type="hidden" id="pagename" value="detail">
-						<input type="hidden" class="wd210p" name="productIdx" value="${info.productIdx}">
-						<input type="hidden" id="origThickness" value="${info.thickness}">
-						<input type="hidden" id="origSize" value="${info.size}">
-						
-						<input type="hidden" class="wd210p" name="productIdx" value="${info.productIdx}">
+						<input type="hidden" class="wd210p" name="detailIdx" value="${list[0]['DETAIL_IDX']}" >
+						<input type="hidden" id="origThickness" value="${list[0]['THICKNESS']}">
+						<input type="hidden" id="origSize" value="${list[0]['SIZE']}">
 																	
                         <dl class="row col-2">
                             <dt>제품명 <i class="essen"> *</i></dt>
                             <dd>
-								<select name="productNm" id="productNm" class="wd210p" onchange=detailNmChange()>
+								<select name="productCd" id="productCd" class="wd210p" onchange=detailNmChange()>
 									<option value="">--선택--</option>
-									<c:forEach items="${productList}" var="list" varStatus="status">
-									<option value="${list.productNm}" <c:if test="${info.productNm == list.productNm}"> selected
-									</c:if>>${list.productNm}</option>
+									<c:forEach items="${productList}" var="productList" varStatus="status">
+									<option value="${productList.productCd}" <c:if test="${list[0]['PRODUCT_CD'] == productList.productCd}"> selected
+									</c:if>>${productList.productNm}</option>
 									</c:forEach>
 								</select>
 							</dd>
@@ -196,22 +194,22 @@
                         <dl class="row col-2">
                             <dt>길이 x 폭 <i class="essen"> *</i></dt>
                             <dd>
-                                <input type="text" class="wd80p" name="height" value="${info.height}">
+                                <input type="text" class="wd80p" name="height" value="${list[0]['HEIGHT']}">
                                 <span>×</span>
-                                <input type="text" class="wd80p" name="width" value="${info.width}">
+                                <input type="text" class="wd80p" name="width" value="${list[0]['WIDTH']}">
                             </dd>
                         </dl>
                         <dl class="row col-2">
                             <dt>안전재고 수량</dt>
-                            <dd><input type="text" class="wd210p" name="safety" value="${info.safety}"></dd>
+                            <dd><input type="text" class="wd210p" name="safety" value="${list[0]['SAFETY']}"></dd>
                         </dl>
                         <dl class="row col-2">
                             <dt>파렛당 장수 </dt>
-                            <dd><input type="text" class="wd210p" name="pallet" value="${info.pallet}"></dd>
+                            <dd><input type="text" class="wd210p" name="pallet" value="${list[0]['PALLET']}"></dd>
                         </dl>
                         <dl class="row col-2">
                             <dt>컨테이너당 장수</dt>
-                            <dd><input type="text" class="wd210p" name="slice" value="${info.slice}"></dd>
+                            <dd><input type="text" class="wd210p" name="slice" value="${list[0]['SLICE']}"></dd>
                         </dl>
                     </article>
                     </c:forEach>

@@ -162,9 +162,9 @@
 							<tbody>
 							<c:forEach items="${list}" var="data" varStatus="status">
 								<tr>
-									<td><input type="checkbox" name="chk" value="${list[status.index]['PRODUCT_IDX']}"></td>
+									<td><input type="checkbox" name="chk" value="${list[status.index]['DETAIL_IDX']}"></td>
 									<td>${status.index+1}</td>
-									<td><a onclick="location.href='goDetailRegist.do?idx=${list[status.index]['PRODUCT_IDX']}'" class="tit">${list[status.index]['PRODUCT_CD']}</a></td>
+									<td><a onclick="location.href='goDetailRegist.do?idx=${list[status.index]['DETAIL_IDX']}'" class="tit">${list[status.index]['PRODUCT_CD']}</a></td>
 									<td>${list[status.index]['HEIGHT']}</td>
 									<td>${list[status.index]['WIDTH']}</td>
 									<c:set var="hebe" value = "${(list[status.index]['HEIGHT']*list[status.index]['WIDTH'])*0.001}"/>
