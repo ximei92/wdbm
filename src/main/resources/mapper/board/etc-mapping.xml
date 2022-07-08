@@ -163,7 +163,7 @@
 		COUNT(*)
 		FROM
 		PRODUCT_THICKNESS A
-		INNER JOIN PRODUCT B ON B.PRODUCT_CD = A.PRODUCT_CD
+		INNER JOIN PRODUCT B ON B.PRODUCT_IDX = A.PRODUCT_IDX
 		WHERE 
 		B.DEL_YN = 'N'
 		<if test= "keyword != null and keyword.equals('') and type.equals('productNm')">
@@ -180,7 +180,7 @@
 		A.*, B.PRODUCT_NM,C.ORIG_NM AS FILE_NM
 		FROM
 		PRODUCT_THICKNESS A
-		INNER JOIN PRODUCT B ON B.PRODUCT_CD = A.PRODUCT_CD
+		INNER JOIN PRODUCT B ON B.PRODUCT_IDX = A.PRODUCT_IDX
 		LEFT OUTER JOIN FILE C ON C.FILE_ID = A.FILE_ID
 		WHERE 
 		B.DEL_YN = 'N'
@@ -203,11 +203,22 @@
 		DEL_YN = 'N'
 	</select>
 	
+	<!--제품명등록관리 전체 개수 -->
+	<select id="getProductNameListGroup" resultType="com.springbook.etc.vo.ProductVO">
+		SELECT 
+		*
+		FROM
+	    PRODUCT
+		WHERE 
+		DEL_YN = 'N'
+		GROUP BY PRODUCT_NM
+	</select>
+	
 	<!--제품두께추가 -->
 	<insert id="addProductThickness" parameterType="com.springbook.etc.vo.ProductVO">
 		INSERT INTO PRODUCT_THICKNESS
 		(
-		product_cd, 
+		product_Idx, 
 		thickness, 
 		test_institute,
 		test_num, 
@@ -217,7 +228,7 @@
 		)
 		VALUES
 		(
-		#{productCd}, 
+		#{productIdx}, 
 		#{thickness},
 		#{testInstitute}, 
 		#{testNum}, 
@@ -231,7 +242,7 @@
 	<update id="updateProductThickness" parameterType="com.springbook.etc.vo.ProductVO">
 		UPDATE
 		PRODUCT_THICKNESS
-		SET product_Cd = #{productCd},
+		SET product_idx = #{productIdx},
 			thickness = #{thickness},
 			test_institute = #{testInstitute},
 			test_num = #{testNum},
@@ -245,7 +256,7 @@
 	<delete id="thicknessDelete" parameterType="java.lang.String">
 	    DELETE FROM PRODUCT_THICKNESS
 	    WHERE
-        PRODUCT_IDX = ${list}
+        THICKNESS_IDX = ${list}
 	</delete>
 	
 	<!--사이즈등록관리 전체 개수 -->
@@ -253,8 +264,8 @@
 		SELECT 
 		COUNT(*)
 		FROM
-		PRODUCT_SIZE A INNER JOIN PRODUCT_THICKNESS B ON A.PRODUCT_CD = B.PRODUCT_CD
-		INNER JOIN PRODUCT C ON A.PRODUCT_CD = C.PRODUCT_CD
+		PRODUCT_SIZE A INNER JOIN PRODUCT_THICKNESS B ON B.PRODUCT_IDX = A.PRODUCT_IDX
+		INNER JOIN PRODUCT C ON B.PRODUCT_IDX = C.PRODUCT_IDX
 		WHERE 
 		C.DEL_YN = 'N'
 		<if test= "keyword != null and keyword.equals('') and type.equals('productNm')">
@@ -270,8 +281,8 @@
 		SELECT
 		A.*, B.THICKNESS AS THICKNESS, C.PRODUCT_NM AS PRODUCT_NM
 		FROM
-		PRODUCT_SIZE A INNER JOIN PRODUCT_THICKNESS B ON A.PRODUCT_CD = B.PRODUCT_CD
-		INNER JOIN PRODUCT C ON A.PRODUCT_CD = C.PRODUCT_CD
+		PRODUCT_SIZE A INNER JOIN PRODUCT_THICKNESS B ON B.PRODUCT_IDX = A.PRODUCT_IDX
+		INNER JOIN PRODUCT C ON C.PRODUCT_IDX = A.PRODUCT_IDX
 		WHERE 
 		C.DEL_YN = 'N'
 		<if test= "keyword != null and !keyword.equals('') and type.equals('productNm')">
@@ -287,7 +298,7 @@
 	<insert id="addProductSize" parameterType="com.springbook.etc.vo.ProductSizeVO">
 		INSERT INTO PRODUCT_SIZE
 		(
-		product_cd, 
+		product_idx, 
 		size, 
 		height,
 		width,
@@ -296,7 +307,7 @@
 		)
 		VALUES
 		(
-		#{productCd}, 
+		#{productIdx}, 
 		#{size},
 		#{height}, 
 		#{width},
@@ -309,7 +320,7 @@
 	<update id="updateProductSize" parameterType="com.springbook.etc.vo.ProductSizeVO">
 		UPDATE
 		PRODUCT_SIZE
-		SET product_Cd = #{productCd},
+		SET product_Idx = #{productIdx},
 			size = #{size},
 			height = #{height},
 			width = #{width},
@@ -332,7 +343,7 @@
 		FROM
 		PRODUCT_DETAIL DETAIL
 			INNER JOIN PRODUCT_THICKNESS THICKNESS ON DETAIL.THICKNESS = THICKNESS.THICKNESS_IDX
-			INNER JOIN PRODUCT PRODUCT ON PRODUCT.PRODUCT_CD = DETAIL.PRODUCT_CD
+			INNER JOIN PRODUCT PRODUCT ON PRODUCT.PRODUCT_IDX = DETAIL.PRODUCT_IDX
 			INNER JOIN PRODUCT_SIZE SIZE ON SIZE.SIZE_IDX = DETAIL.SIZE
 		WHERE 
 		PRODUCT.DEL_YN = 'N'
@@ -350,11 +361,11 @@
 	<!--페이지&키워드 포함 상세 등록관리조회 -->
 	<select id="getDetailList" resultType="Map" parameterType="Map">
 		SELECT
-		DETAIL.*, SIZE.HEIGHT, SIZE.WIDTH ,THICKNESS.THICKNESS, PRODUCT.PRODUCT_NM
+		DETAIL.*, SIZE.HEIGHT, SIZE.WIDTH ,THICKNESS.THICKNESS, PRODUCT.PRODUCT_NM, PRODUCT.PRODUCT_CD, SIZE.SIZE AS SIZE_NM
 		FROM
 		PRODUCT_DETAIL DETAIL
 			INNER JOIN PRODUCT_THICKNESS THICKNESS ON DETAIL.THICKNESS = THICKNESS.THICKNESS_IDX
-			INNER JOIN PRODUCT PRODUCT ON PRODUCT.PRODUCT_CD = DETAIL.PRODUCT_CD
+			INNER JOIN PRODUCT PRODUCT ON PRODUCT.PRODUCT_IDX = DETAIL.PRODUCT_IDX
 			INNER JOIN PRODUCT_SIZE SIZE ON SIZE.SIZE_IDX = DETAIL.SIZE
 		WHERE 
 		PRODUCT.DEL_YN = 'N'
@@ -375,9 +386,9 @@
 		SELECT
 		*
 		FROM
-		PRODUCT A LEFT OUTER JOIN PRODUCT_THICKNESS THICKNESS ON A.PRODUCT_CD = THICKNESS.PRODUCT_CD
+		PRODUCT A LEFT OUTER JOIN PRODUCT_THICKNESS THICKNESS ON A.PRODUCT_IDX = THICKNESS.PRODUCT_IDX
 		WHERE 
-		A.DEL_YN = 'N' AND A.PRODUCT_CD = #{name}
+		A.DEL_YN = 'N' AND A.PRODUCT_IDX = #{name}
 		GROUP BY THICKNESS.THICKNESS
 	</select>
 	
@@ -386,9 +397,9 @@
 		SELECT
 		*
 		FROM
-		PRODUCT A LEFT OUTER JOIN PRODUCT_SIZE SIZE ON A.PRODUCT_CD = SIZE.PRODUCT_CD
+		PRODUCT A LEFT OUTER JOIN PRODUCT_SIZE SIZE ON A.PRODUCT_IDX = SIZE.PRODUCT_IDX
 		WHERE 
-		A.DEL_YN = 'N' AND A.PRODUCT_CD = #{name}
+		A.DEL_YN = 'N' AND A.PRODUCT_IDX = #{name}
 		GROUP BY SIZE.SIZE
 	</select>
 	
@@ -396,7 +407,7 @@
 	<insert id="addProductDetail" parameterType="com.springbook.etc.vo.ProductDetailVO">
 		INSERT INTO PRODUCT_DETAIL
 		(
-		product_cd,
+		product_idx,
 		thickness,
 		size,
 		safety,
@@ -406,7 +417,7 @@
 		)
 		VALUES
 		(
-		#{productCd}, 
+		#{productIdx}, 
 		#{thickness},
 		#{size},
 		#{safety},
@@ -416,11 +427,19 @@
 		)
 	</insert>
 
+	<!--제품 상세설정찾기 -->
+	<select id="findProductDetail"  resultType="com.springbook.etc.vo.ProductDetailVO" parameterType="com.springbook.etc.vo.ProductDetailVO">
+		SELECT * FROM PRODUCT_DETAIL
+		WHERE PRODUCT_IDX = #{productIdx}
+		AND THICKNESS = #{thickness}
+		AND SIZE = #{size}
+	</select>
+	
 	<!--제품 상세설정 수정 -->
 	<update id="updateProductDetail" parameterType="com.springbook.etc.vo.ProductDetailVO">
 		UPDATE
 		PRODUCT_DETAIL
-		SET product_cd = #{productCd},
+		SET product_idx = #{productIdx},
 			thickness = #{thickness},
 			size = #{size},
 			safety = #{safety},
@@ -470,7 +489,7 @@
 	    INSERT INTO WAREHOUSE_STOCK
 		(
 		warehouse,
-		product_cd,
+		product_idx,
 		product_nm,
 		thickness,
 		size, 
@@ -481,7 +500,7 @@
 		VALUES
 		(
 		#{warehouse}, 
-		#{productCd}, 
+		#{productIdx}, 
 		#{productNm}, 
 		#{thickness},
 		#{size},
@@ -499,7 +518,7 @@
     	WHERE
 		THICKNESS = #{thickness} AND
 		SIZE = #{size} AND
-		PRODUCT_CD = #{productCd} AND
+		PRODUCT_Idx = #{productIdx} AND
 		WAREHOUSE = #{warehouse} AND
 		PRODUCT_NM = #{productNm}
 	</update>
@@ -513,7 +532,7 @@
 		WHERE
 		THICKNESS = #{thickness} AND
 		SIZE = #{size} AND
-		PRODUCT_CD = #{productCd} AND
+		PRODUCT_Idx = #{productIdx} AND
 		WAREHOUSE = #{warehouse}
 	</select>
 	
@@ -522,7 +541,7 @@
 	    INSERT INTO WAREHOUSE_inventory
 		(
 		warehouse_idx,
-		product_cd,
+		product_idx,
 		thickness,
 		size, 
 		stock,
@@ -532,7 +551,7 @@
 		VALUES
 		(
 		#{warehouseIdx}, 
-		#{productCd},		
+		#{productIdx},		
 		#{thickness},
 		#{size},
 		#{stock}, 
@@ -557,7 +576,7 @@
 		A.*,B.PRODUCT_NM
 		FROM
 		PRODUCT_THICKNESS AS A
-		INNER JOIN PRODUCT AS B ON A.PRODUCT_CD =B.PRODUCT_CD
+		INNER JOIN PRODUCT AS B ON A.PRODUCT_IDX =B.PRODUCT_IDX
 		WHERE
 		A.THICKNESS_IDX = #{idx}
 	</select>
@@ -568,7 +587,7 @@
 		A.*,B.PRODUCT_NM
 		FROM
 		PRODUCT_SIZE AS A
-		INNER JOIN PRODUCT AS B ON A.PRODUCT_CD =B.PRODUCT_CD
+		INNER JOIN PRODUCT AS B ON A.PRODUCT_IDX =B.PRODUCT_IDX
 		WHERE
 		A.SIZE_IDX = #{idx}
 	</select>
@@ -580,7 +599,7 @@
 		FROM
 		PRODUCT_DETAIL DETAIL
 			INNER JOIN PRODUCT_THICKNESS THICKNESS ON DETAIL.THICKNESS = THICKNESS.THICKNESS_IDX
-			INNER JOIN PRODUCT PRODUCT ON PRODUCT.PRODUCT_CD = DETAIL.PRODUCT_CD
+			INNER JOIN PRODUCT PRODUCT ON PRODUCT.PRODUCT_IDX = DETAIL.PRODUCT_IDX
 			INNER JOIN PRODUCT_SIZE SIZE ON SIZE.SIZE_IDX = DETAIL.SIZE
 		WHERE
 		DETAIL_IDX = #{idx}
@@ -588,29 +607,37 @@
 	
 	<!--제품별상세설정 검색 개수 -->
 	<select id="safetyListCount" resultType="int" parameterType="java.lang.String">
-		SELECT 
+		SELECT
 		COUNT(*)
 		FROM
-		PRODUCT_DETAIL
-		WHERE 
-		DEL_YN = "N"
-		<if test= "keyword != null and !keyword.equals('')">
-    	AND	PRODUCT_NM LIKE CONCAT("%",#{keyword},"%")
-   		</if>
+		(
+		SELECT
+		COUNT(*)
+		FROM
+		WAREHOUSE_INVENTORY A
+		INNER JOIN PRODUCT C ON C.PRODUCT_IDX = A.PRODUCT_IDX
+		INNER JOIN PRODUCT_THICKNESS B ON A.THICKNESS = B.THICKNESS_IDX
+		INNER JOIN PRODUCT_SIZE E ON E.SIZE_IDX = A.SIZE		
+		INNER JOIN PRODUCT_DETAIL D ON D.PRODUCT_IDX = D.PRODUCT_IDX
+		WHERE
+		C.PRODUCT_IDX = #{productIdx}
+		GROUP BY C.PRODUCT_CD   
+		) AS RESULT		
 	</select>
 	
 	<!--제품별상세 포함 검색 페이징포함 -->
 	<select id="getSafetyList" resultType="Map" parameterType="Map">
 		SELECT
-		*
+		SUM(A.STOCK) AS TOTAL_STOCK, C.PRODUCT_CD,C.PRODUCT_NM, C.PRODUCT_CD,F.SAFETY, F.SLICE, A.PRODUCT_IDX, E.SIZE,B.THICKNESS,C.PRODUCT_IDX
 		FROM
-		PRODUCT_DETAIL DETAIL
-		INNER JOIN PRODUCT A ON A.PRODUCT_NM = DETAIL.PRODUCT_NM 
-		WHERE 
-		A.DEL_YN = 'N'
-		<if test= "keyword != null and !keyword.equals('')">
-    	AND	PRODUCT_NM LIKE CONCAT("%",#{keyword},"%")
-   		</if>
+		WAREHOUSE_INVENTORY A
+		INNER JOIN PRODUCT C ON C.PRODUCT_IDX = A.PRODUCT_IDX
+		INNER JOIN PRODUCT_THICKNESS B ON A.THICKNESS = B.THICKNESS_IDX
+		INNER JOIN PRODUCT_SIZE E ON E.SIZE_IDX = A.SIZE	
+		INNER JOIN PRODUCT_DETAIL F ON F.PRODUCT_IDX = A.PRODUCT_IDX
+		WHERE
+		C.PRODUCT_IDX = #{productIdx}
+		GROUP BY C.PRODUCT_CD
 		LIMIT #{i}, #{contentnum}
 	</select>
 	
@@ -668,7 +695,7 @@
 		FROM
 		WAREHOUSE_INVENTORY A
 		INNER JOIN PRODUCT_THICKNESS B ON A.THICKNESS = B.THICKNESS_IDX
-		INNER JOIN PRODUCT C ON C.PRODUCT_CD = A.PRODUCT_CD
+		INNER JOIN PRODUCT C ON C.PRODUCT_IDX = A.PRODUCT_IDX
 		INNER JOIN PRODUCT_SIZE D ON D.SIZE_IDX = A.SIZE
 		INNER JOIN WAREHOUSE E ON E.WAREHOUSE_IDX = A.WAREHOUSE_IDX
 	</select>
@@ -680,19 +707,19 @@
 		FROM
 		WAREHOUSE_INVENTORY A
 		INNER JOIN PRODUCT_THICKNESS B ON A.THICKNESS = B.THICKNESS_IDX
-		INNER JOIN PRODUCT C ON C.PRODUCT_CD = A.PRODUCT_CD
+		INNER JOIN PRODUCT C ON C.PRODUCT_IDX = A.PRODUCT_IDX
 		INNER JOIN PRODUCT_SIZE D ON D.SIZE_IDX = A.SIZE
 		INNER JOIN WAREHOUSE E ON E.WAREHOUSE_IDX = A.WAREHOUSE_IDX
-		<if test= " !'null0'.equals(productCd) or !'null0'.equals(warehouseIdx)">
+		<if test= " !'null0'.equals(productIdx) or !'null0'.equals(warehouseIdx)">
 		WHERE
 		</if>
-		<if test= "!'null0'.equals(productCd)">
-		C.PRODUCT_CD = #{productCd}
+		<if test= "!'null0'.equals(productIdx)">
+		C.PRODUCT_IDX= #{productIdx}
 		</if>
-		<if test= "'null0'.equals(productCd) and !'null0'.equals(warehouseIdx)">
+		<if test= "'null0'.equals(productIdx) and !'null0'.equals(warehouseIdx)">
 		E.WAREHOUSE_IDX = #{warehouseIdx}
 		</if>
-		<if test= " !'null0'.equals(productCd) and !'null0'.equals(warehouseIdx)">
+		<if test= " !'null0'.equals(productIdx) and !'null0'.equals(warehouseIdx)">
 		AND E.WAREHOUSE_IDX = #{warehouseIdx}
 		</if>
 		<if test= "!'null0'.equals(size)">
@@ -706,23 +733,23 @@
 	<!--창고별재고관리 전체 목록 -->
 	<select id="getInventoryHistory" resultType="Map">
 		SELECT
-		A.REG_DATE, A.REASON, A.STOCK, A.PRODUCT_CD,B.THICKNESS,C.PRODUCT_NM,D.HEIGHT,D.WIDTH,D.SIZE,E.WAREHOUSE
+		A.REG_DATE, A.REASON, A.STOCK, C.PRODUCT_CD,B.THICKNESS,C.PRODUCT_NM,D.HEIGHT,D.WIDTH,D.SIZE,E.WAREHOUSE
 		FROM
 		WAREHOUSE_INVENTORY A
 		INNER JOIN PRODUCT_THICKNESS B ON A.THICKNESS = B.THICKNESS_IDX
-		INNER JOIN PRODUCT C ON C.PRODUCT_CD = A.PRODUCT_CD
+		INNER JOIN PRODUCT C ON C.PRODUCT_IDX = A.PRODUCT_IDX
 		INNER JOIN PRODUCT_SIZE D ON D.SIZE_IDX = A.SIZE
 		INNER JOIN WAREHOUSE E ON E.WAREHOUSE_IDX = A.WAREHOUSE_IDX
-		<if test= " !'null0'.equals(productCd) or !'null0'.equals(warehouseIdx)">
+		<if test= " !'null0'.equals(productIdx) or !'null0'.equals(warehouseIdx)">
 		WHERE
 		</if>
-		<if test= "!'null0'.equals(productCd)">
-		C.PRODUCT_CD = #{productCd}
+		<if test= "!'null0'.equals(productIdx)">
+		C.PRODUCT_IDX = #{productIdx}
 		</if>
-		<if test= "'null0'.equals(productCd) and !'null0'.equals(warehouseIdx)">
+		<if test= "'null0'.equals(productIdx) and !'null0'.equals(warehouseIdx)">
 		E.WAREHOUSE_IDX = #{warehouseIdx}
 		</if>
-		<if test= " !'null0'.equals(productCd) and !'null0'.equals(warehouseIdx)">
+		<if test= " !'null0'.equals(productIdx) and !'null0'.equals(warehouseIdx)">
 		AND E.WAREHOUSE_IDX = #{warehouseIdx}
 		</if>
 		<if test= "!'null0'.equals(size)">
@@ -744,31 +771,31 @@
 		FROM
 		WAREHOUSE_INVENTORY A
 		INNER JOIN PRODUCT_THICKNESS B ON A.THICKNESS = B.THICKNESS_IDX
-		INNER JOIN PRODUCT C ON C.PRODUCT_CD = A.PRODUCT_CD
+		INNER JOIN PRODUCT C ON C.PRODUCT_IDX = A.PRODUCT_IDX
 		INNER JOIN PRODUCT_SIZE D ON D.SIZE_IDX = A.SIZE
 		INNER JOIN WAREHOUSE E ON E.WAREHOUSE_IDX = A.WAREHOUSE_IDX
+		INNER JOIN PRODUCT_DETAIL F ON F.PRODUCT_IDX = A.PRODUCT_IDX
 		WHERE
-		C.PRODUCT_CD = #{productCd} AND
+		C.PRODUCT_NM = #{productNm} AND
 		E.WAREHOUSE_IDX = #{warehouseIdx}
 		GROUP BY E.WAREHOUSE_IDX, C.PRODUCT_CD,B.THICKNESS_IDX, D.SIZE_IDX
 		) AS RESULT
-		
 	</select>
 		
 	<!--창고별재고현황 전체 목록 -->
 	<select id="getInventoryStatus" resultType="Map">
 		SELECT
-		A.REG_DATE, A.REASON, SUM(A.STOCK) AS TOTAL_STOCK, A.PRODUCT_CD,B.THICKNESS,C.PRODUCT_NM,D.HEIGHT,D.WIDTH,
-		D.SIZE,E.WAREHOUSE,E.WAREHOUSE_IDX, C.PRODUCT_CD,F.SAFETY, F.PALLET
+		A.REG_DATE, A.REASON, SUM(A.STOCK) AS TOTAL_STOCK, C.PRODUCT_CD,B.THICKNESS,C.PRODUCT_NM,D.HEIGHT,D.WIDTH,
+		D.SIZE,E.WAREHOUSE,E.WAREHOUSE_IDX, C.PRODUCT_CD,F.SAFETY, F.SLICE
 		FROM
 		WAREHOUSE_INVENTORY A
 		INNER JOIN PRODUCT_THICKNESS B ON A.THICKNESS = B.THICKNESS_IDX
-		INNER JOIN PRODUCT C ON C.PRODUCT_CD = A.PRODUCT_CD
+		INNER JOIN PRODUCT C ON C.PRODUCT_IDX = A.PRODUCT_IDX
 		INNER JOIN PRODUCT_SIZE D ON D.SIZE_IDX = A.SIZE
 		INNER JOIN WAREHOUSE E ON E.WAREHOUSE_IDX = A.WAREHOUSE_IDX
-		INNER JOIN PRODUCT_DETAIL F ON F.PRODUCT_CD = A.PRODUCT_CD
+		INNER JOIN PRODUCT_DETAIL F ON F.PRODUCT_IDX = A.PRODUCT_IDX
 		WHERE
-		C.PRODUCT_CD = #{productCd} AND
+		C.PRODUCT_NM = #{productNm} AND
 		E.WAREHOUSE_IDX = #{warehouseIdx}
 		GROUP BY E.WAREHOUSE_IDX, C.PRODUCT_CD,B.THICKNESS_IDX, D.SIZE_IDX
 		LIMIT #{i}, #{contentnum}
@@ -777,11 +804,11 @@
 	<!--창고별재고 조건없을때목록 -->
 	<select id="getInventoryHistoryAll" resultType="Map">
 		SELECT
-		A.REG_DATE, A.REASON, A.STOCK, A.PRODUCT_CD,B.THICKNESS,C.PRODUCT_NM,D.HEIGHT,D.WIDTH,D.SIZE,E.WAREHOUSE
+		A.REG_DATE, A.REASON, A.STOCK, A.PRODUCT_IDX,C.PRODUCT_CD,B.THICKNESS,C.PRODUCT_NM,D.HEIGHT,D.WIDTH,D.SIZE,E.WAREHOUSE
 		FROM
 		WAREHOUSE_INVENTORY A
 		INNER JOIN PRODUCT_THICKNESS B ON A.THICKNESS = B.THICKNESS_IDX
-		INNER JOIN PRODUCT C ON C.PRODUCT_CD = A.PRODUCT_CD
+		INNER JOIN PRODUCT C ON C.PRODUCT_IDX = A.PRODUCT_IDX
 		INNER JOIN PRODUCT_SIZE D ON D.SIZE_IDX = A.SIZE
 		INNER JOIN WAREHOUSE E ON E.WAREHOUSE_IDX = A.WAREHOUSE_IDX
 		ORDER BY A.REG_DATE DESC

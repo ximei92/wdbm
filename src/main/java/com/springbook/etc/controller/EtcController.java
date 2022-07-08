@@ -245,7 +245,6 @@ public class EtcController {
         //마지막 페이지를 마지막 페이지 블록과 현재 페이지 블록 번호로 정한다.
         if(ccontentnum == 10){//선택 게시글 수
         	List<Map<String , Object>> list = etcService.getThicknessList(pagemaker.getPagenum()*10,pagemaker.getContentnum(),type, keyword);
-        	 System.out.println(list);
             model.addAttribute("list", list);
         }else if(ccontentnum == 20){
         	List<Map<String , Object>> list = etcService.getThicknessList(pagemaker.getPagenum()*20,pagemaker.getContentnum(),type, keyword);
@@ -464,10 +463,10 @@ public class EtcController {
 		if(idx != null){
 			List<Map<String,Object>> list = etcService.getDetailInfo(idx);
 			model.addAttribute("list", list);
-			String productCd = list.get(0).get("PRODUCT_CD").toString();
+			String productIdx = list.get(0).get("PRODUCT_IDX").toString();
 
-			List<Map> thicklist = etcService.selectDetailThickness(productCd);
-			List<Map> sizelist = etcService.selectDetailSize(productCd);
+			List<Map> thicklist = etcService.selectDetailThickness(productIdx);
+			List<Map> sizelist = etcService.selectDetailSize(productIdx);
 			
 			Map<String,Object> map = new HashMap<String,Object>();
 			
@@ -499,7 +498,16 @@ public class EtcController {
 	@PostMapping("/addProductDetail.do")
 	@ResponseBody
 	public int addProductDetail(com.springbook.etc.vo.ProductDetailVO vo) {
-		int result = etcService.addProductDetail(vo);
+		List<ProductDetailVO> cnt = etcService.findProductDetail(vo);
+		int result = 0;
+		System.out.println(cnt.size());
+		System.out.println(vo);
+		if(cnt.size() != 0 ){
+			vo.setDetailIdx(cnt.get(0).getDetailIdx());
+			result = etcService.updateProductDetail(vo);
+		} else {
+			result = etcService.addProductDetail(vo);
+		}
 		return result;
 	}
 
@@ -603,12 +611,14 @@ public class EtcController {
 		int cpagenum;
 		int ccontentnum;
 		String key = "";		
-		List<ProductVO> productNameList = etcService.getProductNameList();		
-		model.addAttribute("list", productNameList);
+		List<ProductVO> productNameList = etcService.getProductNameListGroup();		
+		model.addAttribute("productNameList", productNameList);
 		
 		if(keyword == null || keyword == "" || keyword.length() == 0){
-			key = productNameList.get(0).getProductNm();
-		}		
+			key = Integer.toString(productNameList.get(0).getProductIdx());
+		}	else{
+			key = keyword;
+		}
 		
 		if(pagenum == null || pagenum.length() == 0){
 			cpagenum = 1;
@@ -633,20 +643,21 @@ public class EtcController {
         pagemaker.setEndPage(pagemaker.getLastblock(),pagemaker.getCurrentblock());
         //마지막 페이지를 마지막 페이지 블록과 현재 페이지 블록 번호로 정한다.
         if(ccontentnum == 10){//선택 게시글 수
-        	List<ProductDetailVO> list = etcService.getSafetyList(pagemaker.getPagenum()*10,pagemaker.getContentnum(),key);
+        	List<Map<String,Object>> list = etcService.getSafetyList(pagemaker.getPagenum()*10,pagemaker.getContentnum(),key);
             model.addAttribute("list", list);
             System.out.println(list);
         }else if(ccontentnum == 20){
-        	List<ProductDetailVO> list = etcService.getSafetyList(pagemaker.getPagenum()*20,pagemaker.getContentnum(),key);
+        	List<Map<String,Object>> list = etcService.getSafetyList(pagemaker.getPagenum()*20,pagemaker.getContentnum(),key);
         	 model.addAttribute("list", list);
         	 System.out.println(list);
         }else if(ccontentnum ==30){
-        	List<ProductDetailVO> list = etcService.getSafetyList(pagemaker.getPagenum()*30, pagemaker.getContentnum(),key);
+        	List<Map<String,Object>> list = etcService.getSafetyList(pagemaker.getPagenum()*30, pagemaker.getContentnum(),key);
         	model.addAttribute("list", list);
         }
 
          model.addAttribute("page", pagemaker);
-
+         model.addAttribute("productKey",key);
+         
 		return "etc_manage/increase_safety";
 	}
 	
@@ -726,7 +737,7 @@ public class EtcController {
 
 
 	@GetMapping(value= "/goInvetoryManage.do")
-	public String goInvetoryManage(Model model,String pagenum, String contentnum, String productCd, String warehouseIdx, String thickness, String size) {
+	public String goInvetoryManage(Model model,String pagenum, String contentnum, String productIdx, String warehouseIdx, String thickness, String size) {
 		List<WarehouseVO> warehouse = etcService.getWarehouseList(0, 10000);
 		List<ProductVO> productNameList = etcService.getProductNameList();
 		model.addAttribute("warehouse", warehouse);
@@ -735,7 +746,7 @@ public class EtcController {
 		int cpagenum;
 		int ccontentnum;
 		boolean check = false;
-		if(productCd == null && warehouseIdx == null && thickness == null && size == null){
+		if(productIdx == null && warehouseIdx == null && thickness == null && size == null){
 			check = true;
 		}
 		if(pagenum == null || pagenum.length() == 0){
@@ -754,8 +765,8 @@ public class EtcController {
 			pagemaker.setTotalcount(etcService.inventoryHistoryAllCount()); 
 			System.out.println(etcService.inventoryHistoryAllCount());
 		} else{
-			pagemaker.setTotalcount(etcService.inventoryHistoryCount(productCd,warehouseIdx,thickness,size)); 
-			System.out.println(etcService.inventoryHistoryCount(productCd,warehouseIdx,thickness,size));
+			pagemaker.setTotalcount(etcService.inventoryHistoryCount(productIdx,warehouseIdx,thickness,size)); 
+			System.out.println(etcService.inventoryHistoryCount(productIdx,warehouseIdx,thickness,size));
 		}
 		// mapper 전체 게시글 개수를 지정한다
         pagemaker.setPagenum(cpagenum-1);   // 현재 페이지를 페이지 객체에 지정한다 -1 을 해야 쿼리에서 사용할수 있다
@@ -769,33 +780,33 @@ public class EtcController {
         //마지막 페이지를 마지막 페이지 블록과 현재 페이지 블록 번호로 정한다.
         if(ccontentnum == 10){//선택 게시글 수
         	if(check){
-            	List<Map<String,Object>> list = etcService.getInventoryHistoryAll(pagemaker.getPagenum()*10,pagemaker.getContentnum(),productCd,warehouseIdx,thickness,size);
+            	List<Map<String,Object>> list = etcService.getInventoryHistoryAll(pagemaker.getPagenum()*10,pagemaker.getContentnum(),productIdx,warehouseIdx,thickness,size);
                 model.addAttribute("list", list);       		
         	} else{
-        	List<Map<String,Object>> list = etcService.getInventoryHistory(pagemaker.getPagenum()*10,pagemaker.getContentnum(),productCd,warehouseIdx,thickness,size);
+        	List<Map<String,Object>> list = etcService.getInventoryHistory(pagemaker.getPagenum()*10,pagemaker.getContentnum(),productIdx,warehouseIdx,thickness,size);
         	System.out.println(list);
             model.addAttribute("list", list);
         	}
         }else if(ccontentnum == 20){
         	if(check){
-            	List<Map<String,Object>> list = etcService.getInventoryHistoryAll(pagemaker.getPagenum()*20,pagemaker.getContentnum(),productCd,warehouseIdx,thickness,size);
+            	List<Map<String,Object>> list = etcService.getInventoryHistoryAll(pagemaker.getPagenum()*20,pagemaker.getContentnum(),productIdx,warehouseIdx,thickness,size);
                 model.addAttribute("list", list);       		
         	} else{
-        		List<Map<String,Object>> list = etcService.getInventoryHistory(pagemaker.getPagenum()*20,pagemaker.getContentnum(),productCd,warehouseIdx,thickness,size);
+        		List<Map<String,Object>> list = etcService.getInventoryHistory(pagemaker.getPagenum()*20,pagemaker.getContentnum(),productIdx,warehouseIdx,thickness,size);
         		model.addAttribute("list", list);
         	}
         }else if(ccontentnum ==30){
         	if(check){
-            	List<Map<String,Object>> list = etcService.getInventoryHistoryAll(pagemaker.getPagenum()*30,pagemaker.getContentnum(),productCd,warehouseIdx,thickness,size);
+            	List<Map<String,Object>> list = etcService.getInventoryHistoryAll(pagemaker.getPagenum()*30,pagemaker.getContentnum(),productIdx,warehouseIdx,thickness,size);
                 model.addAttribute("list", list);       		
         	} else{
-        		List<Map<String,Object>> list = etcService.getInventoryHistory(pagemaker.getPagenum()*30,pagemaker.getContentnum(),productCd,warehouseIdx,thickness,size);
+        		List<Map<String,Object>> list = etcService.getInventoryHistory(pagemaker.getPagenum()*30,pagemaker.getContentnum(),productIdx,warehouseIdx,thickness,size);
         		model.addAttribute("list", list);
         	}
         }
 
          model.addAttribute("page",pagemaker);
-         model.addAttribute("productCdKey",productCd);
+         model.addAttribute("productIdxKey",productIdx);
          model.addAttribute("warehouseIdxKey",warehouseIdx);
          model.addAttribute("thicknessKey",thickness);
          model.addAttribute("sizeKey",size);
@@ -804,9 +815,9 @@ public class EtcController {
 	}
 	
 	@GetMapping(value= "/goInventoryStatus.do")
-	public String inventoryStatus(Model model,String pagenum, String contentnum, String productCd, String warehouseIdx) {
+	public String inventoryStatus(Model model,String pagenum, String contentnum, String productIdx, String warehouseIdx) {
 		List<WarehouseVO> warehouse = etcService.getWarehouseList(0, 10000);
-		List<ProductVO> productNameList = etcService.getProductNameList();
+		List<ProductVO> productNameList = etcService.getProductNameListGroup();
 	
 		model.addAttribute("warehouse", warehouse);
 		model.addAttribute("productNameList", productNameList);
@@ -829,10 +840,10 @@ public class EtcController {
 	        ccontentnum = Integer.parseInt(contentnum);	
 		}
 		
-		if(productCd == "" || productCd == null){
-			productKey = productNameList.get(0).getProductCd();
+		if(productIdx == "" || productIdx == null){
+			productKey = productNameList.get(0).getProductNm();
 		} else { 
-			productKey = productCd;
+			productKey = productIdx;
 		}
 
 		if(warehouseIdx == "" || warehouseIdx == null){
@@ -840,9 +851,7 @@ public class EtcController {
 		} else { 
 			warehouseKey = warehouseIdx;
 		}
-		System.out.println(warehouseKey+"====ware");
-		System.out.println(productKey +"====product");
-		System.out.println(etcService.inventoryStatusCount(productKey , warehouseKey));
+
 		pagemaker.setTotalcount(etcService.inventoryStatusCount(productKey , warehouseKey)); // mapper 전체 게시글 개수를 지정한다
         pagemaker.setPagenum(cpagenum-1);   // 현재 페이지를 페이지 객체에 지정한다 -1 을 해야 쿼리에서 사용할수 있다
         pagemaker.setContentnum(ccontentnum); // 한 페이지에 몇개씩 게시글을 보여줄지 지정한다.

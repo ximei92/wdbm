@@ -14,10 +14,31 @@ function inventoryHistoryPage(idx){
   }  
 }
 
+/*안전재고관리 페이징 게시물 */
+function safetyPage(idx){
+	  var pagenum = 1;
+	  var contentnum = $("#contentnum option:selected").val();
+	  var productIdxKey = $("#productIdxKey").val();
+	  
+	  location.href="safetyManage.do?pagenum="+pagenum+"&contentnum="+contentnum+"&keyword="+productIdxKey;
+}
+
+/*제품명 한페이지당 게시물 */
+function inventoryStatusPage(idx){
+  var pagenum = 1;
+  var contentnum = $("#contentnum option:selected").val();
+  var productIdxKey = $("#productIdxKey").val();
+  var warehouseIdxKey = $("#warehouseIdxKey").val();
+  
+
+  location.href="goInventoryStatus.do?pagenum="+pagenum+"&contentnum="+contentnum+"&productIdx="+productIdxKey+"&warehouseIdx="+warehouseIdxKey;
+
+}
+
 /*제품명 바뀔 때 두께 조회해오기*/
 function detailNmChange(){
 	
-	var name = $("#productCd").val();
+	var name = $("#productIdx").val();
 	$("#thickness").children().remove();
 	$("#size").children().remove();
 	$.ajax({
@@ -51,14 +72,16 @@ function detailNmChange(){
 				$("#thickness").val($("#origThickness").val()).prop("selected", true);
 				$("#size").val($("#origSize").val()).prop("selected", true);	
 		    }
-		    
-			if($("#thicknessKey").val() != ''){
-				$("#thickness").val("16").prop("selected", true);
-			}
 			
 			if( $("#sizeKey").val() != ''){
 				$("#size").val($("#sizeKey").val()).prop("selected", true);
 			}
+		    
+			if($("#thicknessKey").val() != ''){
+				console.log('thicknessKey');
+				console.log($("#thicknessKey").val());
+				$("#thickness").val($("#thicknessKey").val()).prop("selected", true);
+			}			
 
 		},
 		error : function(){
@@ -67,6 +90,28 @@ function detailNmChange(){
 	});
 
 
+}
+
+function changeWarehouse(warehouseKey){
+	  var pagenum = 1;
+	  var contentnum = $("#contentnum option:selected").val();
+	  var productIdxKey = $("#productIdxKey").val();
+	  
+	  location.href="goInventoryStatus.do?pagenum="+pagenum+"&contentnum="+contentnum+"&productIdx="+productIdxKey+"&warehouseIdx="+warehouseKey;
+}
+
+function changeProduct(productIdxKey){
+	  var pagenum = 1;
+	  var contentnum = $("#contentnum option:selected").val();
+	  var warehouseIdxKey = $("#warehouseIdxKey").val();
+	  
+	  location.href="goInventoryStatus.do?pagenum="+pagenum+"&contentnum="+contentnum+"&productIdx="+productIdxKey+"&warehouseIdx="+warehouseIdxKey;
+}
+
+function changeSafetyProduct(keyword){
+	var pagenum = 1;
+	var contentnum = $("#contentnum option:selected").val();
+	location.href="safetyManage.do?pagenum="+pagenum+"&contentnum="+contentnum+"&keyword="+keyword;
 }
 
 //파일명체크
@@ -95,7 +140,7 @@ function checkFileName(str){
 //상세검색 초건 초기화
 function resetChoice(){
 	console.log("resetChoice");
-	$("#productCd").val("").prop("selected", true);
+	$("#productIdx").val("").prop("selected", true);
 	$("#warehouseIdx").val("").prop("selected", true);
 	$("#thickness").val("").prop("selected", true);
 	$("#size").val("").prop("selected", true);
@@ -103,14 +148,14 @@ function resetChoice(){
 
 function inventoryStockSearch(idx){
 
-	var productCd = $("#productCd").val();
+	var productIdx = $("#productIdx").val();
 	var warehouseIdx = $("#warehouseIdx").val();
 	var thickness =$("#thickness").val();
 	var size = $("#size").val();
 	var pagenum = idx == undefined? 1:idx ;
 	var contentnum = $("#contentnum option:selected").val();
 
-		location.href="goInvetoryManage.do?pagenum="+pagenum+"&contentnum="+contentnum+"&productCd="+productCd+"&warehouseIdx="+warehouseIdx+"&thickness="+thickness+"&size="+size
+		location.href="goInvetoryManage.do?pagenum="+pagenum+"&contentnum="+contentnum+"&productIdx="+productIdx+"&warehouseIdx="+warehouseIdx+"&thickness="+thickness+"&size="+size
 
 }
 
@@ -173,7 +218,7 @@ $(document).ready(function(){
 	});
 	
 	//창고별재고관리 검색어 조건맞을시 검색어 저장되도록 select 박스 체크하기
-	if($("#productCdKey").val() != '' || $("#warehouseIdxKey").val() != ''){
+	if($("#productIdxKey").val() != '' || $("#warehouseIdxKey").val() != ''){
 		detailNmChange();
 	}
 

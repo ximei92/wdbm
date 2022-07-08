@@ -48,8 +48,6 @@ function page(idx){
 		data: {"pagenum":idx, "keyword":keyword},
 		type: "POST",
 		success : function(data){
-			console.log(data.page);
-			console.log(data.list);
 			drawModal(data.page, data.list);
 		},
 		error : function(){

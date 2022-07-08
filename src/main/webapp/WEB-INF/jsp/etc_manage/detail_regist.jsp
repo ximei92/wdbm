@@ -107,10 +107,10 @@
                         <dl class="row col-2">
                             <dt>제품명 <i class="essen"> *</i></dt>
                             <dd>
-								<select name="productCd" id="productCd" class="wd210p" onchange=detailNmChange()>
+								<select name="productIdx" id="productIdx" class="wd210p" onchange=detailNmChange()>
 									<option value="">--선택--</option>
 									<c:forEach items="${productList}" var="list" varStatus="status">
-									<option value="${list.productCd}">${list.productNm}</option>
+									<option value="${list.productIdx}">${list.productNm}</option>
 									</c:forEach>
 								</select>
 							</dd>
@@ -166,10 +166,10 @@
                         <dl class="row col-2">
                             <dt>제품명 <i class="essen"> *</i></dt>
                             <dd>
-								<select name="productCd" id="productCd" class="wd210p" onchange=detailNmChange()>
+								<select name="productIdx" id="productIdx" class="wd210p" onchange=detailNmChange()>
 									<option value="">--선택--</option>
 									<c:forEach items="${productList}" var="productList" varStatus="status">
-									<option value="${productList.productCd}" <c:if test="${list[0]['PRODUCT_CD'] == productList.productCd}"> selected
+									<option value="${productList.productIdx}" <c:if test="${list[0]['PRODUCT_IDX'] == productList.productIdx}"> selected
 									</c:if>>${productList.productNm}</option>
 									</c:forEach>
 								</select>

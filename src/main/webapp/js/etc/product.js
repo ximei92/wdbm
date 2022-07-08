@@ -114,7 +114,7 @@ function sizePage(idx){
 
 /*제품상세등록 제품명 바뀔 때 두께 조회해오기*/
 function detailNmChange(){
-	var name = $("#productCd").val();
+	var name = $("#productIdx").val();
 	$("#thickness").children().remove();
 	$("#size").children().remove();
 	$.ajax({

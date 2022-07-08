@@ -16,7 +16,7 @@
 	<script src="../../js/jquery-1.9.1.min.js"></script>
 	<script src="../../js/uikit.min.js"></script>
 	<script src="../../js/layout.js"></script>
-	<script src="../../../js/member/member.js"></script>
+	<script src="../../../js/etc/warehouse.js"></script>
 	<script defer src="../../js/script.js"></script>
 </head>
 
@@ -93,9 +93,12 @@
                     <div class="rows">
                         <!-- tab -->
                         <ul class="tabs">
-                            <li class="on"><a href="#none">K5</a></li>
-                            <li><a href="#none">비KS</a></li>
-                            <li><a href="#none">심재</a></li>
+                        <c:forEach items="${productNameList}" var="product" varStatus="status">                        
+                            <li
+                            <c:if test="${product.productIdx eq productKey}">class="on"</c:if>>
+                            <a onclick="changeSafetyProduct('${product.productIdx}')">${product.productNm}</a>
+                            </li>
+                        </c:forEach>
                         </ul>
                     </div>
 
@@ -121,11 +124,11 @@
 							<tbody>
 							<c:forEach items="${list}" var="data" varStatus="status">
 								<tr>
-									<td>${list[status.index]['PRODUCT_CD']}</td>
-									<td>${list[status.index]['STOCK']}</td>
+									<td>${list[status.index]['THICKNESS']}${list[status.index]['SIZE']}-${list[status.index]['PRODUCT_CD']}</td>
+									<td>${list[status.index]['TOTAL_STOCK']}</td>
 									<td>${list[status.index]['SAFETY']}</td>
-									<c:set var="total" value="${(list[status.index]['STOCK'] - list[status.index]['SAFETY'])/list[status.index]['SLICE']}" />									
-									<c:set var="cnt" value="${(list[status.index]['STOCK'] - list[status.index]['SAFETY'])/list[status.index]['SLICE']}" />
+									<c:set var="total" value="${(list[status.index]['TOTAL_STOCK'] - list[status.index]['SAFETY'])/list[status.index]['SLICE']}" />									
+									<c:set var="cnt" value="${(list[status.index]['TOTAL_STOCK'] - list[status.index]['SAFETY'])/list[status.index]['SLICE']}" />
 									<td><fmt:formatNumber value="${total}" pattern=".00"/></td>
 								</tr>
 							</c:forEach>
