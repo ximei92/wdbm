@@ -4,17 +4,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.DefaultResponseErrorHandler;
 
 import com.springbook.member.mapper.MemberMapper;
 import com.springbook.member.service.MemberService;
 import com.springbook.member.vo.MemberVO;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@RequiredArgsConstructor
+@Slf4j
 public class MemberServiceImpl implements MemberService {
-	@Autowired
-	private MemberMapper memberMapper;
+
+	private final MemberMapper memberMapper;	
+	private final PasswordEncoder passwordEncoder;
 
 	@Override
 	public int getId(String id) {		
@@ -22,14 +29,21 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public int insertMember(MemberVO vo) {
+	public int insertMember(MemberVO vo) {		
+		vo.setPassword(passwordEncoder.encode("0000"));
 		return memberMapper.insertMember(vo);
 	}
 
 	@Override
-	public MemberVO tryLogin(MemberVO vo) {
-		// TODO Auto-generated method stub
-		return memberMapper.tryLogin(vo);
+	public boolean tryLogin(MemberVO vo) {
+		MemberVO member = memberMapper.tryLogin(vo.getId());
+		
+		//id가 틀린경우 
+		if(member == null){
+			return false;
+		}
+		// 원본패스워드, 암호화패스워드 비교
+		return passwordEncoder.matches(vo.getPassword(),member.getPassword() );  
 	}
 
 	@Override
@@ -133,7 +147,9 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public int modifyPassword(MemberVO member) {
-		return memberMapper.modfiyPassword(member);
+		return memberMapper.modfiyPassword(
+				member.getId(), 
+				passwordEncoder.encode(member.getPassword()));
 	}
 	
 
