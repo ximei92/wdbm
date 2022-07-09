@@ -6,9 +6,9 @@
 <mapper namespace="com.springbook.email.mapper.EmailMapper">
 
 
-<select id="findToken" resultType="">
+<!-- <select id="findToken" resultType="">
 
 
-</select>
+</select> -->
 	
 </mapper>
