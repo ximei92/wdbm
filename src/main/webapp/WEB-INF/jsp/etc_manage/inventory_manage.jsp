@@ -93,7 +93,7 @@
                 <div class="cont-box">
                 <!-- 검색어 select위한 hidden값 -->
                 <input type="hidden" value="${warehouseIdxKey}" id="warehouseIdxKey">
-                <input type="hidden" value="${productCdKey}" id="productCdKey">
+                <input type="hidden" value="${productIdxKey}" id="productIdxKey">
                 <input type="hidden" value="${thicknessKey}" id="thicknessKey">
                 <input type="hidden" value="${sizeKey}" id="sizeKey">
                     <article class="inner">
@@ -112,10 +112,10 @@
                         <dl class="row col-6">
                             <dt>제품명</dt>
                             <dd>
-								<select name="productCd" id="productCd" class="wd210p" onchange=detailNmChange()>
+								<select name="productIdx" id="productIdx" class="wd210p" onchange=detailNmChange()>
 									<option value="">--선택--</option>
 									<c:forEach items="${productList}" var="list" varStatus="status">
-									<option id="productOpt" value="${list.productCd}"  <c:if test="${list.productCd == productCdKey}"> selected</c:if>>
+									<option id="productOpt" value="${list.productIdx}"  <c:if test="${list.productIdx == productIdxKey}"> selected</c:if>>
 									${list.productNm}</option>
 									</c:forEach>
 								</select>
@@ -183,7 +183,7 @@
 									<fmt:formatDate value="${parseDateTime}" pattern="yyyy-MM-dd" var="regDate" />
 									<td>${regDate}</td>
 									<td>${list.WAREHOUSE}</td>
-									<td>${list.PRODUCT_CD}</td>
+									<td>${list.THICKNESS}${list.SIZE}-${list.PRODUCT_CD}</td>
 									<td>${list.PRODUCT_NM}</td>
 									<td>${list.THICKNESS}</td>
 									<td>${list.SIZE} (${list.HEIGHT}*${list.WIDTH})</td>

@@ -1,6 +1,13 @@
 package com.springbook.etc.controller;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -35,7 +42,6 @@ import com.springbook.etc.vo.ProductDetailVO;
 import com.springbook.member.vo.MemberVO;
 import com.springbook.service.FileService;
 import com.springbook.vo.FileVO;
-
 import ch.qos.logback.core.net.SyslogOutputStream;
 
 @Controller
@@ -199,7 +205,6 @@ public class EtcController {
 	@ResponseBody
 	public int typeDelete(HttpServletRequest request) {
 		String[] idxList = request.getParameterValues("idxList");
-		System.out.println(idxList.toString());
 		int result = 0;
 		for(int i=0; i<idxList.length; i++){
 			System.out.println("idx"+idxList[i]);
@@ -245,7 +250,6 @@ public class EtcController {
         //마지막 페이지를 마지막 페이지 블록과 현재 페이지 블록 번호로 정한다.
         if(ccontentnum == 10){//선택 게시글 수
         	List<Map<String , Object>> list = etcService.getThicknessList(pagemaker.getPagenum()*10,pagemaker.getContentnum(),type, keyword);
-        	 System.out.println(list);
             model.addAttribute("list", list);
         }else if(ccontentnum == 20){
         	List<Map<String , Object>> list = etcService.getThicknessList(pagemaker.getPagenum()*20,pagemaker.getContentnum(),type, keyword);
@@ -464,10 +468,10 @@ public class EtcController {
 		if(idx != null){
 			List<Map<String,Object>> list = etcService.getDetailInfo(idx);
 			model.addAttribute("list", list);
-			String productCd = list.get(0).get("PRODUCT_CD").toString();
+			String productIdx = list.get(0).get("PRODUCT_IDX").toString();
 
-			List<Map> thicklist = etcService.selectDetailThickness(productCd);
-			List<Map> sizelist = etcService.selectDetailSize(productCd);
+			List<Map> thicklist = etcService.selectDetailThickness(productIdx);
+			List<Map> sizelist = etcService.selectDetailSize(productIdx);
 			
 			Map<String,Object> map = new HashMap<String,Object>();
 			
@@ -499,7 +503,16 @@ public class EtcController {
 	@PostMapping("/addProductDetail.do")
 	@ResponseBody
 	public int addProductDetail(com.springbook.etc.vo.ProductDetailVO vo) {
-		int result = etcService.addProductDetail(vo);
+		List<ProductDetailVO> cnt = etcService.findProductDetail(vo);
+		int result = 0;
+		System.out.println(cnt.size());
+		System.out.println(vo);
+		if(cnt.size() != 0 ){
+			vo.setDetailIdx(cnt.get(0).getDetailIdx());
+			result = etcService.updateProductDetail(vo);
+		} else {
+			result = etcService.addProductDetail(vo);
+		}
 		return result;
 	}
 
@@ -529,7 +542,7 @@ public class EtcController {
 		return returnVal;
 	}
 	
-	//제품명 조회
+	//창고관리 조회
 	@GetMapping("/warehouseManage.do")    
 	public String warehouseManage(Model model,String pagenum, String contentnum) {
 		Page pagemaker = new Page();
@@ -574,6 +587,177 @@ public class EtcController {
 		return "etc_manage/warehouse_manage";
 	}
 	
+	//창고 수정페이지, 생성페이지
+	@GetMapping(value= "/warehouseCreate.do")
+	public String warehouseCreate(Model model, String warehouseIdx, String fileId) {
+		
+		if(warehouseIdx != null){
+			FileVO file = fileService.getFileData(fileId);
+			model.addAttribute("fileInfo", file);
+			WarehouseVO vo = etcService.getWarehoseInfo(warehouseIdx);
+			model.addAttribute("list", vo);
+		}
+		return "/etc_manage/warehouse_create";
+	}	
+	
+	//창고생성
+	@PostMapping("/addWarehouse.do")
+	@ResponseBody
+	public int addWarehouse(HttpServletRequest request, String fileId ,String fileNm, String warehouse ) {
+		FileVO file = fileService.getFileData(fileId);
+		String filePath = file.getLogiPath()+file.getLogiNm();
+		int result = 0;
+		int addWarehouseResult = etcService.addWarehouse(fileId,warehouse);
+		WarehouseVO vo = etcService.selectWarehouse(fileId,warehouse);
+
+		//csv 파일 읽어서 db에 저장
+        List<List<String>> csvList = new ArrayList<List<String>>();
+        List<Map<String,Object>> insertFeeList = new ArrayList<Map<String,Object>>();
+        File csv = new File(filePath);
+        BufferedReader br = null;
+        String line = "";
+        try {
+            br = new BufferedReader(new FileReader(csv));
+            while ((line = br.readLine()) != null) { // readLine()은 파일에서 개행된 한 줄의 데이터를 읽어온다.
+                List<String> aLine = new ArrayList<String>();
+                String[] lineArr = line.split(","); // 파일의 한 줄을 ,로 나누어 배열에 저장 후 리스트로 변환한다.
+                aLine = Arrays.asList(lineArr);
+                csvList.add(aLine);
+            }
+
+            for(int i = 2; i<csvList.size(); i++){            	
+            	for(int j = 2; j<csvList.get(1).size(); j++){
+            	Map<String,Object> tempMap = new HashMap<String,Object>();
+	            	tempMap.put("warehouseIdx", vo.getWarehouseIdx());
+	            	tempMap.put("city", csvList.get(i).get(0));
+	            	tempMap.put("area", csvList.get(i).get(1));
+            		tempMap.put("ton", csvList.get(1).get(j));
+            		tempMap.put("fee", csvList.get(i).get(j));
+            		insertFeeList.add(tempMap);
+            	}
+
+            }
+            
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (br != null) { 
+                    br.close(); // 사용 후 BufferedReader를 닫아준다.
+                }
+            } catch(IOException e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println(insertFeeList);
+
+        int addFeeResult = etcService.addWarehouseFee(insertFeeList);
+        
+        if(addFeeResult < 1){
+        	result = 3;
+        } else if(addWarehouseResult != 1){
+        	result = 2;
+        }
+        
+		return result;
+	}
+
+	
+	//창고수정
+	@PostMapping("/updateWarehouse.do")
+	@ResponseBody
+	public int updateWarehouse(HttpServletRequest request, String fileId ,String fileNm, String warehouse ,String fileChange, String warehouseIdx) {
+		int result = 0;
+		int addFeeResult = 2;
+		int updateWarehouseResult = etcService.updateWarehouse(fileId,warehouse,warehouseIdx);
+		//csv 파일 변경되었으면 기존 데이터 삭제후 재 업로드
+		System.out.println(fileChange);
+		System.out.println(warehouseIdx);
+		System.out.println(fileId);
+		if(fileChange.equals("Y")){
+
+		int	deleteWarehouseResult = etcService.deleteWarehouseFee(warehouseIdx);	
+		System.out.println(deleteWarehouseResult);
+		FileVO file = fileService.getFileData(fileId);
+		String filePath = file.getLogiPath()+file.getLogiNm();
+
+		//csv 파일 읽어서 db에 저장
+        List<List<String>> csvList = new ArrayList<List<String>>();
+        List<Map<String,Object>> insertFeeList = new ArrayList<Map<String,Object>>();
+        File csv = new File(filePath);
+        BufferedReader br = null;
+        String line = "";
+        try {
+            br = new BufferedReader(new FileReader(csv));
+            while ((line = br.readLine()) != null) { // readLine()은 파일에서 개행된 한 줄의 데이터를 읽어온다.
+                List<String> aLine = new ArrayList<String>();
+                String[] lineArr = line.split(","); // 파일의 한 줄을 ,로 나누어 배열에 저장 후 리스트로 변환한다.
+                aLine = Arrays.asList(lineArr);
+                csvList.add(aLine);
+            }
+
+            for(int i = 2; i<csvList.size(); i++){            	
+            	for(int j = 2; j<csvList.get(1).size(); j++){
+            	Map<String,Object> tempMap = new HashMap<String,Object>();
+	            	tempMap.put("warehouseIdx", warehouseIdx);
+	            	tempMap.put("city", csvList.get(i).get(0));
+	            	tempMap.put("area", csvList.get(i).get(1));
+            		tempMap.put("ton", csvList.get(1).get(j));
+            		tempMap.put("fee", csvList.get(i).get(j));
+            		System.out.println(tempMap);
+            		insertFeeList.add(tempMap);
+            	}
+
+            }
+            
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (br != null) { 
+                    br.close(); // 사용 후 BufferedReader를 닫아준다.
+                }
+            } catch(IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        addFeeResult = etcService.addWarehouseFee(insertFeeList);
+        
+		}
+        
+        if(addFeeResult < 2){
+        	result = 3;
+        } else if(updateWarehouseResult != 1){
+        	result = 2;
+        }
+        
+		return result;
+	}
+	
+	//제품명 삭제
+	@PostMapping("/deleteWarehouse.do")
+	@ResponseBody
+	public int deleteWarehouse(HttpServletRequest request) {
+		String[] idxList = request.getParameterValues("idxList");
+		int result = 0;
+		for(int i=0; i<idxList.length; i++){
+			result += etcService.warehouseDelete(idxList[i]);
+			etcService.deleteWarehouseFee(idxList[i]);	
+		}
+		
+		int returnVal = 0;
+		if(result != idxList.length){
+			returnVal = 1;
+		}
+		
+		return returnVal;
+	}
+	
 	//창고별 재고관리 이동
 	@GetMapping("/addInventoryStock.do")    
 	public String addInventoryStock(Model model) {
@@ -603,12 +787,14 @@ public class EtcController {
 		int cpagenum;
 		int ccontentnum;
 		String key = "";		
-		List<ProductVO> productNameList = etcService.getProductNameList();		
-		model.addAttribute("list", productNameList);
+		List<ProductVO> productNameList = etcService.getProductNameListGroup();		
+		model.addAttribute("productNameList", productNameList);
 		
 		if(keyword == null || keyword == "" || keyword.length() == 0){
-			key = productNameList.get(0).getProductNm();
-		}		
+			key = Integer.toString(productNameList.get(0).getProductIdx());
+		}	else{
+			key = keyword;
+		}
 		
 		if(pagenum == null || pagenum.length() == 0){
 			cpagenum = 1;
@@ -633,20 +819,21 @@ public class EtcController {
         pagemaker.setEndPage(pagemaker.getLastblock(),pagemaker.getCurrentblock());
         //마지막 페이지를 마지막 페이지 블록과 현재 페이지 블록 번호로 정한다.
         if(ccontentnum == 10){//선택 게시글 수
-        	List<ProductDetailVO> list = etcService.getSafetyList(pagemaker.getPagenum()*10,pagemaker.getContentnum(),key);
+        	List<Map<String,Object>> list = etcService.getSafetyList(pagemaker.getPagenum()*10,pagemaker.getContentnum(),key);
             model.addAttribute("list", list);
             System.out.println(list);
         }else if(ccontentnum == 20){
-        	List<ProductDetailVO> list = etcService.getSafetyList(pagemaker.getPagenum()*20,pagemaker.getContentnum(),key);
+        	List<Map<String,Object>> list = etcService.getSafetyList(pagemaker.getPagenum()*20,pagemaker.getContentnum(),key);
         	 model.addAttribute("list", list);
         	 System.out.println(list);
         }else if(ccontentnum ==30){
-        	List<ProductDetailVO> list = etcService.getSafetyList(pagemaker.getPagenum()*30, pagemaker.getContentnum(),key);
+        	List<Map<String,Object>> list = etcService.getSafetyList(pagemaker.getPagenum()*30, pagemaker.getContentnum(),key);
         	model.addAttribute("list", list);
         }
 
          model.addAttribute("page", pagemaker);
-
+         model.addAttribute("productKey",key);
+         
 		return "etc_manage/increase_safety";
 	}
 	
@@ -726,7 +913,7 @@ public class EtcController {
 
 
 	@GetMapping(value= "/goInvetoryManage.do")
-	public String goInvetoryManage(Model model,String pagenum, String contentnum, String productCd, String warehouseIdx, String thickness, String size) {
+	public String goInvetoryManage(Model model,String pagenum, String contentnum, String productIdx, String warehouseIdx, String thickness, String size) {
 		List<WarehouseVO> warehouse = etcService.getWarehouseList(0, 10000);
 		List<ProductVO> productNameList = etcService.getProductNameList();
 		model.addAttribute("warehouse", warehouse);
@@ -735,7 +922,7 @@ public class EtcController {
 		int cpagenum;
 		int ccontentnum;
 		boolean check = false;
-		if(productCd == null && warehouseIdx == null && thickness == null && size == null){
+		if(productIdx == null && warehouseIdx == null && thickness == null && size == null){
 			check = true;
 		}
 		if(pagenum == null || pagenum.length() == 0){
@@ -754,8 +941,8 @@ public class EtcController {
 			pagemaker.setTotalcount(etcService.inventoryHistoryAllCount()); 
 			System.out.println(etcService.inventoryHistoryAllCount());
 		} else{
-			pagemaker.setTotalcount(etcService.inventoryHistoryCount(productCd,warehouseIdx,thickness,size)); 
-			System.out.println(etcService.inventoryHistoryCount(productCd,warehouseIdx,thickness,size));
+			pagemaker.setTotalcount(etcService.inventoryHistoryCount(productIdx,warehouseIdx,thickness,size)); 
+			System.out.println(etcService.inventoryHistoryCount(productIdx,warehouseIdx,thickness,size));
 		}
 		// mapper 전체 게시글 개수를 지정한다
         pagemaker.setPagenum(cpagenum-1);   // 현재 페이지를 페이지 객체에 지정한다 -1 을 해야 쿼리에서 사용할수 있다
@@ -769,33 +956,33 @@ public class EtcController {
         //마지막 페이지를 마지막 페이지 블록과 현재 페이지 블록 번호로 정한다.
         if(ccontentnum == 10){//선택 게시글 수
         	if(check){
-            	List<Map<String,Object>> list = etcService.getInventoryHistoryAll(pagemaker.getPagenum()*10,pagemaker.getContentnum(),productCd,warehouseIdx,thickness,size);
+            	List<Map<String,Object>> list = etcService.getInventoryHistoryAll(pagemaker.getPagenum()*10,pagemaker.getContentnum(),productIdx,warehouseIdx,thickness,size);
                 model.addAttribute("list", list);       		
         	} else{
-        	List<Map<String,Object>> list = etcService.getInventoryHistory(pagemaker.getPagenum()*10,pagemaker.getContentnum(),productCd,warehouseIdx,thickness,size);
+        	List<Map<String,Object>> list = etcService.getInventoryHistory(pagemaker.getPagenum()*10,pagemaker.getContentnum(),productIdx,warehouseIdx,thickness,size);
         	System.out.println(list);
             model.addAttribute("list", list);
         	}
         }else if(ccontentnum == 20){
         	if(check){
-            	List<Map<String,Object>> list = etcService.getInventoryHistoryAll(pagemaker.getPagenum()*20,pagemaker.getContentnum(),productCd,warehouseIdx,thickness,size);
+            	List<Map<String,Object>> list = etcService.getInventoryHistoryAll(pagemaker.getPagenum()*20,pagemaker.getContentnum(),productIdx,warehouseIdx,thickness,size);
                 model.addAttribute("list", list);       		
         	} else{
-        		List<Map<String,Object>> list = etcService.getInventoryHistory(pagemaker.getPagenum()*20,pagemaker.getContentnum(),productCd,warehouseIdx,thickness,size);
+        		List<Map<String,Object>> list = etcService.getInventoryHistory(pagemaker.getPagenum()*20,pagemaker.getContentnum(),productIdx,warehouseIdx,thickness,size);
         		model.addAttribute("list", list);
         	}
         }else if(ccontentnum ==30){
         	if(check){
-            	List<Map<String,Object>> list = etcService.getInventoryHistoryAll(pagemaker.getPagenum()*30,pagemaker.getContentnum(),productCd,warehouseIdx,thickness,size);
+            	List<Map<String,Object>> list = etcService.getInventoryHistoryAll(pagemaker.getPagenum()*30,pagemaker.getContentnum(),productIdx,warehouseIdx,thickness,size);
                 model.addAttribute("list", list);       		
         	} else{
-        		List<Map<String,Object>> list = etcService.getInventoryHistory(pagemaker.getPagenum()*30,pagemaker.getContentnum(),productCd,warehouseIdx,thickness,size);
+        		List<Map<String,Object>> list = etcService.getInventoryHistory(pagemaker.getPagenum()*30,pagemaker.getContentnum(),productIdx,warehouseIdx,thickness,size);
         		model.addAttribute("list", list);
         	}
         }
 
          model.addAttribute("page",pagemaker);
-         model.addAttribute("productCdKey",productCd);
+         model.addAttribute("productIdxKey",productIdx);
          model.addAttribute("warehouseIdxKey",warehouseIdx);
          model.addAttribute("thicknessKey",thickness);
          model.addAttribute("sizeKey",size);
@@ -804,9 +991,9 @@ public class EtcController {
 	}
 	
 	@GetMapping(value= "/goInventoryStatus.do")
-	public String inventoryStatus(Model model,String pagenum, String contentnum, String productCd, String warehouseIdx) {
+	public String inventoryStatus(Model model,String pagenum, String contentnum, String productIdx, String warehouseIdx) {
 		List<WarehouseVO> warehouse = etcService.getWarehouseList(0, 10000);
-		List<ProductVO> productNameList = etcService.getProductNameList();
+		List<ProductVO> productNameList = etcService.getProductNameListGroup();
 	
 		model.addAttribute("warehouse", warehouse);
 		model.addAttribute("productNameList", productNameList);
@@ -829,10 +1016,10 @@ public class EtcController {
 	        ccontentnum = Integer.parseInt(contentnum);	
 		}
 		
-		if(productCd == "" || productCd == null){
-			productKey = productNameList.get(0).getProductCd();
+		if(productIdx == "" || productIdx == null){
+			productKey = productNameList.get(0).getProductNm();
 		} else { 
-			productKey = productCd;
+			productKey = productIdx;
 		}
 
 		if(warehouseIdx == "" || warehouseIdx == null){
@@ -840,9 +1027,7 @@ public class EtcController {
 		} else { 
 			warehouseKey = warehouseIdx;
 		}
-		System.out.println(warehouseKey+"====ware");
-		System.out.println(productKey +"====product");
-		System.out.println(etcService.inventoryStatusCount(productKey , warehouseKey));
+
 		pagemaker.setTotalcount(etcService.inventoryStatusCount(productKey , warehouseKey)); // mapper 전체 게시글 개수를 지정한다
         pagemaker.setPagenum(cpagenum-1);   // 현재 페이지를 페이지 객체에 지정한다 -1 을 해야 쿼리에서 사용할수 있다
         pagemaker.setContentnum(ccontentnum); // 한 페이지에 몇개씩 게시글을 보여줄지 지정한다.

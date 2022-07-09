@@ -107,9 +107,9 @@
                         <dl class="row col-2">
                             <dt>제품명 <i class="essen"> *</i></dt>
                             <dd>
-								<select name="productCd" id="productCd" class="wd210p">
+								<select name="productIdx" id="productIdx" class="wd210p">
 									<c:forEach items="${productList}" var="productList" varStatus="status">
-									<option value="${productList.productCd}">${productList.productNm}</option>
+									<option value="${productList.productIdx}">${productList.productNm}</option>
 									</c:forEach>
 								</select>
 							</dd>
@@ -163,7 +163,7 @@
                             <dd>
 								<select name="productCd" id="productCd" class="wd210p">
 									<c:forEach items="${productList}" var="productList" varStatus="status">
-									<option value="${productList.productCd}" <c:if test="${list[0]['PRODUCT_CD'] == productList.productCd}">selected </c:if>>
+									<option value="${productList.productIdx}" <c:if test="${list[0]['PRODUCT_IDX'] == productList.productIdx}">selected </c:if>>
 									${productList.productNm}</option>
 									</c:forEach>
 								</select>

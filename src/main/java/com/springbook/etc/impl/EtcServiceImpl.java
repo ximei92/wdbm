@@ -217,6 +217,12 @@ public class EtcServiceImpl implements EtcService {
 	}
 
 	@Override
+	public List<ProductDetailVO> findProductDetail(ProductDetailVO vo) {
+		// TODO Auto-generated method stub
+		return etcMapper.findProductDetail(vo);
+	}
+	
+	@Override
 	public int detailDelete(String string) {
 		// TODO Auto-generated method stub
 		return etcMapper.detailDelete(string);
@@ -326,12 +332,12 @@ public class EtcServiceImpl implements EtcService {
 	}
 
 	@Override
-	public List<ProductDetailVO> getSafetyList(int i, int contentnum, String key) {
+	public List<Map<String, Object>> getSafetyList(int i, int contentnum, String productIdx) {
 		Map<String,Object> map = new HashMap<String,Object>();
 		
 		map.put("i", i);
 		map.put("contentnum", contentnum);
-		map.put("keyword", key);
+		map.put("productIdx", productIdx);
 		
 		return etcMapper.getSafetyList(map);
 	}
@@ -355,13 +361,13 @@ public class EtcServiceImpl implements EtcService {
 	}
 
 	@Override
-	public List<Map<String,Object>> getInventoryHistory(int i, int contentnum, String productCd, String warehouseIdx,String thickness, String size) {
+	public List<Map<String,Object>> getInventoryHistory(int i, int contentnum, String productIdx, String warehouseIdx,String thickness, String size) {
 		// TODO Auto-generated method stub
 		// TODO Auto-generated method stub
 		Map<String,Object> map = new HashMap<String,Object>();
 		//검색조건 null값은 공백처리
-		if(productCd == null || productCd.equals("")){
-			productCd ="null0";
+		if(productIdx == null || productIdx.equals("")){
+			productIdx ="null0";
 		}
 		if(warehouseIdx == null || warehouseIdx.equals("")){
 			warehouseIdx ="null0";
@@ -375,22 +381,21 @@ public class EtcServiceImpl implements EtcService {
 		
 		map.put("i", i);
 		map.put("contentnum", contentnum);
-		map.put("productCd", productCd);
+		map.put("productIdx", productIdx);
 		map.put("warehouseIdx", warehouseIdx);
 		map.put("thickness", thickness);
 		map.put("size", size);
-System.out.println("map====");
-System.out.println(map);
+
 		return etcMapper.getInventoryHistory(map);
 	}
 
 	//검색조건이 있을 떄 창고 재고 갯수조회
 	@Override
-	public int inventoryHistoryCount( String productCd, String warehouseIdx,String thickness, String size) {
+	public int inventoryHistoryCount( String productIdx, String warehouseIdx,String thickness, String size) {
 		// TODO Auto-generated method stub
 		Map<String,Object> map = new HashMap<String,Object>();
-		if(productCd == null || productCd.equals("")){
-			productCd ="null0";
+		if(productIdx == null || productIdx.equals("")){
+			productIdx ="null0";
 		}
 		if(warehouseIdx == null || warehouseIdx.equals("")){
 			warehouseIdx ="null0";
@@ -402,7 +407,7 @@ System.out.println(map);
 			size ="null0";
 		}
 		
-		map.put("productCd", productCd);
+		map.put("productIdx", productIdx);
 		map.put("warehouseIdx", warehouseIdx);
 		map.put("thickness", thickness);
 		map.put("size", size);
@@ -486,7 +491,7 @@ System.out.println(map);
 	}
 
 	@Override
-	public List<Map<String, Object>> getInventoryHistoryAll(int i, int contentnum, String productCd,
+	public List<Map<String, Object>> getInventoryHistoryAll(int i, int contentnum, String productIdx,
 			String warehouseIdx, String thickness, String size) {
 		// TODO Auto-generated method stub
 		Map<String,Object> map = new HashMap<String,Object>();
@@ -504,24 +509,83 @@ System.out.println(map);
 	}
 
 	@Override
-	public int inventoryStatusCount(String productCd, String warehouseIdx) {
+	public int inventoryStatusCount(String productNm, String warehouseIdx) {
 		// TODO Auto-generated method stub
 		Map<String,Object> map = new HashMap<String,Object>();
 		
-		map.put("productCd", productCd);
+		map.put("productNm", productNm);
 		map.put("warehouseIdx", warehouseIdx);
 		return etcMapper.inventoryStatusCount(map);
 	}
 
 	@Override
-	public List<Map<String, Object>> getInventoryStatus(int i, int contentnum, String productCd, String warehouseIdx) {
+	public List<Map<String, Object>> getInventoryStatus(int i, int contentnum, String productNm, String warehouseIdx) {
 		// TODO Auto-generated method stub
 		Map<String,Object> map = new HashMap<String,Object>();
 		map.put("i", i);
 		map.put("contentnum", contentnum);
-		map.put("productCd", productCd);
+		map.put("productNm", productNm);
 		map.put("warehouseIdx", warehouseIdx);
 		return etcMapper.getInventoryStatus(map);
 	}
 
+	@Override
+	public List<ProductVO> getProductNameListGroup() {
+		// TODO Auto-generated method stub
+		return etcMapper.getProductNameListGroup();
+	}
+
+	@Override
+	public int addWarehouse(String fileId, String warehouse) {
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("fileId", fileId);
+		map.put("warehouse", warehouse);
+		// TODO Auto-generated method stub
+		return etcMapper.addWarehouse(map);
+	}
+
+	@Override
+	public WarehouseVO selectWarehouse(String fileId, String warehouse) {
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("fileId", fileId);
+		map.put("warehouse", warehouse);
+		// TODO Auto-generated method stub
+		return etcMapper.selectWarehouse(map);
+	}
+
+	@Override
+	public int addWarehouseFee(List<Map<String, Object>> insertFeeList) {
+		// TODO Auto-generated method stub
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("insertFeeList", insertFeeList);
+		return etcMapper.addWarehouseFee(map);
+	}
+
+	@Override
+	public WarehouseVO getWarehoseInfo(String warehouseIdx) {
+		// TODO Auto-generated method stub
+		return etcMapper.getWarehoseInfo(warehouseIdx);
+	}
+
+	@Override
+	public int updateWarehouse(String fileId, String warehouse, String warehouseIdx) {
+		// TODO Auto-generated method stub
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("fileId", fileId);
+		map.put("warehouse", warehouse);
+		map.put("warehouseIdx", warehouseIdx);
+		return etcMapper.updateWarehouse(map);
+	}
+
+	@Override
+	public int deleteWarehouseFee(String warehouseIdx) {
+		// TODO Auto-generated method stub
+		return etcMapper.deleteWarehouseFee(warehouseIdx);
+	}
+
+	@Override
+	public int warehouseDelete(String string) {
+		// TODO Auto-generated method stub
+		return etcMapper.warehouseDelete(string);
+	}
 }

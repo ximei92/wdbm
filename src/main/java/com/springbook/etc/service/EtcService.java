@@ -90,7 +90,7 @@ public interface EtcService {
 
 	int safetyListCount(String key);
 
-	List<ProductDetailVO> getSafetyList(int i, int contentnum, String key);
+	List<Map<String, Object>> getSafetyList(int i, int contentnum, String key);
 
 	int creditListCount(String keyword, Date startDt, Date endDt);
 
@@ -129,5 +129,23 @@ public interface EtcService {
 	int inventoryStatusCount(String productCd, String warehouseIdx);
 
 	List<Map<String, Object>> getInventoryStatus(int i, int contentnum, String productCd, String warehouseIdx);
+
+	List<ProductVO> getProductNameListGroup();
+
+	List<ProductDetailVO> findProductDetail(ProductDetailVO vo);
+
+	int addWarehouse(String fileId, String warehouse);
+
+	WarehouseVO selectWarehouse(String fileId, String warehouse);
+
+	int addWarehouseFee(List<Map<String, Object>> insertFeeList);
+
+	WarehouseVO getWarehoseInfo(String warehouseIdx);
+
+	int updateWarehouse(String fileId, String warehouse, String warehouseIdx);
+
+	int deleteWarehouseFee(String warehouseIdx);
+
+	int warehouseDelete(String string);
 
 }

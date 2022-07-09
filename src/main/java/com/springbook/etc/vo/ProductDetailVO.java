@@ -6,8 +6,8 @@ import lombok.Data;
 @Data
 public class ProductDetailVO {
 	private int detailIdx;
+	private String productIdx;
 	private Date regDate;
-	private String productCd;
 	private String thickness;
 	private String size;
 	private String safety;

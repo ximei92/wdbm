@@ -16,7 +16,7 @@
 	<script src="../../js/jquery-1.9.1.min.js"></script>
 	<script src="../../js/uikit.min.js"></script>
 	<script src="../../js/layout.js"></script>
-	<script src="../../../js/etc/product.js"></script>
+	<script src="../../../js/etc/warehouse.js"></script>
 	<script defer src="../../js/script.js"></script>
 </head>
 
@@ -93,7 +93,7 @@
 
                     <!-- buttons -->
 					<div class="rows d-flex right gap10">
-                        <button class="btn small disable">선택 삭제</button>
+                        <button class="btn small disable" id="warehouseDelete">선택 삭제</button>
                         <button class="btn small bg_color1 ico add" onclick="location.href='warehouseCreate.do'">창고 생성</button>
                     </div>
 					<!-- table -->
@@ -121,8 +121,9 @@
 								<tr>
 									<td><input type="checkbox" name="chk" value="${list.warehouseIdx}"></td>
 									<td>${status.index+1}</td>
-									<td><a href="#" class="tit">${list.warehouse}</a></td>
-									<td><a href="#" class="btn-csv">CSV 다운로드</a></td>
+									<td><a onclick="location.href='warehouseCreate.do?warehouseIdx=${list.warehouseIdx}&fileId=${list.fileId}'" class="tit">
+									${list.warehouse}</a></td>
+									<td><a href="fileDownload?fileIdx=${list.fileId}" class="btn-csv">CSV 다운로드</a></td>
 								</tr>
 							</c:forEach>							
 							</tbody>

@@ -112,10 +112,10 @@
                         <dl class="row col-2">
                             <dt>제품명 <i class="essen"> *</i></dt>
                             <dd>
-								<select name="productCd" id="productCd" class="wd210p" onchange=detailNmChange() required="required">
+								<select name="productIdx" id="productIdx" class="wd210p" onchange=detailNmChange() required="required">
 									<option value="0">--선택--</option>
 									<c:forEach items="${productList}" var="list" varStatus="status">
-									<option id="productOpt" value="${list.productCd}"> ${list.productNm}</option>
+									<option id="productOpt" value="${list.productIdx}"> ${list.productNm}</option>
 									</c:forEach>
 								</select>
 							</dd>
