@@ -11,7 +11,7 @@ public interface MemberService {
 
 	int insertMember(MemberVO vo);
 
-	MemberVO tryLogin(MemberVO vo);
+	boolean tryLogin(MemberVO vo);
 
 	int memberListCount(String type, String keyword);
 

@@ -15,7 +15,7 @@ public interface MemberMapper {
 
 	int insertMember(MemberVO vo);
 	
-	MemberVO tryLogin(MemberVO vo);
+	MemberVO tryLogin(String id);
 	
 	int memberListCount(Map<String, Object> map);
 
@@ -43,7 +43,7 @@ public interface MemberMapper {
 
 	MemberVO findMemberByEmail(@Param("email")String email);
 
-	int modfiyPassword(MemberVO member);
+	int modfiyPassword(@Param("id")String id, @Param("password")String encodedPassword);
 
 
 }
