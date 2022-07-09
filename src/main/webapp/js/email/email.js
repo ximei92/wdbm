@@ -6,22 +6,22 @@
  */
 $("#submitBtn").on("click",function(event){
 	event.preventDefault();
-	const email = $('#userId').val();	
-	if(email.length>0){		
+	const userId = $('#userId').val();	
+	if(userId.length>0){		
 		$.ajax({
-			url: "/email/check",
-			type : "POST",
-			data : {"userId" : email},
-			dataType :"json",
-			success: function(data){
-				if(isEmpty(data.email)){
+			url: "/email/check/"+userId,
+			type : "GET",
+			success: function(member){
+				if(isEmpty(member.id)){
 					alert("입력하신 이메일 회원정보가 없습니다.\n다시 확인후 입력해 주세요.");
 				}else{
-					sendMail(data);
+					sendMail(member);
 				}
 			},
-			error:function(){
+			error:function(jqXHR,textStatus,errorThrown){
 				alert('이메일 체크도중 오류가 발생했습니다.');
+				//alert( textStatus + "\n" + errorThrown); AJAX TEST로그 
+			
 			}
 		});
 	}else{
@@ -37,13 +37,13 @@ function sendMail(email){
 		type: "POST",
 		contentType:'application/json; charset=utf-8',
 		data : JSON.stringify(email),
-		dataType:"json",
+		//dataType:"json",
 		success:function(data){
 			alert("입력하신 이메일로 초기화 링크가 포함된 이메일을 발송하였습니다.");
 			window.location = "/"
 		},
-		error : function(){
-			alert("이메일 전송중 오류가 발생했습니다.")
+		error : function(jqXHR,textStatus,errorThrown){
+			alert(`이메일 전송중 오류가 발생했습니다.\n ${textStatus}  ${errorThrown}`)
 		} 
 	});
 }

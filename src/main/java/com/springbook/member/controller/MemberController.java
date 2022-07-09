@@ -2,24 +2,17 @@ package com.springbook.member.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.springbook.configuration.Page;
@@ -27,6 +20,9 @@ import com.springbook.member.service.MemberService;
 import com.springbook.member.vo.MemberVO;
 import com.springbook.service.FileService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Controller
 public class MemberController {
 	@Autowired
@@ -37,13 +33,6 @@ public class MemberController {
 	
 	@Autowired(required = false)
 	private PasswordEncoder encoder;
-	
-	
-	@PostMapping("/member/check")
-	public String checkUser(@RequestParam String userId){
-		
-		return null; 
-	}
 	
 	@PostMapping("/checkId.do")
 	@ResponseBody
@@ -289,5 +278,17 @@ public class MemberController {
 		}
 		
 		return returnVal;
-	}	
+	}
+	
+	@ResponseBody
+	@GetMapping("/email/check/{userId}")
+	public MemberVO checkUser(@PathVariable String userId, Model model){
+		log.info("userId ={}", userId);
+		return memberService.checkEmailBy(userId); 
+	} 
+	
+	
+	
+	
+	
 }

@@ -116,13 +116,25 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public String findEmailBy(String userId) {
-		return memberMapper.findEmailBy(userId);
+	public MemberVO checkEmailBy(String userId) {
+		if(isEmail(userId))
+			return memberMapper.findMemberByEmail(userId);
+		else
+			return memberMapper.findMemberById(userId);
+	}
+
+	private boolean isEmail(String userId) {
+		if(userId.contains("@"))
+			return true;
+		else{
+			return false; 
+		}
 	}
 
 	@Override
-	public String checkEmail(String email) {
-		return memberMapper.checkEmail(email);
+	public int modifyPassword(MemberVO member) {
+		return memberMapper.modfiyPassword(member);
 	}
+	
 
 }

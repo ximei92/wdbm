@@ -39,7 +39,11 @@ public interface MemberMapper {
 
 	int updatePrice(Map<String, Object> map);
 	
-	String findEmailBy(@Param("memberId")String userId);
+	MemberVO findMemberById(@Param("userId")String userId);
 
-	String checkEmail(@Param("email")String email);
+	MemberVO findMemberByEmail(@Param("email")String email);
+
+	int modfiyPassword(MemberVO member);
+
+
 }

@@ -255,21 +255,33 @@
 	</update>
 
 	<!-- 이메일 조회 -->
-	<select id="findEmailBy" parameterType="String" resultType="String">
+	<select id="findMemberById" parameterType="String" resultType="com.springbook.member.vo.MemberVO">
 		SELECT 
-			CONCAT(EMAIL1,'@',EMAIL2) AS EMAIL  
+			ID,
+			EMAIL1,
+			EMAIL2
 		FROM	
 			MEMBER  
 		WHERE 
-			ID = #{memberId}
+			ID = #{userId}
 	</select>
-	<select id="checkEmail" parameterType="String" resultType="String">
+	<select id="findMemberByEmail" parameterType="String" resultType="com.springbook.member.vo.MemberVO">
 		SELECT 
-			CONCAT(EMAIL1,'@',EMAIL2) AS EMAIL  
+			ID,
+			EMAIL1,
+			EMAIL2
 		FROM	
 			MEMBER  
 		WHERE 
 			CONCAT(EMAIL1,'@',EMAIL2) = #{email}
-	
 	</select>
+	
+	<update id="modfiyPassword" parameterType="com.springbook.member.vo.MemberVO">
+		UPDATE 
+			MEMBER 
+		SET 
+			PASSWORD = #{password}
+		WHERE
+			ID = #{id} 
+	</update>
 </mapper>
