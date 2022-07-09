@@ -93,6 +93,7 @@
                     <div class="rows">
                         <!-- tab -->
                         <ul class="tabs">
+                        <input type="hidden" id="productIdxKey" value="${productKey}">
                         <c:forEach items="${productNameList}" var="product" varStatus="status">                        
                             <li
                             <c:if test="${product.productIdx eq productKey}">class="on"</c:if>>

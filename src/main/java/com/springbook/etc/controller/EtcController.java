@@ -1,6 +1,13 @@
 package com.springbook.etc.controller;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -35,7 +42,6 @@ import com.springbook.etc.vo.ProductDetailVO;
 import com.springbook.member.vo.MemberVO;
 import com.springbook.service.FileService;
 import com.springbook.vo.FileVO;
-
 import ch.qos.logback.core.net.SyslogOutputStream;
 
 @Controller
@@ -199,7 +205,6 @@ public class EtcController {
 	@ResponseBody
 	public int typeDelete(HttpServletRequest request) {
 		String[] idxList = request.getParameterValues("idxList");
-		System.out.println(idxList.toString());
 		int result = 0;
 		for(int i=0; i<idxList.length; i++){
 			System.out.println("idx"+idxList[i]);
@@ -537,7 +542,7 @@ public class EtcController {
 		return returnVal;
 	}
 	
-	//제품명 조회
+	//창고관리 조회
 	@GetMapping("/warehouseManage.do")    
 	public String warehouseManage(Model model,String pagenum, String contentnum) {
 		Page pagemaker = new Page();
@@ -580,6 +585,177 @@ public class EtcController {
          model.addAttribute("page", pagemaker);
 
 		return "etc_manage/warehouse_manage";
+	}
+	
+	//창고 수정페이지, 생성페이지
+	@GetMapping(value= "/warehouseCreate.do")
+	public String warehouseCreate(Model model, String warehouseIdx, String fileId) {
+		
+		if(warehouseIdx != null){
+			FileVO file = fileService.getFileData(fileId);
+			model.addAttribute("fileInfo", file);
+			WarehouseVO vo = etcService.getWarehoseInfo(warehouseIdx);
+			model.addAttribute("list", vo);
+		}
+		return "/etc_manage/warehouse_create";
+	}	
+	
+	//창고생성
+	@PostMapping("/addWarehouse.do")
+	@ResponseBody
+	public int addWarehouse(HttpServletRequest request, String fileId ,String fileNm, String warehouse ) {
+		FileVO file = fileService.getFileData(fileId);
+		String filePath = file.getLogiPath()+file.getLogiNm();
+		int result = 0;
+		int addWarehouseResult = etcService.addWarehouse(fileId,warehouse);
+		WarehouseVO vo = etcService.selectWarehouse(fileId,warehouse);
+
+		//csv 파일 읽어서 db에 저장
+        List<List<String>> csvList = new ArrayList<List<String>>();
+        List<Map<String,Object>> insertFeeList = new ArrayList<Map<String,Object>>();
+        File csv = new File(filePath);
+        BufferedReader br = null;
+        String line = "";
+        try {
+            br = new BufferedReader(new FileReader(csv));
+            while ((line = br.readLine()) != null) { // readLine()은 파일에서 개행된 한 줄의 데이터를 읽어온다.
+                List<String> aLine = new ArrayList<String>();
+                String[] lineArr = line.split(","); // 파일의 한 줄을 ,로 나누어 배열에 저장 후 리스트로 변환한다.
+                aLine = Arrays.asList(lineArr);
+                csvList.add(aLine);
+            }
+
+            for(int i = 2; i<csvList.size(); i++){            	
+            	for(int j = 2; j<csvList.get(1).size(); j++){
+            	Map<String,Object> tempMap = new HashMap<String,Object>();
+	            	tempMap.put("warehouseIdx", vo.getWarehouseIdx());
+	            	tempMap.put("city", csvList.get(i).get(0));
+	            	tempMap.put("area", csvList.get(i).get(1));
+            		tempMap.put("ton", csvList.get(1).get(j));
+            		tempMap.put("fee", csvList.get(i).get(j));
+            		insertFeeList.add(tempMap);
+            	}
+
+            }
+            
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (br != null) { 
+                    br.close(); // 사용 후 BufferedReader를 닫아준다.
+                }
+            } catch(IOException e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println(insertFeeList);
+
+        int addFeeResult = etcService.addWarehouseFee(insertFeeList);
+        
+        if(addFeeResult < 1){
+        	result = 3;
+        } else if(addWarehouseResult != 1){
+        	result = 2;
+        }
+        
+		return result;
+	}
+
+	
+	//창고수정
+	@PostMapping("/updateWarehouse.do")
+	@ResponseBody
+	public int updateWarehouse(HttpServletRequest request, String fileId ,String fileNm, String warehouse ,String fileChange, String warehouseIdx) {
+		int result = 0;
+		int addFeeResult = 2;
+		int updateWarehouseResult = etcService.updateWarehouse(fileId,warehouse,warehouseIdx);
+		//csv 파일 변경되었으면 기존 데이터 삭제후 재 업로드
+		System.out.println(fileChange);
+		System.out.println(warehouseIdx);
+		System.out.println(fileId);
+		if(fileChange.equals("Y")){
+
+		int	deleteWarehouseResult = etcService.deleteWarehouseFee(warehouseIdx);	
+		System.out.println(deleteWarehouseResult);
+		FileVO file = fileService.getFileData(fileId);
+		String filePath = file.getLogiPath()+file.getLogiNm();
+
+		//csv 파일 읽어서 db에 저장
+        List<List<String>> csvList = new ArrayList<List<String>>();
+        List<Map<String,Object>> insertFeeList = new ArrayList<Map<String,Object>>();
+        File csv = new File(filePath);
+        BufferedReader br = null;
+        String line = "";
+        try {
+            br = new BufferedReader(new FileReader(csv));
+            while ((line = br.readLine()) != null) { // readLine()은 파일에서 개행된 한 줄의 데이터를 읽어온다.
+                List<String> aLine = new ArrayList<String>();
+                String[] lineArr = line.split(","); // 파일의 한 줄을 ,로 나누어 배열에 저장 후 리스트로 변환한다.
+                aLine = Arrays.asList(lineArr);
+                csvList.add(aLine);
+            }
+
+            for(int i = 2; i<csvList.size(); i++){            	
+            	for(int j = 2; j<csvList.get(1).size(); j++){
+            	Map<String,Object> tempMap = new HashMap<String,Object>();
+	            	tempMap.put("warehouseIdx", warehouseIdx);
+	            	tempMap.put("city", csvList.get(i).get(0));
+	            	tempMap.put("area", csvList.get(i).get(1));
+            		tempMap.put("ton", csvList.get(1).get(j));
+            		tempMap.put("fee", csvList.get(i).get(j));
+            		System.out.println(tempMap);
+            		insertFeeList.add(tempMap);
+            	}
+
+            }
+            
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (br != null) { 
+                    br.close(); // 사용 후 BufferedReader를 닫아준다.
+                }
+            } catch(IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        addFeeResult = etcService.addWarehouseFee(insertFeeList);
+        
+		}
+        
+        if(addFeeResult < 2){
+        	result = 3;
+        } else if(updateWarehouseResult != 1){
+        	result = 2;
+        }
+        
+		return result;
+	}
+	
+	//제품명 삭제
+	@PostMapping("/deleteWarehouse.do")
+	@ResponseBody
+	public int deleteWarehouse(HttpServletRequest request) {
+		String[] idxList = request.getParameterValues("idxList");
+		int result = 0;
+		for(int i=0; i<idxList.length; i++){
+			result += etcService.warehouseDelete(idxList[i]);
+			etcService.deleteWarehouseFee(idxList[i]);	
+		}
+		
+		int returnVal = 0;
+		if(result != idxList.length){
+			returnVal = 1;
+		}
+		
+		return returnVal;
 	}
 	
 	//창고별 재고관리 이동

@@ -55,14 +55,11 @@ public class MemberController {
 	@PostMapping("/addMember.do")
 	@ResponseBody
 	public int addMember(MemberVO vo) {
-		System.out.println("들어옴");
-		System.out.println(vo.getRole().equals("1"));
-		System.out.println(vo.getRole());
+
 		vo.setCreditAmount(vo.getCreditAmount().replace(",", ""));
 		int result = memberService.insertMember(vo);
 		if(vo.getRole().equals("1")){
 			//거래처일경우 초기 여신정보 넣어주기
-			System.out.println("initmoneyinfo넣기!");
 			memberService.initMoneyInfo(vo);
 		}
 		return result;

@@ -134,4 +134,18 @@ public interface EtcService {
 
 	List<ProductDetailVO> findProductDetail(ProductDetailVO vo);
 
+	int addWarehouse(String fileId, String warehouse);
+
+	WarehouseVO selectWarehouse(String fileId, String warehouse);
+
+	int addWarehouseFee(List<Map<String, Object>> insertFeeList);
+
+	WarehouseVO getWarehoseInfo(String warehouseIdx);
+
+	int updateWarehouse(String fileId, String warehouse, String warehouseIdx);
+
+	int deleteWarehouseFee(String warehouseIdx);
+
+	int warehouseDelete(String string);
+
 }

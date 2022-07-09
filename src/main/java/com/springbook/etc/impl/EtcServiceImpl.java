@@ -535,4 +535,57 @@ public class EtcServiceImpl implements EtcService {
 		return etcMapper.getProductNameListGroup();
 	}
 
+	@Override
+	public int addWarehouse(String fileId, String warehouse) {
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("fileId", fileId);
+		map.put("warehouse", warehouse);
+		// TODO Auto-generated method stub
+		return etcMapper.addWarehouse(map);
+	}
+
+	@Override
+	public WarehouseVO selectWarehouse(String fileId, String warehouse) {
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("fileId", fileId);
+		map.put("warehouse", warehouse);
+		// TODO Auto-generated method stub
+		return etcMapper.selectWarehouse(map);
+	}
+
+	@Override
+	public int addWarehouseFee(List<Map<String, Object>> insertFeeList) {
+		// TODO Auto-generated method stub
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("insertFeeList", insertFeeList);
+		return etcMapper.addWarehouseFee(map);
+	}
+
+	@Override
+	public WarehouseVO getWarehoseInfo(String warehouseIdx) {
+		// TODO Auto-generated method stub
+		return etcMapper.getWarehoseInfo(warehouseIdx);
+	}
+
+	@Override
+	public int updateWarehouse(String fileId, String warehouse, String warehouseIdx) {
+		// TODO Auto-generated method stub
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("fileId", fileId);
+		map.put("warehouse", warehouse);
+		map.put("warehouseIdx", warehouseIdx);
+		return etcMapper.updateWarehouse(map);
+	}
+
+	@Override
+	public int deleteWarehouseFee(String warehouseIdx) {
+		// TODO Auto-generated method stub
+		return etcMapper.deleteWarehouseFee(warehouseIdx);
+	}
+
+	@Override
+	public int warehouseDelete(String string) {
+		// TODO Auto-generated method stub
+		return etcMapper.warehouseDelete(string);
+	}
 }

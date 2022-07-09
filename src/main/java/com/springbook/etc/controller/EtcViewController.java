@@ -1,5 +1,6 @@
 package com.springbook.etc.controller;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -43,10 +44,5 @@ public class EtcViewController {
 		
 		return "/etc_manage/type_regist";
 	}
-	
-	
-	@GetMapping(value= "/warehouseCreate.do")
-	public String warehouseCreate() {
-		return "/etc_manage/warehouse_create";
-	}	
+
 }

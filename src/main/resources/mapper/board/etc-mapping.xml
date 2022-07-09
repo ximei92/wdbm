@@ -473,7 +473,73 @@
 		WHERE 
 		DEL_YN = 'N'
 	</select>
+
+	<!--창고 생성 개수 -->
+	<insert id="addWarehouse" parameterType="Map" >
+
+        INSERT INTO WAREHOUSE
+        (
+            warehouse, file_id, reg_date
+        )
+        VALUES
+        (
+            #{warehouse}, #{fileId}, now()
+        )
+	</insert>
+
+	<!--창고 정보 select -->
+	<select id="selectWarehouse" resultType="com.springbook.etc.vo.WarehouseVO" parameterType="Map">
+		SELECT
+		*
+		FROM
+		WAREHOUSE
+		WHERE FILE_ID = #{fileId} AND WAREHOUSE = #{warehouse}
+	</select>
+
+	<!--창고상세 수정 -->
+	<update id="updateWarehouse" parameterType="Map">
+		UPDATE WAREHOUSE
+		SET FILE_ID = #{fileId}, WAREHOUSE = #{warehouse}
+		WHERE WAREHOUSE_IDX = #{warehouseIdx}
+	</update>
 	
+	<!--페이지 포함 창고조회 -->
+	<select id="getWarehoseInfo" resultType="com.springbook.etc.vo.WarehouseVO" parameterType="java.lang.String">
+		SELECT
+		*
+		FROM
+		WAREHOUSE
+		WHERE WAREHOUSE_IDX = #{warehouseIdx}
+	</select>
+	
+	<!--csv 파일 DB warehouse_fee에 insert -->
+	<insert id="addWarehouseFee" parameterType="Map">
+		INSERT INTO WAREHOUSE_FEE(
+			WAREHOUSE_IDX, 
+			CITY,
+			AREA, 
+			TON, 
+			FEE,
+			REG_DATE
+		)
+		VALUES
+		<foreach collection="insertFeeList" item="i" separator=",">
+		(
+			#{i.warehouseIdx},
+			#{i.city},
+			#{i.area},
+			#{i.ton},
+			#{i.fee},
+			now()
+			)
+		</foreach>
+	</insert>
+
+	<!--csv 기존파일 DB 삭제  -->
+	<delete id="deleteWarehouseFee" parameterType="java.lang.String">
+		DELETE FROM WAREHOUSE_FEE WHERE WAREHOUSE_IDX = #{warehouseIdx}
+	</delete>
+					
 	<!--페이지 포함 창고조회 -->
 	<select id="getWarehouseList" resultType="com.springbook.etc.vo.WarehouseVO" parameterType="Map">
 		SELECT
@@ -483,7 +549,12 @@
 		WHERE DEL_YN = "N"
 		LIMIT #{i}, #{contentnum}
 	</select>
-	
+
+	<!--창고삭제  -->
+	<update id="warehouseDelete" parameterType="java.lang.String">
+		UPDATE WAREHOUSE SET DEL_YN = "Y" WHERE WAREHOUSE_IDX = #{string}
+	</update>
+		
 	<!--창고 재고 반영 넣기 -->
 	<insert id="insertInventoryStock">
 	    INSERT INTO WAREHOUSE_STOCK

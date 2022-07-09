@@ -142,4 +142,19 @@ public interface EtcMapper {
 
 	List<ProductDetailVO> findProductDetail(ProductDetailVO vo);
 
+	int addWarehouse(Map<String, Object> map);
+
+	WarehouseVO selectWarehouse(Map<String, Object> map);
+	
+	//csv DB insert
+	int addWarehouseFee(Map<String, Object> map);
+
+	WarehouseVO getWarehoseInfo(String warehouseIdx);
+
+	int updateWarehouse(Map<String, Object> map);
+
+	int deleteWarehouseFee(String warehouseIdx);
+
+	int warehouseDelete(String string);
+
 }
