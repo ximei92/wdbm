@@ -43,12 +43,10 @@ function drawTable(data){
 		console.log('tableㄱ밧');
 		var tr = '<tr class="'+data.list[i].PRODUCT_NM+'" name="'+data.list[i].PRODUCT_NM+'">';
 		var td1= '<td><input type="checkbox" name="chk" value="Y">';
-		td1 += '<input type="hidden" name="productCd" value='+data.list[i].PRODUCT_CD+'></td>';
-		td1 += '<input type="hidden" name="thickness" value='+data.list[i].THICKNESS+'></td>';
-		td1 += '<input type="hidden" name="size" value='+data.list[i].SIZE+'></td>';
-		td1 += '<input type="hidden" name="height" value='+data.list[i].HEIGHT+'></td>';
-		td1 += '<input type="hidden" name="width" value='+data.list[i].WIDTH+'></td>';
-		td1 += '<td>'+data.list[i].PRODUCT_CD+'</td>'; 
+        td1 += '<input type="hidden" name="productIdx" value='+data.list[i].PRODUCT_IDX+'></td>';
+        td1 += '<input type="hidden" name="thicknessIdx" value='+data.list[i].THICKNESS_IDX+'></td>';
+        td1 += '<input type="hidden" name="sizeIdx" value='+data.list[i].SIZE_IDX+'></td>';
+        td1 += '<td>'+data.list[i].THICKNESS+data.list[i].SIZE+'-'+data.list[i].PRODUCT_CD+'</td>'; 
 		td1 += '<td>'+data.list[i].THICKNESS+'</td>'; 
 		td1 +='<td> '+ data.list[i].SIZE+ ' ('+data.list[i].HEIGHT +'x'+data.list[i].WIDTH+')</td>'; 
 		td1 += '<td><input type="text" class="wd100 txt-right" placeholder="0" name="price"> </td>'; 
@@ -139,14 +137,10 @@ console.log(a);
 			checkVal = 'N';
 		}
 		var object= new Object();
-		object.productCd = $(".bbs.mt17.tab-box.on tbody tr input[name=productCd]").eq(i).val();
-		object.thickness =  $(".bbs.mt17.tab-box.on tbody tr input[name=thickness]").eq(i).val();
-		object.size =  $(".bbs.mt17.tab-box.on tbody tr input[name=size]").eq(i).val();
-		object.height =  $(".bbs.mt17.tab-box.on tbody tr input[name=height]").eq(i).val();
-		object.width =  $(".bbs.mt17.tab-box.on tbody tr input[name=width]").eq(i).val();
-		object.price =  $(".bbs.mt17.tab-box.on tbody tr input[name=price]").eq(i).val();
-		console.log('price');
-		console.log(object.price);
+        object.productIdx = $(".bbs.mt17.tab-box.on tbody tr input[name=productIdx]").eq(i).val();
+        object.thicknessIdx =  $(".bbs.mt17.tab-box.on tbody tr input[name=thicknessIdx]").eq(i).val();
+        object.sizeIdx =  $(".bbs.mt17.tab-box.on tbody tr input[name=sizeIdx]").eq(i).val();
+        object.priceIdx =  $(".bbs.mt17.tab-box.on tbody tr input[name=price]").eq(i).val();
 		object.id = parentId;
 		object.use = checkVal;
 		arr.push(object);
@@ -512,7 +506,7 @@ $(document).ready(function(){
 	});
 	
 	//pdf 확장자 체크
-	$("input:file[name='file']").change(function () {
+    $("input:file[name='file1']").change(function () {
 		console.log("file");
 	    var str = $(this).val();
 	    var size = $(this).size();
@@ -532,7 +526,7 @@ $(document).ready(function(){
 	    console.log(fileSize);
 	    if(fileSize > maxSize){
 	    	alert("첨부파일 사이즈는 10MB 이내로 등록 가능합니다.");
-	    	$("input:file[name='file']").val('');
+	    	$("input:file[name='file1']").val('');
 	    	$("input:text[name='filename']").val('');
 	    	return;
 	    }

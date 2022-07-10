@@ -189,9 +189,10 @@
 	                                    <div class="wd100">
 	                                        <p class="filebox wd415p">
 	                                            <label for="file1">파일찾기</label>
-	                                            <input type="file" id="file1" name="file_pdf" class="upload_hidden" required="required">
-	                                            <input type="text" readonly="readonly" class="upload_name" placeholder="파일을 선택해주세요.">
+                                                <input type="file" id="file1" name="file1" class="upload_hidden" required="required"  accept=".pdf" >
+                                                <input type="text" name="filename" readonly="readonly" class="upload_name" placeholder="파일을 선택해주세요.">
 	                                        </p>
+	                                        
 	                                        <p class="font-s12 color-gray">
 	                                            	※ 파일형석: pdf, 용량10MB 이하 제한
 	                                        </p>
@@ -342,8 +343,8 @@
 	                                        <p class="filebox wd415p">
 	                                            <label for="file1">파일찾기</label>
 	                                            <input type="hidden" id="origFile" value="${fileInfo.fileId}">
-	                                            <input type="file" id="file1" name="file_pdf" class="upload_hidden" accept=".pdf" >
-	                                            <input type="text" readonly="readonly" class="upload_name" placeholder="파일을 선택해주세요." value="${fileInfo.origNm}">
+                                                <input type="file" id="file1" name="file1" class="upload_hidden" accept=".pdf" >
+                                                <input type="text" name="filename" readonly="readonly" class="upload_name" placeholder="파일을 선택해주세요." value="${fileInfo.origNm}">
 	                                        </p>
 	                                        <p class="font-s12 color-gray">
 	                                            	※ 파일형석: pdf, 용량10MB 이하 제한
