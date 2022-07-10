@@ -43,7 +43,7 @@ public class MemberServiceImpl implements MemberService {
 			return false;
 		}
 		// 원본패스워드, 암호화패스워드 비교
-		return passwordEncoder.matches(vo.getPassword(),member.getPassword() );  
+		return passwordEncoder.matches(vo.getPassword(),member.getPassword());  
 	}
 
 	@Override
