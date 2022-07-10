@@ -98,7 +98,7 @@ public interface EtcMapper {
 
 	int safetyListCount(String key);
 
-	List<ProductDetailVO> getSafetyList(Map<String, Object> map);
+	List<Map<String, Object>> getSafetyList(Map<String, Object> map);
 
 	int creditListCount(Map<String, Object> map);
 
@@ -137,5 +137,24 @@ public interface EtcMapper {
 	int inventoryStatusCount(Map<String, Object> map);
 
 	List<Map<String, Object>> getInventoryStatus(Map<String, Object> map);
+
+	List<ProductVO> getProductNameListGroup();
+
+	List<ProductDetailVO> findProductDetail(ProductDetailVO vo);
+
+	int addWarehouse(Map<String, Object> map);
+
+	WarehouseVO selectWarehouse(Map<String, Object> map);
+	
+	//csv DB insert
+	int addWarehouseFee(Map<String, Object> map);
+
+	WarehouseVO getWarehoseInfo(String warehouseIdx);
+
+	int updateWarehouse(Map<String, Object> map);
+
+	int deleteWarehouseFee(String warehouseIdx);
+
+	int warehouseDelete(String string);
 
 }

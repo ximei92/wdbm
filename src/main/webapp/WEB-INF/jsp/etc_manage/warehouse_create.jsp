@@ -88,6 +88,7 @@
 		<!-- s:container -->
 		<div id="container">
 			<h2 class="normal">창고 관리</h2>
+			<form method="post" action="addWarehouse.do" id="warehouseForm" enctype="multipart/form-data"> 
 			<div id="content">
 				<div class="cont-box pt19">
 					<div class="h3-title blue">
@@ -96,9 +97,11 @@
 
 					<!-- 발주 정보 -->
 					<article class="inner-1">
+					<input type="hidden" id="fileChange" value="N"> <!--파일체인지체크 -->
+					<c:if test="${empty list}">
 						<dl class="row col-2">
 							<dt>창고명</dt>
-							<dd><input type="text" class="wd410p" name="warehouse"></dd>
+							<dd><input type="text" class="wd410p" name="warehouse" id="warehouse"></dd>
 						</dl>
 						<dl class="row col-2">
 							<dt class="al-start">배송료 DB테이블 <i class="essen">*</i></dt>
@@ -106,21 +109,47 @@
 								<div class="wd100">
 									<p class="filebox wd410p srch">
 										<label for="attachDbCsv">파일찾기</label>
-										<input type="file" id="attachDbCsv" name="file1" class="upload_hidden">
+										<input type="file" id="attachDbCsv" name="file1" class="upload_hidden" accept=".csv">
 										<input type="text" readonly="readonly" class="upload_name" name="filename" placeholder="파일을 선택해주세요.">
 									</p>
 									<p class="font-s12 color-gray"> ※ 파일형식: CSV, 용량10MB 이하 제한 </p>
 								</div>
 							</dd>
 						</dl>
+					</c:if>
+					<c:if test="${!empty list}">
+						<input type="hidden" id="update" value="update">
+						<input type="hidden" class="wd210p" id="origWarehouseIdx" value="${list.warehouseIdx}">
+						<dl class="row col-2">
+							<dt>창고명</dt>
+							<dd><input type="text" class="wd410p" name="warehouse" id="warehouse" value="${list.warehouse}"></dd>
+						</dl>
+						<dl class="row col-2">
+							<dt class="al-start">배송료 DB테이블 <i class="essen">*</i></dt>
+							<dd>
+								<div class="wd100">
+									<p class="filebox wd410p srch">
+										<label for="attachDbCsv">파일찾기</label>
+										<input type="hidden" id="origFile" value="${fileInfo.fileId}">
+										<input type="hidden" id="origFileNm" value="${fileInfo.origNm}">
+										<input type="file" id="attachDbCsv" name="file1" class="upload_hidden" accept=".csv">
+										<input type="text" readonly="readonly" class="upload_name" name="filename" placeholder="파일을 선택해주세요."
+										 value="${fileInfo.origNm}" required="required">
+									</p>
+									<p class="font-s12 color-gray"> ※ 파일형식: CSV, 용량10MB 이하 제한 </p>
+								</div>
+							</dd>
+						</dl>
+					</c:if>					
 					</article>
 
 					<div class="dl-buttons">
-						<button class="btn bg_color3 small wd120p">취소</button>
-						<button class="btn bg_color1 small wd120p ml10">저장</button>
+						<button class="btn bg_color3 small wd120p" type="button">취소</button>
+						<button class="btn bg_color1 small wd120p ml10" type="submit">저장</button>
 					</div>
 				</div>
 			</div>
+			</form>
 		</div>
 		<!-- s:container -->
 	</div>

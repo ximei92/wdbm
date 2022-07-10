@@ -88,7 +88,8 @@
 		<!-- s:container -->
 		<div id="container">
 			<h2 class="normal">창고별 재고현황</h2>
-
+			<input type="hidden" id="warehouseIdxKey" value="${warehouseKey}">
+			<input type="hidden" id="productCdKey" value="${productKey}">
             <ul class="tmenu">
 	            <c:forEach items="${warehouse}" var="warehouse" varStatus="status">                        
 	                <li
@@ -104,8 +105,8 @@
                         <ul class="tabs">
                         <c:forEach items="${productNameList}" var="product" varStatus="status">                        
                             <li
-                            <c:if test="${product.productCd eq productKey}">class="on"</c:if>>
-                            <a onclick="changeProduct('${product.productCd}')">${product.productNm}</a>
+                            <c:if test="${product.productNm eq productKey}">class="on"</c:if>>
+                            <a onclick="changeProduct('${product.productNm}')">${product.productNm}</a>
                             </li>
                         </c:forEach>
                         </ul>
@@ -135,20 +136,19 @@
 							<tbody>
 							<c:forEach items="${list}" var="list" varStatus="status">
 								<tr>
-									<td>${list.PRODUCT_CD}</td>
+									<td>${list.THICKNESS}${list.SIZE}-${list.PRODUCT_CD}</td>
 									<td>${list.THICKNESS}</td>
 									<fmt:formatNumber value="${list.HEIGHT}" pattern="#,###" var="height" />
 									<fmt:formatNumber value="${list.WIDTH}" pattern="#,###" var="width" />
 									<td>${list.SIZE} (${height} x ${width})</td>
 									<fmt:formatNumber value="${list.TOTAL_STOCK}" pattern="#,###" var="totla_stock" />
 									<td>${totla_stock}</td>
-									<c:set var="ctn" value="${(list.TOTAL_STOCK-list.SAFETY)/list.PALLET}"/>
+									<c:set var="ctn" value="${(list.TOTAL_STOCK-list.SAFETY)/list.SLICE}"/>
 									<td>${ctn}</td>
 								</tr>
 							</c:forEach>	
 							</tbody>
 						</table>
-
 						<!-- pager -->
 						<div class="pager txt-right">
 						    <select name="contentnum" id="contentnum" onchange=inventoryStatusPage()>
@@ -156,7 +156,6 @@
 						      <option value="20" <c:if test="${page.getContentnum() == 20 }">selected="selected"</c:if> >20 개</option>
 						      <option value="30" <c:if test="${page.getContentnum() == 30 }">selected="selected"</c:if> >30 개</option>
 						    </select>
-
 						    <c:if test="${page.prev}">
                     			<a class="arr prev" href="javascript:inventoryStatusPage(${page.getStartPage()-1});">이전</a>
                   			</c:if>

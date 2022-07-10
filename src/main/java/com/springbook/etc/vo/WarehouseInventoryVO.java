@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class WarehouseInventoryVO {
 	private String warehouseIdx;
-	private String productCd;
+	private String productIdx;
 	private String size;
 	private String thickness;
 	private int stock;
