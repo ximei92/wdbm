@@ -625,12 +625,13 @@ public class EtcController {
                 csvList.add(aLine);
             }
 
-            for(int i = 2; i<csvList.size(); i++){            	
-            	for(int j = 2; j<csvList.get(1).size(); j++){
+            for(int i = 1; i<csvList.size(); i++){            	
+            	for(int j = 3; j<csvList.get(1).size(); j++){
             	Map<String,Object> tempMap = new HashMap<String,Object>();
 	            	tempMap.put("warehouseIdx", vo.getWarehouseIdx());
-	            	tempMap.put("city", csvList.get(i).get(0));
-	            	tempMap.put("area", csvList.get(i).get(1));
+	            	tempMap.put("SIDO_NM", csvList.get(i).get(0));
+	            	tempMap.put("SIGUNGU_NM", csvList.get(i).get(1));
+	            	tempMap.put("EUBMYEONDONG_NM", csvList.get(i).get(2));
             		tempMap.put("ton", csvList.get(1).get(j));
             		tempMap.put("fee", csvList.get(i).get(j));
             		insertFeeList.add(tempMap);
@@ -698,15 +699,15 @@ public class EtcController {
                 csvList.add(aLine);
             }
 
-            for(int i = 2; i<csvList.size(); i++){            	
-            	for(int j = 2; j<csvList.get(1).size(); j++){
+            for(int i = 1; i<csvList.size(); i++){            	
+            	for(int j = 3; j<csvList.get(1).size(); j++){
             	Map<String,Object> tempMap = new HashMap<String,Object>();
 	            	tempMap.put("warehouseIdx", warehouseIdx);
-	            	tempMap.put("city", csvList.get(i).get(0));
-	            	tempMap.put("area", csvList.get(i).get(1));
+	            	tempMap.put("SIDO_NM", csvList.get(i).get(0));
+	            	tempMap.put("SIGUNGU_NM", csvList.get(i).get(1));
+	            	tempMap.put("EUBMYEONDONG_NM", csvList.get(i).get(2));
             		tempMap.put("ton", csvList.get(1).get(j));
             		tempMap.put("fee", csvList.get(i).get(j));
-            		System.out.println(tempMap);
             		insertFeeList.add(tempMap);
             	}
 

@@ -53,10 +53,10 @@ public class MemberController {
 		vo.setCreditAmount(vo.getCreditAmount().replace(",", ""));
 		int result = memberService.insertMember(vo);
 
-		if (vo.getRole().equals("1")) {
-			// 거래처일경우 초기 여신정보 넣어주기
-			memberService.initMoneyInfo(vo);
-		}
+//		if (vo.getRole().equals("1")) {
+//			// 거래처일경우 초기 여신정보 넣어주기
+//			memberService.initMoneyInfo(vo);
+//		}
 		return result;
 	}
 
