@@ -44,7 +44,7 @@
 		VALUES
 		(
 		#{id}, 
-		"0000", 
+		#{password}, 
 		#{companyNm}, 
 		#{ceoNm}, 
 		#{businessNum}, 
@@ -94,15 +94,18 @@
 	
 	<!-- 로그인 -->
 	<select id="tryLogin" parameterType="com.springbook.member.vo.MemberVO" resultType="com.springbook.member.vo.MemberVO">
-		SELECT 
-		*
-		FROM (SELECT *, CONCAT(EMAIL1,'@',EMAIL2) as EMAIL_1, CONCAT(EMAIL1,'@',EMAIL3) as EMAIL_2 FROM MEMBER) I	
-		WHERE 
-		(I.ID = #{id} AND I.PASSWORD = #{password})
-		OR
-		(I.EMAIL_1 = #{id} AND I.PASSWORD = #{password})
-		OR
-		(I.EMAIL_2 = #{id} AND I.PASSWORD = #{password})
+	 	SELECT 
+			*
+		FROM 
+			(SELECT *, CONCAT(EMAIL1,'@',EMAIL2) as EMAIL_1, CONCAT(EMAIL1,'@',EMAIL3) as EMAIL_2 FROM MEMBER) I	
+		WHERE
+			DEL_YN = 'N'
+			AND  
+			(I.ID = #{id})
+			OR
+			(I.EMAIL_1 = #{id} )
+			OR
+			(I.EMAIL_2 = #{id} )
 	</select>
 
 	<!--회원관리 전체 개수 -->
@@ -255,21 +258,33 @@
 	</update>
 
 	<!-- 이메일 조회 -->
-	<select id="findEmailBy" parameterType="String" resultType="String">
+	<select id="findMemberById" parameterType="String" resultType="com.springbook.member.vo.MemberVO">
 		SELECT 
-			CONCAT(EMAIL1,'@',EMAIL2) AS EMAIL  
+			ID,
+			EMAIL1,
+			EMAIL2
 		FROM	
 			MEMBER  
 		WHERE 
-			ID = #{memberId}
+			ID = #{userId}
 	</select>
-	<select id="checkEmail" parameterType="String" resultType="String">
+	<select id="findMemberByEmail" parameterType="String" resultType="com.springbook.member.vo.MemberVO">
 		SELECT 
-			CONCAT(EMAIL1,'@',EMAIL2) AS EMAIL  
+			ID,
+			EMAIL1,
+			EMAIL2
 		FROM	
 			MEMBER  
 		WHERE 
 			CONCAT(EMAIL1,'@',EMAIL2) = #{email}
-	
 	</select>
+	
+	<update id="modfiyPassword" parameterType="com.springbook.member.vo.MemberVO">
+		UPDATE 
+			MEMBER 
+		SET 
+			PASSWORD = #{password}
+		WHERE
+			ID = #{id} 
+	</update>
 </mapper>

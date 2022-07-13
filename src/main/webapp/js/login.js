@@ -7,7 +7,7 @@ $(document).ready(function(){
 			url: "tryLogin.do",
 			data: $("#loginForm").serialize(),
 			type: "POST",
-			dataType: "json",
+			//dataType: "json",
 			success : function(data){
 				console.log(data);
 				location.href="memberList.do";
