@@ -159,7 +159,7 @@
 								<dt>주소<i class="essen">*</i></dt>
 								<dd>
                                     <input type="text" class="wd330p" placeholder="서울시 강남구 강남대로 |" name="addr1" required="required">
-                                    <input type="text" class="wd62" placeholder="상세주소" name="addr2" required="required">                                    
+                                 <!--    <input type="text" class="wd62" placeholder="상세주소" name="addr2" required="required">  -->                                   
                                 </dd>
 							</dl>
 							<dl class="row col-2 dt-start">
@@ -269,7 +269,7 @@
 								<dt>주소<i class="essen">*</i></dt>
 								<dd>
                                     <input type="text" class="wd330p" placeholder="서울시 강남구 강남대로 |" name="addr1" required="required" value="${info.addr1}">
-                                    <input type="text" class="wd62" placeholder="상세주소" name="addr2" required="required" value="${info.addr2}">                                      
+                                   <%--  <input type="text" class="wd62" placeholder="상세주소" name="addr2" required="required" value="${info.addr2}"> --%>                                      
                                 </dd>
 							</dl>
 							<dl class="row col-2 dt-start">
