@@ -101,11 +101,11 @@
 		WHERE
 			DEL_YN = 'N'
 			AND  
-			(I.ID = #{id})
+			(I.ID = #{id} AND PASSWORD = #{password} )
 			OR
-			(I.EMAIL_1 = #{id} )
+			(I.EMAIL_1 = #{id} AND PASSWORD = #{password} )
 			OR
-			(I.EMAIL_2 = #{id} )
+			(I.EMAIL_2 = #{id} AND PASSWORD = #{password} )
 	</select>
 
 	<!--회원관리 전체 개수 -->

@@ -15,7 +15,7 @@ public interface MemberMapper {
 
 	int insertMember(MemberVO vo);
 	
-	MemberVO tryLogin(String id);
+	MemberVO tryLogin(MemberVO vo);
 	
 	int memberListCount(Map<String, Object> map);
 

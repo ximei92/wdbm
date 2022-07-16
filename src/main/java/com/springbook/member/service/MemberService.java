@@ -3,15 +3,17 @@ package com.springbook.member.service;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.http.ResponseEntity;
+
 import com.springbook.member.vo.MemberVO;
 
 public interface MemberService {
 
 	int getId(String id);
 
-	int insertMember(MemberVO vo);
+	int insertMember(MemberVO vo) throws Exception;
 
-	boolean tryLogin(MemberVO vo);
+	ResponseEntity<MemberVO> tryLogin(MemberVO vo) throws Exception;
 
 	int memberListCount(String type, String keyword);
 
@@ -37,7 +39,7 @@ public interface MemberService {
 
 	MemberVO checkEmailBy(String userId);
 
-	int modifyPassword(MemberVO member);
+	int modifyPassword(MemberVO member) throws Exception;
 
 
 }

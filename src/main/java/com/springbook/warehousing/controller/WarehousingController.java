@@ -1,4 +1,4 @@
-package com.springbook.warehousing.controller;
+/*package com.springbook.warehousing.controller;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -112,3 +112,4 @@ public class WarehousingController {
 	
 
 }
+*/
