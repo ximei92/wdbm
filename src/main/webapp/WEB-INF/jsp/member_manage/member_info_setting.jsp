@@ -15,12 +15,107 @@
 	<script src="../../js/layout.js"></script>
 	<script src="../../../js/member/member.js"></script>
 	<script defer src="../../js/script.js"></script>
+	<script>
+
+	//팝업창 저장 누르면 정보 저장
+	function savePopupInfo(){
+		$('#businessNum1',opener.document).val($('#businessNum1').val());
+		$('#businessNum2',opener.document).val($('#businessNum2').val());
+		$('#addr1',opener.document).val($('#addr1').val());
+		$('#addr2',opener.document).val($('#addr2').val());
+		$('#companyPhoneNum1',opener.document).val($('#companyPhoneNum1').val());
+		$('#companyPhoneNum2',opener.document).val($('#companyPhoneNum2').val());
+		$('#faxNum1',opener.document).val($('#faxNum1').val());
+		$('#faxNum2',opener.document).val($('#faxNum2').val());
+		$('#ceoNm1',opener.document).val($('#ceoNm1').val());
+		$('#ceoNm2',opener.document).val($('#ceoNm2').val());
+		$('#email11',opener.document).val($('#email11').val());
+		$('#email21',opener.document).val($('#email21').val());
+		$('#email31',opener.document).val($('#email31').val());
+		$('#email12',opener.document).val($('#email12').val());
+		$('#email22',opener.document).val($('#email22').val());
+		$('#email32',opener.document).val($('#email32').val());
+		$('#ceoBirth1',opener.document).val($('#ceoBirth1').val());
+		$('#ceoBirth2',opener.document).val($('#ceoBirth2').val());
+		$('#specialMessage1',opener.document).val($('#specialMessage1').val());
+		$('#specialMessage2',opener.document).val($('#specialMessage2').val());
+
+		window.close();
+	
+	}
+	
+	$( document ).ready(function() {
+		//부모창 정보로드
+		$('#businessNum1').val($('#businessNum1',opener.document).val());
+		$('#businessNum2').val($('#businessNum2',opener.document).val());
+		$('#addr1').val($('#addr1',opener.document).val());
+		$('#addr2').val($('#addr2',opener.document).val());
+		$('#companyPhoneNum1').val($('#companyPhoneNum1',opener.document).val());
+		$('#companyPhoneNum2').val($('#companyPhoneNum2',opener.document).val());
+		$('#faxNum1').val($('#faxNum1',opener.document).val());
+		$('#faxNum2').val($('#faxNum2',opener.document).val());
+		$('#ceoNm1').val($('#ceoNm1',opener.document).val());
+		$('#ceoNm2').val($('#ceoNm2',opener.document).val());
+		$('#email11').val($('#email11',opener.document).val());
+		$('#email21').val($('#email21',opener.document).val());
+		$('#email31').val($('#email31',opener.document).val());
+		$('#email12').val($('#email12',opener.document).val());
+		$('#email22').val($('#email22',opener.document).val());
+		$('#email32').val($('#email32',opener.document).val());
+		$('#ceoBirth1').val($('#ceoBirth1',opener.document).val());
+		$('#ceoBirth2').val($('#ceoBirth2',opener.document).val());
+		$('#specialMessage1').val($('#specialMessage1',opener.document).val());
+		$('#specialMessage2').val($('#specialMessage2',opener.document).val());
+		
+		
+		if($("#email21 option:selected").val() == "self"){
+			console.log('self');
+			$("#email31").removeClass("disable");
+			$("#email31").removeAttr("readonly");
+		}
+		
+
+		//이메일 직업입력 활성화
+		$("#email21").change(function(){
+			if($("#email21 option:selected").val() == "self"){
+				console.log('self');
+				$("#email31").removeClass("disable");
+				$("#email31").removeAttr("readonly");
+			} else {
+				$("#email31").addClass("disable");
+				$("#email31").val("");
+				$("#email31").prop("readonly","readonly");
+			}
+		});
+		
+		if($("#email22 option:selected").val() == "self"){
+			console.log('self');
+			$("#email32").removeClass("disable");
+			$("#email32").removeAttr("readonly");
+		}
+		
+
+		//이메일 직업입력 활성화
+		$("#email22").change(function(){
+			if($("#email22 option:selected").val() == "self"){
+				console.log('self');
+				$("#email32").removeClass("disable");
+				$("#email32").removeAttr("readonly");
+			} else {
+				$("#email32").addClass("disable");
+				$("#email32").val("");
+				$("#email32").prop("readonly","readonly");
+			}
+		});
+	});
+	
+	</script>
 </head>
 
 <body>
 	<div id="wrap">
 		<!-- header -->
-		<header id="header">
+<!-- 		<header id="header">
 			<h1>
 				<a href="#">
 					<img src="../images/logo.png" alt="월드비엠 물류관리 시스템">
@@ -38,7 +133,7 @@
 					<button class="alarm-list">알림 목록</button>
 				</div>
 			</div>
-			<!-- s:aside -->
+			s:aside
 			<nav id="aside">
 				<ul class="uk-nav-default uk-nav-parent-icon uk-nav member" uk-nav="">
 					<li><a href="210_dashboard.html">대시보드</a></li>
@@ -79,14 +174,13 @@
 					<li class="uk-open"><a href="250_member_manage.html">회원관리 </a></li>
 				</ul>
 			</nav>
-			<!-- e:aside -->
-		</header>
+			e:aside
+		</header> -->
 
 		<!-- s:container -->
 		<div id="container">
 			<h2 class="normal">회원관리</h2>
-			<form method="post" action="addMember.do" id="form" enctype="multipart/form-data"> 
-			<input name="id" id="id" type="hidden" value =<%=request.getParameter("id")%>>
+<!-- 			<form method="post" action="addMember.do" id="form" enctype="multipart/form-data"> -->
 			<div id="content">
 				<div class="cont-box pt19">
 					<div class="h3-title blue">
@@ -99,48 +193,47 @@
 						<article class="inner">
 							<dl class="row col-4">
 								<dt>회사명</dt>
-								<dd><input type="text" class="wd330p" value="월드웍스" name="name"></dd>
+								<dd><input type="text" class="disable wd330p" value="월드웍스" name="name" id="companyName1" readonly="readonly"></dd>
 								<dt>대표이사명 <i class="essen">*</i></dt>
-								<dd><input type="text" class="wd210p" placeholder="대표이사명 입력"></dd>
+								<dd><input type="text" class="wd210p" id="ceoNm1" placeholder="대표이사명 입력"></dd>
 							</dl>
 							<dl class="row col-4">
 								<dt>법인등록번호 <i class="essen">*</i></dt>
-								<dd><input type="text" class="wd330p" placeholder="- 없이 숫자만 입력"></dd>
+								<dd><input type="text" class="wd330p" name="" id="businessNum1" placeholder="- 없이 숫자만 입력"></dd>
 								<dt>대표이사 생년월일</dt>
-								<dd><input type="text" class="wd210p" placeholder="" name="ceo_birth"></dd>
+								<dd><input type="text" class="wd210p" placeholder="" name="ceo_birth" id="ceoBirth1"></dd>
 							</dl>
 							<dl class="row col-4">
 								<dt>대표 전화번호<i class="essen">*</i></dt>
-								<dd><input type="text" class="wd210p" placeholder="- 없이 숫자만 입력"></dd>
+								<dd><input type="text" class="wd210p" id="companyPhoneNum1" placeholder="- 없이 숫자만 입력"></dd>
 								<dt>팩스번호</dt>
-								<dd><input type="text" class="wd210p" placeholder="- 없이 숫자만 입력"></dd>
+								<dd><input type="text" class="wd210p" id="faxNum1" placeholder="- 없이 숫자만 입력"></dd>
 							</dl>
 							<dl class="row col-2">
 								<dt>주소<i class="essen">*</i></dt>
 								<dd>
-                                    <input type="text" class="wd330p" value="서울시 강남구 강남대로 |">
-                                    <input type="text" class="wd62" placeholder="상세주소">
+                                    <input type="text" class="wd330p" id="addr1" placeholder="서울시 강남구 강남대로 |">
                                 </dd>
 							</dl>
                             <dl class="row col-2">
 								<dt>이메일<i class="essen">*</i></dt>
 								<dd>
-                                    <input type="text" class="wd210p" placeholder="이메일 입력" name="email1" required="required">
+                                    <input type="text" class="wd210p" placeholder="이메일 입력" name="email11" id="email11" required="required">
                                     <span>@</span>
-                                    <select title="" class="wd210p" name="email2" id="email2" required="required">
+                                    <select title="" class="wd210p" name="email2" id="email21" required="required">
 										<option value="naver.com">naver.com</option>
 										<option value="gmail.com">gmail.com</option>
 										<option value="nate.com">nate.com</option>
 										<option value="self">직접 입력</option>
 									</select>
                                     <!-- 직접 입력할때만 활성화 -->
-                                    <input type="text" class="disable wd30" name="email3" id="email3">	                                    
+                                    <input type="text" class="disable wd30" name="email3" id="email31">	                                    
                                 </dd>
 							</dl>
                             <dl class="row col-2 dt-start">
 								<dt>특이사항 </dt>
 								<dd>
-                                    <textarea name="special_message" id="special_message" placeholder="예) 5톤축차 진입불가" class="wd60"></textarea>
+                                    <textarea name="special_message" id="specialMessage1" placeholder="예) 5톤축차 진입불가" class="wd60"></textarea>
                                 </dd>
 							</dl>
 						</article>
@@ -152,60 +245,59 @@
 												<article class="inner">
 							<dl class="row col-4">
 								<dt>회사명</dt>
-								<dd><input type="text" class="wd330p" value="월드웍스" name="name"></dd>
+								<dd><input type="text" class="disable wd330p" value="월드비엠" name="name" id="companyName2" readonly="readonly"></dd>
 								<dt>대표이사명 <i class="essen">*</i></dt>
-								<dd><input type="text" class="wd210p" placeholder="대표이사명 입력"></dd>
+								<dd><input type="text" class="wd210p" id="ceoNm2" placeholder="대표이사명 입력"></dd>
 							</dl>
 							<dl class="row col-4">
 								<dt>법인등록번호 <i class="essen">*</i></dt>
-								<dd><input type="text" class="wd330p" placeholder="- 없이 숫자만 입력"></dd>
+								<dd><input type="text" class="wd330p" id="businessNum2" placeholder="- 없이 숫자만 입력"></dd>
 								<dt>대표이사 생년월일</dt>
-								<dd><input type="text" class="wd210p" placeholder="" name="ceo_birth"></dd>
+								<dd><input type="text" class="wd210p" placeholder="" name="ceo_birth" id="ceoBirth2"></dd>
 							</dl>
 							<dl class="row col-4">
 								<dt>대표 전화번호<i class="essen">*</i></dt>
-								<dd><input type="text" class="wd210p" placeholder="- 없이 숫자만 입력"></dd>
+								<dd><input type="text" class="wd210p" placeholder="- 없이 숫자만 입력" id="companyPhoneNum2"></dd>
 								<dt>팩스번호</dt>
-								<dd><input type="text" class="wd210p" placeholder="- 없이 숫자만 입력"></dd>
+								<dd><input type="text" class="wd210p" placeholder="- 없이 숫자만 입력" id="faxNum2"></dd>
 							</dl>
 							<dl class="row col-2">
 								<dt>주소<i class="essen">*</i></dt>
 								<dd>
-                                    <input type="text" class="wd330p" value="서울시 강남구 강남대로 |">
-                                    <input type="text" class="wd62" placeholder="상세주소">
+                                    <input type="text" class="wd330p" id="addr2" placeholder="서울시 강남구 강남대로 |">
                                 </dd>
 							</dl>
                             <dl class="row col-2">
 								<dt>이메일<i class="essen">*</i></dt>
 								<dd>
-                                    <input type="text" class="wd210p" placeholder="이메일 입력" name="email1" required="required">
+                                    <input type="text" class="wd210p" placeholder="이메일 입력" name="email1" id="email12" required="required">
                                     <span>@</span>
-                                    <select title="" class="wd210p" name="email2" id="email2" required="required">
+                                    <select title="" class="wd210p" name="email2" id="email22" required="required">
 										<option value="naver.com">naver.com</option>
 										<option value="gmail.com">gmail.com</option>
 										<option value="nate.com">nate.com</option>
 										<option value="self">직접 입력</option>
 									</select>
                                     <!-- 직접 입력할때만 활성화 -->
-                                    <input type="text" class="disable wd30" name="email3" id="email3">	                                    
+                                    <input type="text" class="disable wd30" name="email3" id="email32">	                                    
                                 </dd>
 							</dl>
                             <dl class="row col-2 dt-start">
 								<dt>특이사항 </dt>
 								<dd>
-                                    <textarea name="special_message" id="special_message" placeholder="예) 5톤축차 진입불가" class="wd60"></textarea>
+                                    <textarea name="special_message" id="specialMessage2" placeholder="예) 5톤축차 진입불가" class="wd60"></textarea>
                                 </dd>
 							</dl>
 						</article>
 					</div>
 
 					<div class="dl-buttons">
-						<button class="btn bg_color3 small wd120p">취소</button>
-						<button class="btn bg_color1 small wd120p" type="submit">저장</button>
+						<button class="btn bg_color3 small wd120p" type="button" onClick="window.close()">취소</button>
+						<button class="btn bg_color1 small wd120p" onclick=savePopupInfo()>저장</button>
 					</div>
 				</div>
 			</div>
-			</form>
+<!-- 			</form> -->
 		</div>
 		<!-- s:container -->
 	</div>

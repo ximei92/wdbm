@@ -103,7 +103,7 @@
 						<!-- button -->
 						<div class="d-flex right wd40 gap10">
 							<button class="btn small bg_color4" id="historyDelete">선택 삭제</button>
-							<button class="btn small bg_color2 ico down">다운로드</button>
+							<button class="btn small bg_color2 ico down" onclick=downloadExcel()>다운로드</button>
 							<button class="btn small bg_color1 ico add" onclick="location.href='depositRegist.do'">입금 등록</button>
 						</div>
 					</div>
@@ -142,13 +142,14 @@
 										<fmt:formatDate value="${parseDateTime}" pattern="yyyy-MM-dd" var="depDate" />
 									<td>${depDate}</td>
 									<c:set var ="idx" value="${list[status.index]['IDX']}"/>									
-									<td><a onclick="location.href='searchDepositInfo.do?idx=${idx}'"class="tit" >${list[status.index]["COMPANY_NM"]}</a></td>
-									<td><fmt:formatNumber value="${list[status.index]['DEP_AMOUNT']}" pattern="#,###" /></td>
+									<td><a onclick="location.href='searchDepositInfo.do?idx=${idx}&dep=${list[status.index]['TOTAL_DEP']}&order=${list[status.index]['TOTAL_ORDER']}'" 
+									class="tit" >${list[status.index]["COMPANY_NM"]}</a></td>
+									<td><fmt:formatNumber value="${list[status.index]['DEP']}" pattern="#,###" /></td>
 									<td><fmt:formatNumber value='${list[status.index]["CREDIT_AMOUNT"]}' pattern="#,###" /></td>
 									<td><fmt:formatNumber value='${list[status.index]["TOTAL_ORDER"]}' pattern="#,###" /></td>
 									<td><fmt:formatNumber value='${list[status.index]["TOTAL_DEP"]}' pattern="#,###" /></td>
 									<c:set var ="ableCredit" value='${list[status.index]["CREDIT_AMOUNT"]+list[status.index]["TOTAL_DEP"]-list[status.index]["TOTAL_ORDER"]}'/>
-									<td>${ableCredit}</td>
+									<td><fmt:formatNumber value='${ableCredit}' pattern="#,###" /></td>
 								</tr>
 							</c:forEach>						
 							</tbody>

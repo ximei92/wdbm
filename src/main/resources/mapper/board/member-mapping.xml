@@ -165,20 +165,20 @@
 		COUNT(*)
 		FROM
 		PRODUCT_SIZE SIZE 
-			LEFT OUTER JOIN PRODUCT_THICKNESS THICKNESS ON SIZE.PRODUCT_NM = THICKNESS.PRODUCT_NM
-			LEFT OUTER JOIN PRODUCT PRODUCT ON PRODUCT.PRODUCT_NM = THICKNESS.PRODUCT_NM
-		WHERE 
-		SIZE.DEL_YN = 'N'
+			LEFT OUTER JOIN PRODUCT_THICKNESS THICKNESS ON SIZE.PRODUCT_IDX = THICKNESS.PRODUCT_IDX
+			LEFT OUTER JOIN PRODUCT PRODUCT ON PRODUCT.PRODUCT_IDX = THICKNESS.PRODUCT_IDX
+		WHERE  
+		PRODUCT.DEL_YN = 'N'
 	</select>
 	
 	<!--페이지&키워드 포함 회원조회 -->
 	<select id="getTypeProductList" resultType="Map" parameterType="Map">
 		SELECT
-		PRODUCT.PRODUCT_NM, SIZE.SIZE, SIZE.HEIGHT, SIZE.WIDTH, THICKNESS.THICKNESS, PRODUCT.PRODUCT_CD
+		PRODUCT.PRODUCT_NM,SIZE.SIZE_IDX,SIZE.SIZE, SIZE.HEIGHT, SIZE.WIDTH, THICKNESS.THICKNESS, THICKNESS.THICKNESS_IDX, PRODUCT.PRODUCT_IDX, PRODUCT.PRODUCT_CD
 		FROM
 		PRODUCT_SIZE SIZE 
-			LEFT OUTER JOIN PRODUCT_THICKNESS THICKNESS ON SIZE.PRODUCT_NM = THICKNESS.PRODUCT_NM
-			LEFT OUTER JOIN PRODUCT PRODUCT ON PRODUCT.PRODUCT_NM = THICKNESS.PRODUCT_NM
+			LEFT OUTER JOIN PRODUCT_THICKNESS THICKNESS ON SIZE.PRODUCT_IDX = THICKNESS.PRODUCT_IDX
+			LEFT OUTER JOIN PRODUCT PRODUCT ON PRODUCT.PRODUCT_IDX = THICKNESS.PRODUCT_IDX
 		WHERE  
 		PRODUCT.DEL_YN = 'N'
  		<if test= "keyword != null and !keyword.equals('')">
@@ -192,22 +192,18 @@
 		INSERT INTO PRICE
 		(
 		id,
-		product_cd,
+		product_Idx,
 		thickness,
 		size,
-		height,
-		width,
 		price,
 		used
 		)
 		VALUES
 		(
 		#{id}, 
-		#{productCd}, 
+		#{productIdx}, 
 		#{thickness}, 
 		#{size}, 
-		#{height}, 
-		#{width}, 
 		#{price}, 
 		#{use}	
 		)
@@ -241,10 +237,10 @@
 		COUNT(*)
 		FROM
 		PRICE PRICE
-		INNER JOIN PRODUCT PRODUCT ON PRODUCT.PRODUCT_CD = PRICE.PRODUCT_CD
+		INNER JOIN PRODUCT PRODUCT ON PRODUCT.PRODUCT_IDX = PRICE.PRODUCT_IDX
 		WHERE  
 		PRODUCT.DEL_YN = 'N'
-    	AND	PRICE.PRODUCT_CD = #{productCd}
+    	AND	PRICE.PRODUCT_IDX = #{productIdx}
     	AND	PRICE.THICKNESS = #{thickness}
     	AND	PRICE.SIZE = #{size}
     	AND	PRICE.ID = #{id}
@@ -254,7 +250,7 @@
 	<update id="updatePrice" parameterType="Map">
 		UPDATE PRICE SET
 		PRICE = #{price}, USED = #{use}
-    	WHERE ID = #{id} AND product_cd = #{productCd} AND thickness = #{thickness} AND size = #{size}
+    	WHERE ID = #{id} AND product_idx = #{productIdx} AND thickness = #{thickness} AND size = #{size}
 	</update>
 
 	<!-- 이메일 조회 -->

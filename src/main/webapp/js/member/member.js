@@ -12,7 +12,12 @@ function goPrice(){
 
 //탭메뉴 제품 변경
 function changeProduct(product){
-
+	var keyword = product;
+	var div = document.getElementsByClassName("bbs mt17 tab-box")[0];
+		div.classList.add("on");
+		div = document.getElementsByClassName("bbs mt17 tab-box on")[0];
+	var tableDiv = $("tbody").empty();
+	
 	  var keyword = keyword;
 		$.ajax({
 			url: "choicePriceSetting.do",
@@ -21,7 +26,12 @@ function changeProduct(product){
 		    dataType:"json",
 		    traditional:true,
 			success : function(data){
-				drawTable(data);
+				console.log(data);
+				if(data.list.length > 0 ){
+					drawTable(data);
+				} else {
+					alert("해당제품의 두꼐와 사이즈가 생성되있지 않습니다.");
+				}
 			},
 			error : function(){
 				alert("에러가 발생했습니다.");		
@@ -39,16 +49,15 @@ function drawTable(data){
 	var tableDiv = $("tbody").empty();
 	
 	for(var i = 0 ; i<data.list.length; i++){
-		console.log(data.list[i]);
-		console.log('tableㄱ밧');
+
 		var tr = '<tr class="'+data.list[i].PRODUCT_NM+'" name="'+data.list[i].PRODUCT_NM+'">';
 		var td1= '<td><input type="checkbox" name="chk" value="Y">';
-		td1 += '<input type="hidden" name="productCd" value='+data.list[i].PRODUCT_CD+'></td>';
-		td1 += '<input type="hidden" name="thickness" value='+data.list[i].THICKNESS+'></td>';
-		td1 += '<input type="hidden" name="size" value='+data.list[i].SIZE+'></td>';
+		td1 += '<input type="hidden" name="productIdx" value='+data.list[i].PRODUCT_IDX+'></td>';
+		td1 += '<input type="hidden" name="thickness" value='+data.list[i].THICKNESS_IDX+'></td>';
+		td1 += '<input type="hidden" name="size" value='+data.list[i].SIZE_IDX+'></td>';
 		td1 += '<input type="hidden" name="height" value='+data.list[i].HEIGHT+'></td>';
 		td1 += '<input type="hidden" name="width" value='+data.list[i].WIDTH+'></td>';
-		td1 += '<td>'+data.list[i].PRODUCT_CD+'</td>'; 
+		td1 += '<td>'+data.list[i].THICKNESS+ data.list[i].SIZE+'-'+data.list[i].PRODUCT_CD+'</td>'; 
 		td1 += '<td>'+data.list[i].THICKNESS+'</td>'; 
 		td1 +='<td> '+ data.list[i].SIZE+ ' ('+data.list[i].HEIGHT +'x'+data.list[i].WIDTH+')</td>'; 
 		td1 += '<td><input type="text" class="wd100 txt-right" placeholder="0" name="price"> </td>'; 
@@ -127,7 +136,7 @@ console.log(a);
 		console.log($(".bbs.mt17.tab-box.on tbody tr").children().eq(i).text());
 
     }
-	var parentId = window.opener.document.getElementById("id").value;
+	var parentId = window.window.opener.document.getElementById("id").value;
 	//배열 생성
 	var arr = new Array();
 	//배열에 값 주입
@@ -139,20 +148,21 @@ console.log(a);
 			checkVal = 'N';
 		}
 		var object= new Object();
-		object.productCd = $(".bbs.mt17.tab-box.on tbody tr input[name=productCd]").eq(i).val();
+		object.productIdx = $(".bbs.mt17.tab-box.on tbody tr input[name=productIdx]").eq(i).val();
 		object.thickness =  $(".bbs.mt17.tab-box.on tbody tr input[name=thickness]").eq(i).val();
 		object.size =  $(".bbs.mt17.tab-box.on tbody tr input[name=size]").eq(i).val();
 		object.height =  $(".bbs.mt17.tab-box.on tbody tr input[name=height]").eq(i).val();
 		object.width =  $(".bbs.mt17.tab-box.on tbody tr input[name=width]").eq(i).val();
 		object.price =  $(".bbs.mt17.tab-box.on tbody tr input[name=price]").eq(i).val();
-		console.log('price');
-		console.log(object.price);
+		if(object.price == '' ){
+			object.price = 0;
+		}
 		object.id = parentId;
 		object.use = checkVal;
 		arr.push(object);
 
     }
-	console.log(arr);
+
 	var jsonData = JSON.stringify(arr);
 	jQuery.ajaxSettings.traditional = true;
 	
@@ -232,7 +242,7 @@ function checkId(){
 
 /*한페이지당 게시물 */
 function page(idx){
-  var pagenum = idx;
+  var pagenum = idx == undefined? 1:idx ;
   var contentnum = $("#contentnum option:selected").val();
   var type = $("#search_item").val();
   var keyword = $("#keyword").val();
@@ -298,17 +308,22 @@ function regists(fileId){
 	checkUnload = false;
 }
 
+//관리자 정보입력 팝업생성
 function moveInfo(){
-	if($("#checkId").val()== "N"){
-		alert("아이디 중복체크를 해주세요.");
-		return;
-	}
-	
-	var	id = $("#id").val();
-	location.href="goMemberInfoSetting.do?id="+id;	
+
+	popup = window.open("goMemberInfoSetting.do","관리자","width=1400,height=800");
+
 }
 
+//function
+function test(){
+	console.log($('#businessNum1'));
+	console.log($('#businessNum1').val());
+}
+
+
 $(document).ready(function(){
+	var popup = null;
 	var checkUnload = true;
 	var location = window.location.href;
 	if($("#email2 option:selected").val() == "self"){
@@ -317,11 +332,7 @@ $(document).ready(function(){
 		$("#email3").removeAttr("readonly");
 	}
 	
-//	$(window).on("beforeunload", function(){
-//		console.log(checkUnload);
-//		if(checkUnload && location.includes("Regists")) return "이 페이지를 벗어나면 작성된 내용은 저장되지 않습니다.";
-//	});
-	
+
 	//이메일 직업입력 활성화
 	$("#email2").change(function(){
 		if($("#email2 option:selected").val() == "self"){
@@ -383,7 +394,6 @@ $(document).ready(function(){
 	
 	//담당자추가
 	$("#add_manager").on("click", function () {
-		console.log('aaaa');
 		var name = $("#manager_nm").val();
 		var num = $("#manager_num").val();
 		
@@ -575,5 +585,6 @@ $(document).ready(function(){
 		}
 
 	});
+
 
 })

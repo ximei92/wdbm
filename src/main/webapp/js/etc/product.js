@@ -235,7 +235,6 @@ function registsThickness(fileId, fileNm){
 	var update = $("#update").val();
 //	var form = document.getElementById('thicknessForm');
 //	var formData = new FormData(form);
-
 	if(fileId != ''){
 		formData.append('fileId', fileId);
 		formData.append('fileNm', fileNm);
@@ -260,7 +259,7 @@ function registsThickness(fileId, fileNm){
 	} else {
 		$.ajax({
 			url: "addProductThickness.do",
-			data: form,
+			data: formData,
 			type: "POST",
 	       	processData: false,
 	   	    contentType: false,
@@ -386,7 +385,6 @@ $(document).ready(function(){
 		var update = $("#update").val();
 		var form = $("form").serialize();
 		if(update == 'update'){
-			console.log('siezeUpdqtq');
 			$.ajax({
 				url: "updateProductSize.do",
 				data: form,

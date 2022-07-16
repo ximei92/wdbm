@@ -79,7 +79,9 @@ public class EtcController {
 		} else {
 	        ccontentnum = Integer.parseInt(contentnum);	
 		}
-
+		System.out.println(cpagenum+"///"+ccontentnum);
+		System.out.println("cunrtPa");
+		System.out.println(pagemaker.getCurrentblock());
 		pagemaker.setTotalcount(etcService.inquiryListCount(keyword)); // mapper 전체 게시글 개수를 지정한다
         pagemaker.setPagenum(cpagenum-1);   // 현재 페이지를 페이지 객체에 지정한다 -1 을 해야 쿼리에서 사용할수 있다
         pagemaker.setContentnum(ccontentnum); // 한 페이지에 몇개씩 게시글을 보여줄지 지정한다.
@@ -270,6 +272,7 @@ public class EtcController {
 	@PostMapping("/addProductThickness.do")
 	@ResponseBody
 	public int addProductThickness(ProductThicknessVO vo) {
+		System.out.println(vo);
 		int result = etcService.addProductThickness(vo);
 		return result;
 	}
@@ -1112,7 +1115,16 @@ public class EtcController {
 	public Map<String,Object>  searchCreditInfo(String keyword) {
 		System.out.println(keyword);
 		Map<String,Object> map = etcService.searchCreditInfo(keyword);
-		System.out.println(map);
+		System.out.println(map == null);
+		if(map == null){
+			map = etcService.memberInfoDeposit(keyword);
+			map.put("TOTAL_ORDER", 0);
+			map.put("TOTAL_DEP", 0);
+			map.put("id",map.get("ID"));
+			System.out.println(map);
+			
+		}
+		
 		return map;
 	}
 	
@@ -1120,6 +1132,7 @@ public class EtcController {
 	@PostMapping("/addDepositHistory.do")
 	@ResponseBody
 	public boolean addDepositHistory(String depAmount, String totalDeposit,String companyNm,String totalOrder,String depDate,String credit) {
+		System.out.println("id====="+companyNm);
 		Map<String,Object> map = new HashMap<String,Object>();
 		map.put("depAmount", depAmount.replace(",", ""));
 		map.put("totalDeposit", Integer.parseInt(depAmount.replace(",", ""))+Integer.parseInt(totalDeposit.replace(",", "")));
@@ -1130,9 +1143,9 @@ public class EtcController {
 		//총 입금액에 추가된 입금액 계산
 		map.put("updateDepositInfo", Integer.parseInt(depAmount.replace(",", ""))+Integer.parseInt(totalDeposit.replace(",", "")));
 		
-		int updateTotalDep = etcService.updateTotalDeposit(map);
+//		int updateTotalDep = etcService.updateTotalDeposit(map);
 		int insertDepositHistory = etcService.addDepositHistory(map);
-		boolean result = updateTotalDep == insertDepositHistory;
+		boolean result = true;
 		
 		return result;
 	}
@@ -1158,10 +1171,13 @@ public class EtcController {
 	
 	//여신관리 수정화면 정보
 	@GetMapping(value= "/searchDepositInfo.do")
-	public String searchDepositInfo(Model model, String idx) {
+	public String searchDepositInfo(Model model, String idx, String dep, String order) {
 		System.out.println(idx);
 		Map<String,String> map= etcService.searchDepositInfo(idx);
+		map.put("TOTAL_ORDER",order);
+		map.put("TOTAL_DEP", dep);
 		System.out.println(map);
+		System.out.println("mdmamdmamddmadm");
         model.addAttribute("list",map);
 
 		return "/etc_manage/deposit_regist";
@@ -1173,7 +1189,7 @@ public class EtcController {
 	public boolean updateDepositHistory(Model model, int totalDeposit,String depDate,int depAmount, String idx, String companyNm) {
 		Map<String,Object> map = new HashMap<String,Object>();
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-		
+		System.out.println("memberid ===="+companyNm);
         try {
     		Date date = formatter.parse(depDate);
     		map.put("depDate", date);
@@ -1188,9 +1204,9 @@ public class EtcController {
 		//총 입금액에 추가된 입금액 계산
 		map.put("updateDepositInfo", totalDeposit);
 
-		int updateTotalDep = etcService.updateTotalDeposit(map);
+//		int updateTotalDep = etcService.updateTotalDeposit(map);
 		int updateDepositHistory = etcService.updateDepositHistory(map);
-		boolean result = updateTotalDep == updateDepositHistory;
+		boolean result= true;
 		
 		return result;
 	}

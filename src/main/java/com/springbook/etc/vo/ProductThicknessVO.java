@@ -8,7 +8,7 @@ public class ProductThicknessVO {
 	private int fileId;
 	private int thicknessIdx;
 	private Date regDate;
-	private String productIdx;
+	private int productIdx;
 	private String thickness;
 	private String testInstitute;
 	private String testNum;

@@ -264,8 +264,7 @@
 		SELECT 
 		COUNT(*)
 		FROM
-		PRODUCT_SIZE A INNER JOIN PRODUCT_THICKNESS B ON B.PRODUCT_IDX = A.PRODUCT_IDX
-		INNER JOIN PRODUCT C ON B.PRODUCT_IDX = C.PRODUCT_IDX
+		PRODUCT_SIZE A INNER JOIN PRODUCT C ON C.PRODUCT_IDX = A.PRODUCT_IDX
 		WHERE 
 		C.DEL_YN = 'N'
 		<if test= "keyword != null and keyword.equals('') and type.equals('productNm')">
@@ -279,10 +278,9 @@
 	<!--페이지&키워드 포함 사이즈 등록관리조회 -->
 	<select id="getSizeList" resultType="Map" parameterType="Map">
 		SELECT
-		A.*, B.THICKNESS AS THICKNESS, C.PRODUCT_NM AS PRODUCT_NM
+		A.*, C.PRODUCT_NM AS PRODUCT_NM
 		FROM
-		PRODUCT_SIZE A INNER JOIN PRODUCT_THICKNESS B ON B.PRODUCT_IDX = A.PRODUCT_IDX
-		INNER JOIN PRODUCT C ON C.PRODUCT_IDX = A.PRODUCT_IDX
+		PRODUCT_SIZE A INNER JOIN PRODUCT C ON C.PRODUCT_IDX = A.PRODUCT_IDX
 		WHERE 
 		C.DEL_YN = 'N'
 		<if test= "keyword != null and !keyword.equals('') and type.equals('productNm')">
@@ -361,7 +359,7 @@
 	<!--페이지&키워드 포함 상세 등록관리조회 -->
 	<select id="getDetailList" resultType="Map" parameterType="Map">
 		SELECT
-		DETAIL.*, SIZE.HEIGHT, SIZE.WIDTH ,THICKNESS.THICKNESS, PRODUCT.PRODUCT_NM, PRODUCT.PRODUCT_CD, SIZE.SIZE AS SIZE_NM
+		DETAIL.*, SIZE.HEIGHT, SIZE.WIDTH ,THICKNESS.THICKNESS AS THICKNESS_NM, PRODUCT.PRODUCT_NM, PRODUCT.PRODUCT_CD, SIZE.SIZE AS SIZE_NM
 		FROM
 		PRODUCT_DETAIL DETAIL
 			INNER JOIN PRODUCT_THICKNESS THICKNESS ON DETAIL.THICKNESS = THICKNESS.THICKNESS_IDX
@@ -733,22 +731,33 @@
 	
 	<!--여신관리 페이징포함 조회 -->
 	<select id="getCreditList" resultType="Map" parameterType="Map">
-		SELECT
-		*
-		FROM
-		DEPOSIT_HISTORY HISTORY
-		INNER JOIN MEMBER MEMBER ON MEMBER.COMPANY_NM = HISTORY.COMPANY_NM
+		SELECT T.SEQ,T.DEP_DATE,T.ID, DEP, T.COMPANY_NM, T.CREDIT_AMOUNT,T.IDX,
+		    SUM(T.DEP) OVER(PARTITION BY T.ID ORDER BY T.SEQ) AS TOTAL_DEP,
+		    SUM(T.OD) OVER(PARTITION BY T.ID ORDER BY T.SEQ) AS TOTAL_ORDER
+		FROM(
+		    SELECT 
+		        ROW_NUMBER() OVER() AS SEQ,
+		 member.CREDIT_AMOUNT, member.COMPANY_NM , member.ID,
+		       HISTORY.DEP_MOUNT AS DEP, HISTORY.DEP_DATE, HISTORY.IDX,
+		       HISTORY.ORDER_MOUNT AS OD
+					FROM
+				DEPOSIT_HISTORY HISTORY
+				INNER JOIN MEMBER MEMBER ON MEMBER.ID = HISTORY.MEMBER_ID
 		<if test= "keyword != null and !keyword.equals('')">
-    	WHERE HISTORY.COMPANY_NM LIKE CONCAT("%",#{keyword},"%")
+    	WHERE MEMBER.COMPANY_NM LIKE CONCAT("%",#{keyword},"%")
    		</if>
    		<if test= "keyword != null and !keyword.equals('') and startDt != null and !startDt.equals('') and endDt != null and !endDt.equals('')">
     	AND DATE(DEP_DATE) BETWEEN #{startDt} AND #{endDt}
    		</if>
    		<if test= "keyword != null and keyword.equals('') and startDt != null and endDt != null">
     	WHERE DATE(DEP_DATE) BETWEEN #{startDt} AND #{endDt}
-   		</if>
-   		GROUP BY HISTORY.IDX
+   		</if>				
+		    GROUP BY HISTORY.IDX,MEMBER.ID
+			ORDER BY HISTORY.DEP_DATE DESC
+		) T
+		ORDER BY T.DEP_DATE DESC
 		LIMIT #{i}, #{contentnum}
+
 	</select>
 	
 	<!--입금등록 거래처 검색 -->
@@ -866,11 +875,11 @@
 		INNER JOIN PRODUCT C ON C.PRODUCT_IDX = A.PRODUCT_IDX
 		INNER JOIN PRODUCT_SIZE D ON D.SIZE_IDX = A.SIZE
 		INNER JOIN WAREHOUSE E ON E.WAREHOUSE_IDX = A.WAREHOUSE_IDX
-		INNER JOIN PRODUCT_DETAIL F ON F.PRODUCT_IDX = A.PRODUCT_IDX
+		INNER JOIN PRODUCT_DETAIL F ON F.PRODUCT_IDX = A.PRODUCT_IDX AND F.THICKNESS = A.THICKNESS AND F.SIZE = A.SIZE
 		WHERE
 		C.PRODUCT_NM = #{productNm} AND
 		E.WAREHOUSE_IDX = #{warehouseIdx}
-		GROUP BY E.WAREHOUSE_IDX, C.PRODUCT_CD,B.THICKNESS_IDX, D.SIZE_IDX
+		GROUP BY E.WAREHOUSE_IDX, C.PRODUCT_CD,B.THICKNESS_IDX, D.SIZE_IDX, F.DETAIL_IDX
 		LIMIT #{i}, #{contentnum}
 	</select>
 	
@@ -916,34 +925,30 @@
 	<!--회사 재정정보 검색 결과-->
 	<select id="searchCreditInfo" resultType="Map" parameterType="java.lang.String">
 		SELECT
-		*
+		SUM(HISTORY.DEP_MOUNT) AS TOTAL_DEP, SUM(HISTORY.ORDER_MOUNT) AS TOTAL_ORDER, member.CREDIT_AMOUNT, member.COMPANY_NM , member.id
 		FROM
-		CLIENT_MONEY_INFO MONEY
-		INNER JOIN MEMBER MEMBER ON MEMBER.COMPANY_NM = MONEY.COMPANY_NM
-		WHERE MONEY.COMPANY_NM = #{keyword}
-		GROUP BY MONEY.IDX
+		DEPOSIT_HISTORY HISTORY
+		INNER JOIN MEMBER MEMBER ON MEMBER.ID = HISTORY.MEMBER_ID
+		WHERE MEMBER.ID = #{keyword}
+		GROUP BY MEMBER.ID
 	</select>
 	
 	<!--여신목록등록 -->
 	<insert id="addDepositHistory">
 	    INSERT INTO DEPOSIT_HISTORY
 		(
-		company_nm,
-		total_dep,
-		total_order,
+		member_id,
 		dep_date, 
-		credit_amount,
-		dep_amount,
+		dep_mount,
+		order_mount,
 		reg_date
 		)
 		VALUES
 		(
-		#{companyNm}, 
-		#{totalDeposit}, 
-		#{totalOrder}, 		
+		#{companyNm},	
 		#{depDate},
-		#{credit},
 		#{depAmount},
+		0,
 		now()		
 		)
 	</insert>
@@ -970,16 +975,25 @@
 		HISTORY.*, MEMBER.CREDIT_AMOUNT
 		FROM
 		DEPOSIT_HISTORY HISTORY
-		INNER JOIN MEMBER MEMBER ON MEMBER.COMPANY_NM = HISTORY.COMPANY_NM
+		INNER JOIN MEMBER MEMBER ON MEMBER.ID = HISTORY.MEMBER_ID
 		WHERE 
-		IDX = #{idx}
+		HISTORY.IDX = #{idx}
 	</select>
 	
 	<!--입금액 업로드 -->
 	<update id="updateDepositHistory">
 		UPDATE
 		DEPOSIT_HISTORY
-		SET DEP_DATE = #{depDate} ,TOTAL_DEP = #{totalDeposit}, DEP_AMOUNT = #{depAmount} WHERE IDX = #{idx}
+		SET DEP_DATE = #{depDate} , DEP_MOUNT = #{depAmount} WHERE IDX = #{idx}
 	</update>
 	
+		<!--여신관리 수정페이지 들어가기 -->
+	<select id="memberInfoDeposit" resultType="map" parameterType="java.lang.String">
+		SELECT 
+		ID,COMPANY_NM, CREDIT_AMOUNT
+		FROM
+		MEMBER
+		WHERE 
+		ID = #{keyword}
+	</select>
 </mapper>

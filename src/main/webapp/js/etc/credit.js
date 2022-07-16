@@ -1,22 +1,26 @@
 /*제품명 한페이지당 게시물 */
 function historyList(idx){
+	console.log('histtory Listddddd')
   var pagenum = idx == undefined? 1:idx ;
   var contentnum = $("#contentnum option:selected").val();
   var type = $("#search_item").val();
   var keyword = $("#keyword").val();
   var startDate = $("#startDate").val();
   var endDate = $("#endDate").val();
-  var result = new Date(endDate);
-  	  result.setDate(result.getDate() + 1);
-  	  endDate = result.toISOString();
-  if(!startDate && endDate){
-	  alert('시작날짜를 입력해주세요.');
-	  return;
-  }
-
-  if(startDate && !endDate){
-	  alert('종료날짜를 입력해주세요.');
-	  return;
+  
+  if(endDate){
+	  var result = new Date(endDate);
+	  	  result.setDate(result.getDate() + 1);
+	  	  endDate = result.toISOString();
+	  if(!startDate && endDate){
+		  alert('시작날짜를 입력해주세요.');
+		  return;
+	  }
+	
+	  if(startDate && !endDate){
+		  alert('종료날짜를 입력해주세요.');
+		  return;
+	  }
   }
   
   if(contentnum == 10){
@@ -141,7 +145,8 @@ function drawModal(page,list){
 	var j =0
 	console.log($("#modal tbody"));
 	for(var j ; j < list.length; j++){
-		$("#modal tbody").append('<tr><td>'+(j+1)+'</td><td><a onclick=searchCreditInfo("'+list[j].companyNm+'")>'+list[j].companyNm+"</a></td><tr>");
+		console.dir(list[j]);
+		$("#modal tbody").append('<tr><td>'+(j+1)+'</td><td><a onclick=searchCreditInfo("'+list[j].id+'")>'+list[j].companyNm+"</a></td><tr>");
 	}
 
 }
@@ -155,9 +160,11 @@ function searchCreditInfo(companyNm){
 		data: {"keyword":companyNm},
 		type: "POST",
 		success : function(data){
-			$("#compnayNm").val(companyNm);
+			console.log(data);
+			$("#id").val(data.id);
+			$("#compnayNm").val(data.COMPANY_NM);
 			$("#totalOrder").val(data.TOTAL_ORDER.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g,","));
-			$("#totalDeposit").val(data.TOTAL_DEPOSIT.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g,","));
+			$("#totalDeposit").val(data.TOTAL_DEP.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g,","));
 			$("#credit").val(data.CREDIT_AMOUNT.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g,","));
 			
 			document.getElementById('colseBtn').click();
@@ -173,10 +180,11 @@ function addDeposit(){
 
 	var depAmount = $("#depAmount").val();
 	var totalDeposit = $("#totalDeposit").val();
-	var companyNm = $("#compnayNm").val();
+	var companyNm = $("#id").val();
 	var totalOrder = $("#totalOrder").val();
 	var depDate = $("#depDate").val();
 	var credit = $("#credit").val();
+
 	if(!companyNm){
 		alert("거래처를 입력해주세요");
 		return;
@@ -207,6 +215,41 @@ function addDeposit(){
 
 function searchHistory(){
 	
+	
+}
+
+function downloadExcel(){
+	var checked = $("input[name=chk]:checked").length;
+	if(checked == 0){
+		alert("다운로드할 내역을 선택해주세요");
+		return;
+	}
+	
+	let chkVal = [];
+	$("input:checkbox[name=chk]").each(function(index){
+		if($(this).is(":checked")==true){
+			var siblings = $(this).parent().siblings();
+			var tempList = [];
+			for(var i =0; i < siblings.length; i++){
+				tempList.push($(siblings).eq(i).text());
+			}
+	    	chkVal.push(tempList);
+	    }
+	});
+
+	$.ajax({
+ 	      type: "POST",
+ 	      url: "downloadDepositExcel.do",
+ 	      dataType:"json",
+ 	      traditional:true,
+     	  data : {"list":chkVal},
+ 	      success: function (data) {
+ 	    	  location.href = "creditList.do";
+ 	      },
+		error : function(){
+			alert("에러가 발생했습니다.");		
+		}
+	});
 	
 }
 

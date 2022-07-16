@@ -192,7 +192,7 @@
 						</table>
 						<!-- pager -->
 						<div class="pager txt-right">
-						    <select name="contentnum" id="contentnum" onchange="page(1)">
+						    <select name="contentnum" id="contentnum" onchange="page()">
 						      <option value="10" <c:if test="${page.getContentnum() == 10 }">selected="selected"</c:if> >10 개</option>
 						      <option value="20" <c:if test="${page.getContentnum() == 20 }">selected="selected"</c:if> >20 개</option>
 						      <option value="30" <c:if test="${page.getContentnum() == 30 }">selected="selected"</c:if> >30 개</option>
