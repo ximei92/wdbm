@@ -159,5 +159,4 @@ public interface EtcMapper {
 
 	Map<String, Object> memberInfoDeposit(String keyword);
 
-
 }

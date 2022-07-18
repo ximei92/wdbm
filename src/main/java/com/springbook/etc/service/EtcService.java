@@ -150,5 +150,4 @@ public interface EtcService {
 
 	Map<String, Object> memberInfoDeposit(String keyword);
 
-
 }

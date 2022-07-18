@@ -37,7 +37,7 @@ public class EmailServiceImpl implements EmailService {
 		javaMailSender.send(mailMessage);
 	}
 	@Override
-	public void resetPassword(MemberVO member) {
+	public void resetPassword(MemberVO member) throws Exception {
 		member.setPassword(getRandomPassword(10)); 
 		memberService.modifyPassword(member);
 	}

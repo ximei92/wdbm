@@ -10,9 +10,11 @@ import com.springbook.member.vo.MemberVO;
 
 public interface WarehousingService {
 
+
 	List<MemberVO> getMakerList();
 
 	Map<String, Object> getCalCtnInfo(Map<String, Object> map);
+
 
 	
 

@@ -1,4 +1,6 @@
+
 package com.springbook.warehousing.controller;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -27,7 +29,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import org.springframework.web.servlet.ModelAndView;
+
 
 import com.springbook.configuration.Page;
 import com.springbook.etc.service.EtcService;
@@ -43,7 +47,11 @@ import com.springbook.etc.vo.ProductDetailVO;
 import com.springbook.member.vo.MemberVO;
 import com.springbook.service.FileService;
 import com.springbook.vo.FileVO;
+
 import com.springbook.warehousing.service.WarehousingService;
+
+import ch.qos.logback.core.net.SyslogOutputStream;
+
 
 import ch.qos.logback.core.net.SyslogOutputStream;
 
@@ -54,6 +62,7 @@ public class WarehousingController {
 	private EtcService etcService;
 	@Autowired
 	private FileService fileService;
+
 	@Autowired
 	private WarehousingService warehousingService;
 	
@@ -91,7 +100,9 @@ public class WarehousingController {
 		System.out.println(map);
 		System.out.println("---=====");
 		return infoMap;
+
 	}
 	
 
 }
+

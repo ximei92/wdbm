@@ -14,35 +14,30 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.swing.plaf.synth.SynthSeparatorUI;
 
-import org.eclipse.jdt.internal.compiler.parser.ParserBasicInformation;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.springbook.configuration.Page;
 import com.springbook.etc.service.EtcService;
-import com.springbook.etc.vo.CreditVO;
 import com.springbook.etc.vo.JoinAskVO;
+import com.springbook.etc.vo.ProductDetailVO;
 import com.springbook.etc.vo.ProductSizeVO;
 import com.springbook.etc.vo.ProductThicknessVO;
 import com.springbook.etc.vo.ProductVO;
 import com.springbook.etc.vo.WarehouseInventoryVO;
 import com.springbook.etc.vo.WarehouseVO;
-import com.springbook.etc.vo.WarehouseStockVO;
-import com.springbook.etc.vo.ProductDetailVO;
 import com.springbook.member.vo.MemberVO;
 import com.springbook.service.FileService;
+import com.springbook.utill.excel.ExcelXlsxView;
 import com.springbook.vo.FileVO;
-import ch.qos.logback.core.net.SyslogOutputStream;
 
 @Controller
 public class EtcController {
@@ -704,6 +699,7 @@ public class EtcController {
                 aLine = Arrays.asList(lineArr);
                 csvList.add(aLine);
             }
+
             for(int i = 1; i<csvList.size(); i++){            	
             	for(int j = 3; j<csvList.get(1).size(); j++){
             	Map<String,Object> tempMap = new HashMap<String,Object>();
@@ -713,8 +709,7 @@ public class EtcController {
 	            	tempMap.put("EUBMYEONDONG_NM", csvList.get(i).get(2));
             		tempMap.put("ton", csvList.get(1).get(j));
             		tempMap.put("fee", csvList.get(i).get(j));
-            		System.out.println(tempMap);
-            		System.out.println("tempMap!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
             		insertFeeList.add(tempMap);
             	}
 
@@ -1213,5 +1208,14 @@ public class EtcController {
 		boolean result= true;
 		
 		return result;
+	}
+	
+	@PostMapping("/deposit-excel/down")
+	@ResponseBody
+	public ModelAndView downlaodDepositExcel(Map<String, ?> excelData){ 
+		
+		return new ModelAndView(new ExcelXlsxView(),excelData);
+		
+		
 	}
 }

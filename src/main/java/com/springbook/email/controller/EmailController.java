@@ -25,9 +25,10 @@ public class EmailController {
 	 * 
 	 * @param userId
 	 * @return
+	 * @throws Exception 
 	 */
 	@PostMapping("/send/")
-	public void sendMail(@RequestBody MemberVO member){
+	public void sendMail(@RequestBody MemberVO member) throws Exception{
 		log.info("sendMail, member={}", member);
 		emailService.resetPassword(member);
 		emailService.sendMail(member);

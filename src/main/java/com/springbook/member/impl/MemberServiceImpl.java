@@ -4,13 +4,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.DefaultResponseErrorHandler;
 
 import com.springbook.member.mapper.MemberMapper;
 import com.springbook.member.service.MemberService;
 import com.springbook.member.vo.MemberVO;
+import com.springbook.security.base64.DataScrty;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,56 +21,74 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class MemberServiceImpl implements MemberService {
 
-	private final MemberMapper memberMapper;	
-	private final PasswordEncoder passwordEncoder;
+	private final MemberMapper memberMapper;
+	private final String DEFUALT_PW = "0000";
+	// private final PasswordEncoder passwordEncoder;
 
 	@Override
-	public int getId(String id) {		
+	public int getId(String id) {
 		return memberMapper.getId(id.toString());
 	}
 
 	@Override
-	public int insertMember(MemberVO vo) {		
-		vo.setPassword(passwordEncoder.encode("0000"));
+	public int insertMember(MemberVO vo) throws Exception {
+		// vo.setPassword(passwordEncoder.encode("0000"));
+		vo.setPassword(DataScrty.encryptPassword(DEFUALT_PW, vo.getId()));
 		return memberMapper.insertMember(vo);
 	}
 
 	@Override
-	public boolean tryLogin(MemberVO vo) {
-		MemberVO member = memberMapper.tryLogin(vo.getId());
+	public ResponseEntity<MemberVO> tryLogin(MemberVO vo) throws Exception {
+		String enpassword = DataScrty.encryptPassword(vo.getPassword(),vo.getId());
+		vo.setPassword(enpassword);
+		MemberVO member = memberMapper.tryLogin(vo);
 		
-		//id가 틀린경우 
-		if(member == null){
+		log.info("member={}",member);
+		if(hasMember(member)){
+			log.debug("성공");
+			return new ResponseEntity<MemberVO>(member,HttpStatus.OK); 
+		} else {
+			log.debug("실패");
+			return new ResponseEntity<MemberVO>(HttpStatus.BAD_REQUEST);
+		}
+		
+		
+
+	}
+
+	private boolean hasMember(MemberVO member) {
+		if (member != null &&!member.getId().equals("")) {
+			return true;
+		} else {
 			return false;
 		}
-		// 원본패스워드, 암호화패스워드 비교
-		return passwordEncoder.matches(vo.getPassword(),member.getPassword() );  
+
 	}
 
 	@Override
 	public int memberListCount(String type, String keyword) {
 		// TODO Auto-generated method stub
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String, Object> map = new HashMap<String, Object>();
 
 		map.put("type", type);
 		map.put("keyword", keyword);
-		
+
 		return memberMapper.memberListCount(map);
 	}
 
 	@Override
-	public List<MemberVO> getMemberList(int i, int contentnum,String type, String keyword) {
+	public List<MemberVO> getMemberList(int i, int contentnum, String type, String keyword) {
 		// TODO Auto-generated method stub
-		Map<String,Object> map = new HashMap<String,Object>();
-		
+		Map<String, Object> map = new HashMap<String, Object>();
+
 		map.put("i", i);
 		map.put("contentnum", contentnum);
 		map.put("type", type);
 		map.put("keyword", keyword);
-		
+
 		return memberMapper.getMemberList(map);
 	}
-	
+
 	@Override
 	public MemberVO getMemberInfo(String id) {
 		// TODO Auto-generated method stub
@@ -79,12 +98,12 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public List<MemberVO> getTypeProductList(int i, int contentnum, String keyword) {
 		// TODO Auto-generated method stub
-		Map<String,Object> map = new HashMap<String,Object>();
-		
+		Map<String, Object> map = new HashMap<String, Object>();
+
 		map.put("i", i);
 		map.put("contentnum", contentnum);
 		map.put("keyword", keyword);
-		
+
 		return memberMapper.getTypeProductList(map);
 	}
 
@@ -131,26 +150,31 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public MemberVO checkEmailBy(String userId) {
-		if(isEmail(userId))
+		return memberMapper.findMemberById(userId);
+		/*if (isEmail(userId))
 			return memberMapper.findMemberByEmail(userId);
 		else
-			return memberMapper.findMemberById(userId);
+			return memberMapper.findMemberById(userId);*/
 	}
 
-	private boolean isEmail(String userId) {
-		if(userId.contains("@"))
+	/**
+	 * userId인지 이메일인지 체크
+	 * @param userId
+	 * @return
+	 */
+	/*private boolean isEmail(String userId) {
+		if (userId.contains("@"))
 			return true;
-		else{
-			return false; 
+		else {
+			return false;
 		}
-	}
+	}*/
 
 	@Override
-	public int modifyPassword(MemberVO member) {
-		return memberMapper.modfiyPassword(
-				member.getId(), 
-				passwordEncoder.encode(member.getPassword()));
+	public void modifyPassword(MemberVO member) throws Exception {
+		String enpassword = DataScrty.encryptPassword(member.getPassword(),member.getId());
+		int result = memberMapper.modfiyPassword(member.getId(), enpassword);
+		log.debug("modify passwrod result = {}", result);
 	}
-	
 
 }

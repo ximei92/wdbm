@@ -17,6 +17,7 @@
 	<script src="../../js/uikit.min.js"></script>
 	<script src="../../js/layout.js"></script>
 	<script src="../../../js/etc/credit.js"></script>
+	<script src="../../../js/etc/excel.js"></script>
 	<script defer src="../../js/script.js"></script>
 </head>
 
@@ -103,7 +104,9 @@
 						<!-- button -->
 						<div class="d-flex right wd40 gap10">
 							<button class="btn small bg_color4" id="historyDelete">선택 삭제</button>
-							<button class="btn small bg_color2 ico down" onclick=downloadExcel()>다운로드</button>
+
+							<button class="btn small bg_color2 ico down" onclick='downloadExcel()'>다운로드</button>
+
 							<button class="btn small bg_color1 ico add" onclick="location.href='depositRegist.do'">입금 등록</button>
 						</div>
 					</div>

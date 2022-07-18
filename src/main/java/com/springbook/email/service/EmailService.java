@@ -15,7 +15,7 @@ public interface EmailService {
 
 	void sendMail(MemberVO member);
 
-	void resetPassword(MemberVO member);
+	void resetPassword(MemberVO member) throws Exception;
 
 
 		

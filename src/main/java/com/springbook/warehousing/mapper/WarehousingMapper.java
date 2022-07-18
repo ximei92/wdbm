@@ -20,9 +20,11 @@ import com.springbook.member.vo.MemberVO;
 @Mapper
 public interface WarehousingMapper {
 
+
 	List<MemberVO> getMakerList();
 
 	Map<String, Object> getCalCtnInfo(Map<String, Object> map);
+
 
 
 

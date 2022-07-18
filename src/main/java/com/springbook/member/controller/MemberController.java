@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -48,7 +47,7 @@ public class MemberController {
 
 	@PostMapping("/addMember.do")
 	@ResponseBody
-	public int addMember(MemberVO vo) {
+	public int addMember(MemberVO vo) throws Exception {
 		if(vo.getCreditAmount() != null){
 			vo.setCreditAmount(vo.getCreditAmount().replace(",", ""));
 		}
@@ -63,13 +62,9 @@ public class MemberController {
 
 	@PostMapping("/tryLogin.do")
 	@ResponseBody
-	public ResponseEntity<MemberVO> tryLogin(HttpServletResponse response, MemberVO vo) {
+	public ResponseEntity<MemberVO> tryLogin(HttpServletResponse response, MemberVO vo) throws Exception {
 		log.info("vo = {}", vo.toString());
-		if (memberService.tryLogin(vo)) {
-			return new ResponseEntity<>(HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
+	return memberService.tryLogin(vo);
 	}
 
 	@PostMapping("/getMemberInfo.do")

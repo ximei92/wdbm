@@ -101,11 +101,11 @@
 		WHERE
 			DEL_YN = 'N'
 			AND  
-			(I.ID = #{id})
+			(I.ID = #{id} AND PASSWORD = #{password} )
 			OR
-			(I.EMAIL_1 = #{id} )
+			(I.EMAIL_1 = #{id} AND PASSWORD = #{password} )
 			OR
-			(I.EMAIL_2 = #{id} )
+			(I.EMAIL_2 = #{id} AND PASSWORD = #{password} )
 	</select>
 
 	<!--회원관리 전체 개수 -->
@@ -261,10 +261,12 @@
 			EMAIL2
 		FROM	
 			MEMBER  
-		WHERE 
-			ID = #{userId}
+		WHERE
+			1=1  
+			AND ( ID = #{userId} OR CONCAT(EMAIL1,'@',EMAIL2) = #{userId})   
+			
 	</select>
-	<select id="findMemberByEmail" parameterType="String" resultType="com.springbook.member.vo.MemberVO">
+	<!-- <select id="findMemberByEmail" parameterType="String" resultType="com.springbook.member.vo.MemberVO">
 		SELECT 
 			ID,
 			EMAIL1,
@@ -273,7 +275,7 @@
 			MEMBER  
 		WHERE 
 			CONCAT(EMAIL1,'@',EMAIL2) = #{email}
-	</select>
+	</select> -->
 	
 	<update id="modfiyPassword" parameterType="com.springbook.member.vo.MemberVO">
 		UPDATE 

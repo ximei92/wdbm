@@ -148,15 +148,11 @@ console.log(a);
 			checkVal = 'N';
 		}
 		var object= new Object();
-		object.productIdx = $(".bbs.mt17.tab-box.on tbody tr input[name=productIdx]").eq(i).val();
-		object.thickness =  $(".bbs.mt17.tab-box.on tbody tr input[name=thickness]").eq(i).val();
-		object.size =  $(".bbs.mt17.tab-box.on tbody tr input[name=size]").eq(i).val();
-		object.height =  $(".bbs.mt17.tab-box.on tbody tr input[name=height]").eq(i).val();
-		object.width =  $(".bbs.mt17.tab-box.on tbody tr input[name=width]").eq(i).val();
-		object.price =  $(".bbs.mt17.tab-box.on tbody tr input[name=price]").eq(i).val();
-		if(object.price == '' ){
-			object.price = 0;
-		}
+
+        object.productIdx = $(".bbs.mt17.tab-box.on tbody tr input[name=productIdx]").eq(i).val();
+        object.thicknessIdx =  $(".bbs.mt17.tab-box.on tbody tr input[name=thicknessIdx]").eq(i).val();
+        object.sizeIdx =  $(".bbs.mt17.tab-box.on tbody tr input[name=sizeIdx]").eq(i).val();
+        object.priceIdx =  $(".bbs.mt17.tab-box.on tbody tr input[name=price]").eq(i).val();
 		object.id = parentId;
 		object.use = checkVal;
 		arr.push(object);

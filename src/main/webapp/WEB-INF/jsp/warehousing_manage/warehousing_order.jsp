@@ -53,6 +53,7 @@
 							<li><a href="#">- 예약내역</a></li>
 						</ul>
 					</li>
+
 					<li class="uk-parent uk-open">
 						<a href="230_warehouse_manage.html">입고관리 </a>
 						<ul class="uk-nav-sub" hidden="">
@@ -65,6 +66,7 @@
 							<li><a href="#">- 컨테이너 반납현황</a></li>
 						</ul>
 					</li>
+
 					<li class="uk-parent">
 						<a href="240_etc_manage.html">기타관리</a>
 						<ul class="uk-nav-sub" hidden="">
@@ -108,6 +110,7 @@
 						<dl class="row col-6">
 							<dt>제조사</dt>
 							<dd>
+
 								<select name="maker" id="maker" class="wd190p">
 									<option value="">--선택--</option>
 									<c:forEach items="${makerList}" var="makerList" varStatus="status">
@@ -125,6 +128,7 @@
 									<c:forEach items="${warehouse}" var="warehouse" varStatus="status">
 									<option value="${warehouse.warehouseIdx}" > ${warehouse.warehouse}</option>
 									</c:forEach>
+
 								</select>
 							</dd>
 							<dt></dt>
@@ -203,7 +207,8 @@
 							</thead>
 							<tbody>
 								<tr>
-<!-- 									<td><input type="radio" name="" id=""></td>
+
+								<td><input type="radio" name="" id=""></td>
 									<td>2022-03-21</td>
 									<td>QD - PT</td>
 									<td>HH</td>
@@ -216,10 +221,10 @@
 										</div>
 									</td>
 									<td>2파렛 5장</td>
-									<td>1CTN</td> -->
+									<td>1CTN</td>
 								</tr>
 								<tr>
-<!-- 									<td><input type="radio" name="" id=""></td>
+									<td><input type="radio" name="" id=""></td>
 									<td>2022-03-21</td>
 									<td>QD - PT</td>
 									<td>HH</td>
@@ -232,10 +237,10 @@
 										</div>
 									</td>
 									<td>2파렛 5장</td>
-									<td>1CTN</td> -->
+									<td>1CTN</td>
 								</tr>
 								<tr>
-<!-- 									<td><input type="radio" name="" id=""></td>
+									<td><input type="radio" name="" id=""></td>
 									<td rowspan="2">2022-03-21</td>
 									<td rowspan="2">QD - PT</td>
 									<td rowspan="2">HH</td>
@@ -248,10 +253,10 @@
 										</div>
 									</td>
 									<td>2파렛 5장</td>
-									<td>1CTN</td> -->
+									<td>1CTN</td>
 								</tr>
 								<tr>
-<!-- 									<td><input type="radio" name="" id=""></td>
+									<td><input type="radio" name="" id=""></td>
 									<td>
 										<div class="tb-prd-info center wd190p">
 											<span class="wd12">KS</span>
@@ -260,7 +265,7 @@
 										</div>
 									</td>
 									<td>2파렛 5장</td>
-									<td>1CTN</td> -->
+									<td>1CTN</td>
 								</tr>
 							</tbody>
 						</table>

@@ -253,6 +253,7 @@ function downloadExcel(){
 	
 }
 
+
 $(document).ready(function(){
 	//전체체크박스
 	$("#allListCheck").click(function() {
