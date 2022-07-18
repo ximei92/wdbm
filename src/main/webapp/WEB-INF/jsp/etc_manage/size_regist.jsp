@@ -56,7 +56,7 @@
 					<li class="uk-parent">
 						<a href="230_warehouse_manage.html">입고관리 </a>
 						<ul class="uk-nav-sub" hidden="">
-							<li><a href="#">- 오더하기</a></li>
+							<li><a onclick="location.href='manageOrder.do'">- 오더하기</a></li>
 							<li><a href="#">- 오더내역</a></li>
 							<li><a href="#">- 선적현황</a></li>
 							<li><a href="#">- 통관현황</a></li>
@@ -108,8 +108,8 @@
                             <dt>제품명 <i class="essen"> *</i></dt>
                             <dd>
 								<select name="productIdx" id="productIdx" class="wd210p">
-									<c:forEach items="${list}" var="list" varStatus="status">
-									<option value="${list.productIdx}">${list.productNm}</option>
+									<c:forEach items="${productList}" var="productList" varStatus="status">
+									<option value="${productList.productIdx}">${productList.productNm}</option>
 									</c:forEach>
 								</select>
 							</dd>
@@ -148,7 +148,7 @@
                         <dl class="row col-2">
                             <dt>제품명 <i class="essen"> *</i></dt>
                             <dd>
-								<select name="productCd" id="productCd" class="wd210p">
+								<select name="productIdx" id="productIdx" class="wd210p">
 									<c:forEach items="${productList}" var="productList" varStatus="status">
 									<option value="${productList.productIdx}" <c:if test="${list[0]['PRODUCT_IDX'] == productList.productIdx}">selected </c:if>>
 									${productList.productNm}</option>

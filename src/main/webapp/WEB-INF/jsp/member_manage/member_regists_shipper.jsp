@@ -56,7 +56,7 @@
 					<li class="uk-parent">
 						<a href="230_warehouse_manage.html">입고관리 </a>
 						<ul class="uk-nav-sub" hidden="">
-							<li><a href="#">- 오더하기</a></li>
+							<li><a onclick="location.href='manageOrder.do'">- 오더하기</a></li>
 							<li><a href="#">- 오더내역</a></li>
 							<li><a href="#">- 선적현황</a></li>
 							<li><a href="#">- 통관현황</a></li>
@@ -152,7 +152,7 @@
 								<dt>주소<i class="essen">*</i></dt>
 								<dd>
                                     <input type="text" class="wd330p" placeholder="서울시 강남구 강남대로 |" name="addr1" required="required">
-                                    <!-- <input type="text" class="wd62" placeholder="상세주소" name="addr2" required="required">      -->                               
+                                    <input type="text" class="wd62" placeholder="상세주소" name="addr2" required="required">                                    
                                 </dd>
 							</dl>
 							<dl class="row col-2 dt-start">
@@ -272,7 +272,7 @@
 								<dt>주소<i class="essen">*</i></dt>
 								<dd>
                                     <input type="text" class="wd330p" placeholder="서울시 강남구 강남대로 |" name="addr1" required="required" value="${info.addr1}">
-                                   <%--  <input type="text" class="wd62" placeholder="상세주소" name="addr2" required="required" value="${info.addr2}">   --%>                                  
+                                    <input type="text" class="wd62" placeholder="상세주소" name="addr2" required="required" value="${info.addr2}">                                    
                                 </dd>
 							</dl>
 							<dl class="row col-2 dt-start">

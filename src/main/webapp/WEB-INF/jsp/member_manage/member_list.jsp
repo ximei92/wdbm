@@ -54,7 +54,7 @@
 					<li class="uk-parent">
 						<a href="230_warehouse_manage.html">입고관리 </a>
 						<ul class="uk-nav-sub" hidden="">
-							<li><a href="#">- 오더하기</a></li>
+							<li><a onclick="location.href='manageOrder.do'">- 오더하기</a></li>
 							<li><a href="#">- 오더내역</a></li>
 							<li><a href="#">- 선적현황</a></li>
 							<li><a href="#">- 통관현황</a></li>
@@ -192,7 +192,7 @@
 						</table>
 						<!-- pager -->
 						<div class="pager txt-right">
-						    <select name="contentnum" id="contentnum" onchange="page(1)">
+						    <select name="contentnum" id="contentnum" onchange="page()">
 						      <option value="10" <c:if test="${page.getContentnum() == 10 }">selected="selected"</c:if> >10 개</option>
 						      <option value="20" <c:if test="${page.getContentnum() == 20 }">selected="selected"</c:if> >20 개</option>
 						      <option value="30" <c:if test="${page.getContentnum() == 30 }">selected="selected"</c:if> >30 개</option>

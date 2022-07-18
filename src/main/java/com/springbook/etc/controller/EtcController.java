@@ -79,7 +79,9 @@ public class EtcController {
 		} else {
 	        ccontentnum = Integer.parseInt(contentnum);	
 		}
-
+		System.out.println(cpagenum+"///"+ccontentnum);
+		System.out.println("cunrtPa");
+		System.out.println(pagemaker.getCurrentblock());
 		pagemaker.setTotalcount(etcService.inquiryListCount(keyword)); // mapper 전체 게시글 개수를 지정한다
         pagemaker.setPagenum(cpagenum-1);   // 현재 페이지를 페이지 객체에 지정한다 -1 을 해야 쿼리에서 사용할수 있다
         pagemaker.setContentnum(ccontentnum); // 한 페이지에 몇개씩 게시글을 보여줄지 지정한다.
@@ -270,6 +272,7 @@ public class EtcController {
 	@PostMapping("/addProductThickness.do")
 	@ResponseBody
 	public int addProductThickness(ProductThicknessVO vo) {
+		System.out.println(vo);
 		int result = etcService.addProductThickness(vo);
 		return result;
 	}
@@ -472,7 +475,7 @@ public class EtcController {
 
 			List<Map> thicklist = etcService.selectDetailThickness(productIdx);
 			List<Map> sizelist = etcService.selectDetailSize(productIdx);
-			
+
 			Map<String,Object> map = new HashMap<String,Object>();
 			
 			map.put("thickness", thicklist);
@@ -492,7 +495,8 @@ public class EtcController {
 		List<Map> sizelist = etcService.selectDetailSize(name);
 		
 		Map<String,Object> map = new HashMap<String,Object>();
-		
+		System.out.println(thicklist);
+		System.out.println(sizelist);
 		map.put("thickness", thicklist);
 		map.put("size", sizelist);
 		
@@ -625,14 +629,17 @@ public class EtcController {
                 csvList.add(aLine);
             }
 
-            for(int i = 2; i<csvList.size(); i++){            	
-            	for(int j = 2; j<csvList.get(1).size(); j++){
+            for(int i = 1; i<csvList.size(); i++){            	
+            	for(int j = 3; j<csvList.get(1).size(); j++){
             	Map<String,Object> tempMap = new HashMap<String,Object>();
 	            	tempMap.put("warehouseIdx", vo.getWarehouseIdx());
-	            	tempMap.put("city", csvList.get(i).get(0));
-	            	tempMap.put("area", csvList.get(i).get(1));
+	            	tempMap.put("SIDO_NM", csvList.get(i).get(0));
+	            	tempMap.put("SIGUNGU_NM", csvList.get(i).get(1));
+	            	tempMap.put("EUBMYEONDONG_NM", csvList.get(i).get(2));
             		tempMap.put("ton", csvList.get(1).get(j));
             		tempMap.put("fee", csvList.get(i).get(j));
+            		System.out.println(tempMap);
+            		System.out.println("tempMap!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             		insertFeeList.add(tempMap);
             	}
 
@@ -653,13 +660,13 @@ public class EtcController {
         }
         System.out.println(insertFeeList);
 
-        int addFeeResult = etcService.addWarehouseFee(insertFeeList);
-        
-        if(addFeeResult < 1){
-        	result = 3;
-        } else if(addWarehouseResult != 1){
-        	result = 2;
-        }
+//        int addFeeResult = etcService.addWarehouseFee(insertFeeList);
+//        
+//        if(addFeeResult < 1){
+//        	result = 3;
+//        } else if(addWarehouseResult != 1){
+//        	result = 2;
+//        }
         
 		return result;
 	}
@@ -697,16 +704,17 @@ public class EtcController {
                 aLine = Arrays.asList(lineArr);
                 csvList.add(aLine);
             }
-
-            for(int i = 2; i<csvList.size(); i++){            	
-            	for(int j = 2; j<csvList.get(1).size(); j++){
+            for(int i = 1; i<csvList.size(); i++){            	
+            	for(int j = 3; j<csvList.get(1).size(); j++){
             	Map<String,Object> tempMap = new HashMap<String,Object>();
 	            	tempMap.put("warehouseIdx", warehouseIdx);
-	            	tempMap.put("city", csvList.get(i).get(0));
-	            	tempMap.put("area", csvList.get(i).get(1));
+	            	tempMap.put("SIDO_NM", csvList.get(i).get(0));
+	            	tempMap.put("SIGUNGU_NM", csvList.get(i).get(1));
+	            	tempMap.put("EUBMYEONDONG_NM", csvList.get(i).get(2));
             		tempMap.put("ton", csvList.get(1).get(j));
             		tempMap.put("fee", csvList.get(i).get(j));
             		System.out.println(tempMap);
+            		System.out.println("tempMap!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             		insertFeeList.add(tempMap);
             	}
 
@@ -726,15 +734,15 @@ public class EtcController {
             }
         }
 
-        addFeeResult = etcService.addWarehouseFee(insertFeeList);
+        //addFeeResult = etcService.addWarehouseFee(insertFeeList);
         
 		}
         
-        if(addFeeResult < 2){
-        	result = 3;
-        } else if(updateWarehouseResult != 1){
-        	result = 2;
-        }
+//        if(addFeeResult < 2){
+//        	result = 3;
+//        } else if(updateWarehouseResult != 1){
+//        	result = 2;
+//        }
         
 		return result;
 	}
@@ -762,7 +770,7 @@ public class EtcController {
 	@GetMapping("/addInventoryStock.do")    
 	public String addInventoryStock(Model model) {
 		List<WarehouseVO> warehouse = etcService.getWarehouseList(0, 10000);
-		List<ProductVO> productNameList = etcService.getProductNameList();
+		List<ProductVO> productNameList = etcService.getProductNameListGroup();
 		
 		model.addAttribute("warehouse", warehouse);
 		model.addAttribute("productList", productNameList);
@@ -915,7 +923,7 @@ public class EtcController {
 	@GetMapping(value= "/goInvetoryManage.do")
 	public String goInvetoryManage(Model model,String pagenum, String contentnum, String productIdx, String warehouseIdx, String thickness, String size) {
 		List<WarehouseVO> warehouse = etcService.getWarehouseList(0, 10000);
-		List<ProductVO> productNameList = etcService.getProductNameList();
+		List<ProductVO> productNameList = etcService.getProductNameListGroup();
 		model.addAttribute("warehouse", warehouse);
 		model.addAttribute("productList", productNameList);
 		Page pagemaker = new Page();
@@ -1111,7 +1119,16 @@ public class EtcController {
 	public Map<String,Object>  searchCreditInfo(String keyword) {
 		System.out.println(keyword);
 		Map<String,Object> map = etcService.searchCreditInfo(keyword);
-		System.out.println(map);
+		System.out.println(map == null);
+		if(map == null){
+			map = etcService.memberInfoDeposit(keyword);
+			map.put("TOTAL_ORDER", 0);
+			map.put("TOTAL_DEP", 0);
+			map.put("id",map.get("ID"));
+			System.out.println(map);
+			
+		}
+		
 		return map;
 	}
 	
@@ -1119,6 +1136,7 @@ public class EtcController {
 	@PostMapping("/addDepositHistory.do")
 	@ResponseBody
 	public boolean addDepositHistory(String depAmount, String totalDeposit,String companyNm,String totalOrder,String depDate,String credit) {
+		System.out.println("id====="+companyNm);
 		Map<String,Object> map = new HashMap<String,Object>();
 		map.put("depAmount", depAmount.replace(",", ""));
 		map.put("totalDeposit", Integer.parseInt(depAmount.replace(",", ""))+Integer.parseInt(totalDeposit.replace(",", "")));
@@ -1129,9 +1147,9 @@ public class EtcController {
 		//총 입금액에 추가된 입금액 계산
 		map.put("updateDepositInfo", Integer.parseInt(depAmount.replace(",", ""))+Integer.parseInt(totalDeposit.replace(",", "")));
 		
-		int updateTotalDep = etcService.updateTotalDeposit(map);
+//		int updateTotalDep = etcService.updateTotalDeposit(map);
 		int insertDepositHistory = etcService.addDepositHistory(map);
-		boolean result = updateTotalDep == insertDepositHistory;
+		boolean result = true;
 		
 		return result;
 	}
@@ -1157,10 +1175,13 @@ public class EtcController {
 	
 	//여신관리 수정화면 정보
 	@GetMapping(value= "/searchDepositInfo.do")
-	public String searchDepositInfo(Model model, String idx) {
+	public String searchDepositInfo(Model model, String idx, String dep, String order) {
 		System.out.println(idx);
 		Map<String,String> map= etcService.searchDepositInfo(idx);
+		map.put("TOTAL_ORDER",order);
+		map.put("TOTAL_DEP", dep);
 		System.out.println(map);
+		System.out.println("mdmamdmamddmadm");
         model.addAttribute("list",map);
 
 		return "/etc_manage/deposit_regist";
@@ -1172,7 +1193,7 @@ public class EtcController {
 	public boolean updateDepositHistory(Model model, int totalDeposit,String depDate,int depAmount, String idx, String companyNm) {
 		Map<String,Object> map = new HashMap<String,Object>();
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-		
+		System.out.println("memberid ===="+companyNm);
         try {
     		Date date = formatter.parse(depDate);
     		map.put("depDate", date);
@@ -1187,9 +1208,9 @@ public class EtcController {
 		//총 입금액에 추가된 입금액 계산
 		map.put("updateDepositInfo", totalDeposit);
 
-		int updateTotalDep = etcService.updateTotalDeposit(map);
+//		int updateTotalDep = etcService.updateTotalDeposit(map);
 		int updateDepositHistory = etcService.updateDepositHistory(map);
-		boolean result = updateTotalDep == updateDepositHistory;
+		boolean result= true;
 		
 		return result;
 	}

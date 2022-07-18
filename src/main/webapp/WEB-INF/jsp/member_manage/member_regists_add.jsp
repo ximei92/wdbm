@@ -88,7 +88,7 @@
 		<!-- s:container -->
 		<div id="container">
 			<h2 class="normal">회원관리</h2>
-			<form method="post" action="addMember.do" id="form" enctype="multipart/form-data"> 
+			<form method="post" action="addManageMember.do" id="form" enctype="multipart/form-data"> 
 			<div id="content">
 				<div class="cont-box pt19">
 					<div class="h3-title blue">
@@ -135,6 +135,25 @@
 								<dl class="row col-2">
                                     <dt>회사정보 설정 <i class="essen">*</i></dt>
                                     <dd>
+                                    <!-- 팝업창 값 받을 input -->
+                                        <input type="hidden" name="businessNum" id="businessNum1">
+                                        <input type="hidden" name="businessNum" id="businessNum2">
+                                        <input type="hidden" name="addr1" id="addr1">
+                                        <input type="hidden" name="addr1" id="addr2">
+                                        <input type="hidden" name="companyPhoneNum" id="companyPhoneNum1">
+                                        <input type="hidden" name="companyPhoneNum" id="companyPhoneNum2">
+                                        <input type="hidden" name="faxNum" id="faxNum1">
+                                        <input type="hidden" name="faxNum" id="faxNum12">
+                                        <input type="hidden" name="email1" id="email11">
+                                        <input type="hidden" name="email1" id="email12">
+                                        <input type="hidden" name="email2" id="email21">
+                                        <input type="hidden" name="email2" id="email22">
+                                        <input type="hidden" name="email3" id="email31">
+                                        <input type="hidden" name="email3" id="email32">
+                                        <input type="hidden" name="ceoBirth" id="ceoBirth1"> 
+                                        <input type="hidden" name="ceoBirth" id="ceoBirth2">
+                                        <input type="hidden" name="specialMessage" id="specialMessage1">                                        
+                                        <input type="hidden" name="specialMessage" id="specialMessage2">      
                                         <button type="button" class="btn small bg_color2 wd100p" onclick="moveInfo()">설정하기</button>
                                     </dd>
                                 </dl>
@@ -184,6 +203,26 @@
 								<dl class="row col-2">
                                     <dt>회사정보 설정 <i class="essen">*</i></dt>
                                     <dd>
+										<input type="hidden" name="ceoNm" id="ceoNm1"> 
+                                        <input type="hidden" name="ceoNm" id="ceoNm2">                                        
+                                        <input type="hidden" name="businessNum" id="businessNum1">
+                                        <input type="hidden" name="businessNum" id="businessNum2">
+                                        <input type="hidden" name="addr1" id="addr1">
+                                        <input type="hidden" name="addr1" id="addr2">
+                                        <input type="hidden" name="companyPhoneNum" id="companyPhoneNum1">
+                                        <input type="hidden" name="companyPhoneNum" id="companyPhoneNum2">
+                                        <input type="hidden" name="faxNum" id="faxNum1">
+                                        <input type="hidden" name="faxNum" id="faxNum2">
+                                        <input type="hidden" name="email1" id="email11">
+                                        <input type="hidden" name="email1" id="email12">
+                                        <input type="hidden" name="email2" id="email21">
+                                        <input type="hidden" name="email2" id="email22">
+                                        <input type="hidden" name="email3" id="email31">
+                                        <input type="hidden" name="email3" id="email32">
+                                        <input type="hidden" name="ceoBirth" id="ceoBirth1"> 
+                                        <input type="hidden" name="ceoBirth" id="ceoBirth2">
+                                        <input type="hidden" name="specialMessage" id="specialMessage1">                                        
+                                        <input type="hidden" name="specialMessage" id="specialMessage2">                                     
                                         <button type="button" class="btn small bg_color2 wd100p" onclick="moveInfo()">설정하기</button>
                                     </dd>
                                 </dl>

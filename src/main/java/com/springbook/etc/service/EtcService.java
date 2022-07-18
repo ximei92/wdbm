@@ -148,4 +148,7 @@ public interface EtcService {
 
 	int warehouseDelete(String string);
 
+	Map<String, Object> memberInfoDeposit(String keyword);
+
+
 }

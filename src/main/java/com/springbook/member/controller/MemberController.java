@@ -49,14 +49,15 @@ public class MemberController {
 	@PostMapping("/addMember.do")
 	@ResponseBody
 	public int addMember(MemberVO vo) {
-
-		vo.setCreditAmount(vo.getCreditAmount().replace(",", ""));
+		if(vo.getCreditAmount() != null){
+			vo.setCreditAmount(vo.getCreditAmount().replace(",", ""));
+		}
 		int result = memberService.insertMember(vo);
 
-		if (vo.getRole().equals("1")) {
-			// 거래처일경우 초기 여신정보 넣어주기
-			memberService.initMoneyInfo(vo);
-		}
+//		if (vo.getRole().equals("1")) {
+//			// 거래처일경우 초기 여신정보 넣어주기
+//			memberService.initMoneyInfo(vo);
+//		}
 		return result;
 	}
 
@@ -98,12 +99,11 @@ public class MemberController {
 		} else {
 			ccontentnum = Integer.parseInt(contentnum);
 		}
+		
+		System.out.println(cpagenum+"//////////"+ ccontentnum);
 
 		pagemaker.setTotalcount(memberService.memberListCount(type, keyword)); // mapper
-																				// 전체
-																				// 게시글
-																				// 개수를
-																				// 지정한다
+																				
 		pagemaker.setPagenum(cpagenum - 1); // 현재 페이지를 페이지 객체에 지정한다 -1 을 해야 쿼리에서
 											// 사용할수 있다
 		pagemaker.setContentnum(ccontentnum); // 한 페이지에 몇개씩 게시글을 보여줄지 지정한다.
@@ -132,6 +132,9 @@ public class MemberController {
 			model.addAttribute("list", list);
 		}
 
+		System.out.println(pagemaker.getEndPage()+"getEnd");
+		System.out.println(pagemaker.getLastblock()+"getLastBlock");
+		System.out.println(pagemaker.getPagenum()+"getPagenum");
 		model.addAttribute("keyword", keyword);
 		model.addAttribute("page", pagemaker);
 		model.addAttribute("type", type);
@@ -163,7 +166,8 @@ public class MemberController {
 		} else {
 			ccontentnum = Integer.parseInt(contentnum);
 		}
-
+		System.out.println("MEMBER CONTROLLLER");
+		System.out.println(keyword);
 		pagemaker.setTotalcount(memberService.typeProductListCount(keyword)); // mapper
 																				// 전체
 																				// 게시글
@@ -184,15 +188,15 @@ public class MemberController {
 		// 마지막 페이지를 마지막 페이지 블록과 현재 페이지 블록 번호로 정한다.
 		if (ccontentnum == 10) {// 선택 게시글 수
 			List<MemberVO> list = memberService.getTypeProductList(pagemaker.getPagenum() * 10,
-					pagemaker.getContentnum(), keyword);
+			pagemaker.getContentnum(), keyword);
 			model.addAttribute("list", list);
 		} else if (ccontentnum == 20) {
 			List<MemberVO> list = memberService.getTypeProductList(pagemaker.getPagenum() * 20,
-					pagemaker.getContentnum(), keyword);
+			pagemaker.getContentnum(), keyword);
 			model.addAttribute("list", list);
 		} else if (ccontentnum == 30) {
 			List<MemberVO> list = memberService.getTypeProductList(pagemaker.getPagenum() * 30,
-					pagemaker.getContentnum(), keyword);
+			pagemaker.getContentnum(), keyword);
 			model.addAttribute("list", list);
 		}
 

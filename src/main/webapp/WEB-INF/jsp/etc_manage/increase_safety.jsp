@@ -56,7 +56,7 @@
 					<li class="uk-parent">
 						<a href="230_warehouse_manage.html">입고관리 </a>
 						<ul class="uk-nav-sub" hidden="">
-							<li><a href="#">- 오더하기</a></li>
+							<li><a onclick="location.href='manageOrder.do'">- 오더하기</a></li>
 							<li><a href="#">- 오더내역</a></li>
 							<li><a href="#">- 선적현황</a></li>
 							<li><a href="#">- 통관현황</a></li>
@@ -125,12 +125,23 @@
 							<tbody>
 							<c:forEach items="${list}" var="data" varStatus="status">
 								<tr>
+									<c:set var = "total_stock" value="${list[status.index]['TOTAL_STOCK']}"></c:set>
+								<%-- 	<c:set var="total_stock" value=0></c:set> --%>
+									<%-- 
+									<c:if test="${list[status.index]['TOTAL_STOCK']} == null"><c:set var="total_stock" value=0></c:set></c:if>	 --%>
+									<c:choose>
+									    <c:when test="${empty list[status.index]['TOTAL_STOCK']}">
+									    <c:set var="total_stock" value="0"></c:set>
+									    </c:when>
+									    <c:otherwise>
+									    <c:set var="total_stock" value="${list[status.index]['TOTAL_STOCK']}"></c:set>
+									    </c:otherwise>
+									</c:choose>									
 									<td>${list[status.index]['THICKNESS']}${list[status.index]['SIZE']}-${list[status.index]['PRODUCT_CD']}</td>
-									<td>${list[status.index]['TOTAL_STOCK']}</td>
-									<td>${list[status.index]['SAFETY']}</td>
-									<c:set var="total" value="${(list[status.index]['TOTAL_STOCK'] - list[status.index]['SAFETY'])/list[status.index]['SLICE']}" />									
-									<c:set var="cnt" value="${(list[status.index]['TOTAL_STOCK'] - list[status.index]['SAFETY'])/list[status.index]['SLICE']}" />
-									<td><fmt:formatNumber value="${total}" pattern=".00"/></td>
+									<td>${total_stock}</td>
+									<td>${list[status.index]['SAFETY']}</td>							
+									<c:set var="cnt" value="${(total_stock - list[status.index]['SAFETY'])/list[status.index]['SLICE']}" />
+									<td><fmt:formatNumber value="${cnt}" pattern="0.00"/></td>
 								</tr>
 							</c:forEach>
 							</tbody>
@@ -156,7 +167,7 @@
 						</div>
 					</div>
 
-					<div class="bbs mt17 tab-box">
+<%-- 					<div class="bbs mt17 tab-box">
 						<table class="b-list">
 							<caption></caption>
 							<colgroup>
@@ -176,12 +187,15 @@
 							<tbody>
 							<c:forEach items="${list}" var="data" varStatus="status">
 								<tr>
+								<td>${list}<td>
+									<c:set var = "total_stcok" value="${list[status.index]['TOTAL_STOCK']}"></c:set>
+									<c:if test="${list[status.index]['TOTAL_STOCK']} == null"><c:set var="total_stock" value=0></c:set></c:if>								
 									<td>${list[status.index]['PRODUCT_CD']}</td>
-									<td>${list[status.index]['STOCK']}</td>
+									<td>${total_stcok}</td>
 									<td>${list[status.index]['SAFETY']}</td>
 									<c:set var="total" value="${(list[status.index]['STOCK'] - list[status.index]['SAFETY'])/list[status.index]['SLICE']}" />									
-									<c:set var="cnt" value="${(list[status.index]['STOCK'] - list[status.index]['SAFETY'])/list[status.index]['SLICE']}" />
-									<td><fmt:formatNumber value="${total}" pattern=".00"/></td>
+									<c:set var="cnt" value="${(total_stock - list[status.index]['SAFETY'])/list[status.index]['SLICE']}" />
+									<td><fmt:formatNumber value="${cnt}" pattern=".00"/></td>
 								</tr>
 							</c:forEach>
 							</tbody>
@@ -205,7 +219,7 @@
                     			<a class="arr next"href="javascript:safetyPage(${page.getEndPage()+1});">다음</a>
                   			</c:if>                  			
 						</div>
-					</div>
+					</div> --%>
 				</div>
             </div>
         </div>

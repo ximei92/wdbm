@@ -56,7 +56,7 @@
 					<li class="uk-parent">
 						<a href="230_warehouse_manage.html">입고관리 </a>
 						<ul class="uk-nav-sub" hidden="">
-							<li><a href="#">- 오더하기</a></li>
+							<li><a onclick="location.href='manageOrder.do'">- 오더하기</a></li>
 							<li><a href="#">- 오더내역</a></li>
 							<li><a href="#">- 선적현황</a></li>
 							<li><a href="#">- 통관현황</a></li>
@@ -102,6 +102,7 @@
                             <dt>거래처 검색<i class="essen"> *</i></dt>
                             <dd>
 								<input type="text" class="disable wd310p" placeholder="회사를 검색해주세요." id="compnayNm">
+								<input type="hidden" id="id">
                                 <button class="btn bg_color2 small" uk-toggle="target: #modalSearchPartner" onclick=selectCompany()>거래처 검색</button>
 							</dd>
                         </dl>
@@ -143,15 +144,15 @@
 					<div class="h3-title blue">
 						<h3 class="normal"><i class="s-add"></i>입금 등록</h3>
 					</div>
-
 					<article class="inner-1">
                         <dl class="row col-2">
                             <dt>거래처 검색<i class="essen"> *</i></dt>
                             <dd>
+                      
                         	<input type="hidden" value="${list['DEP_AMOUNT']}" id="orginDep">                            	
                             	<input type="hidden" id="idx" value="${list['IDX']}">
-								<input type="text" class="disable wd310p" placeholder="회사를 검색해주세요." id="compnayNm"
-								value="${list['COMPANY_NM']}">
+								<input type="text" class="disable wd310p" placeholder="회사를 검색해주세요." id="memberId"
+								value="${list['MEMBER_ID']}">
                                 <button class="btn bg_color2 small" onclick="alert('거래처는 수정할 수 없습니다.')">거래처 검색</button>
 							</dd>
                         </dl>
@@ -180,7 +181,7 @@
                             <dt>입금액 <i class="essen"> *</i></dt>
                             <dd><input type="text" class="wd210p txt-right" id="depAmount" required="required" name="depAmount"
                             oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
-                             value=<fmt:formatNumber value="${list['DEP_AMOUNT']}" pattern="#,###" />> 원</dd>
+                             value=<fmt:formatNumber value="${list['DEP_MOUNT']}" pattern="#,###" />> 원</dd>
                         </dl>
                     </article>
 

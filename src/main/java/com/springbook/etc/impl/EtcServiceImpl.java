@@ -40,7 +40,7 @@ public class EtcServiceImpl implements EtcService {
 		map.put("i", i);
 		map.put("contentnum", contentnum);
 		map.put("keyword", keyword);
-		
+
 		return etcMapper.getInquiryList(map);
 	}
 
@@ -480,7 +480,8 @@ public class EtcServiceImpl implements EtcService {
 		map.put("keyword", keyword);
 		map.put("startDt", startDt);
 		map.put("endDt", endDt);
-		
+		System.out.println("ddddd");
+		System.out.println(map);
 		return etcMapper.getCreditList(map);
 	}
 
@@ -557,6 +558,8 @@ public class EtcServiceImpl implements EtcService {
 	public int addWarehouseFee(List<Map<String, Object>> insertFeeList) {
 		// TODO Auto-generated method stub
 		Map<String,Object> map = new HashMap<String,Object>();
+		System.out.println(insertFeeList);
+		System.out.println("impleeeeeeeee");
 		map.put("insertFeeList", insertFeeList);
 		return etcMapper.addWarehouseFee(map);
 	}
@@ -588,4 +591,11 @@ public class EtcServiceImpl implements EtcService {
 		// TODO Auto-generated method stub
 		return etcMapper.warehouseDelete(string);
 	}
+
+	@Override
+	public Map<String, Object> memberInfoDeposit(String keyword) {
+		// TODO Auto-generated method stub
+		return etcMapper.memberInfoDeposit(keyword);
+	}
+
 }

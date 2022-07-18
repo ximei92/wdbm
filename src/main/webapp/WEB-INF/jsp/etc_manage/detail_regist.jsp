@@ -56,7 +56,7 @@
 					<li class="uk-parent">
 						<a href="230_warehouse_manage.html">입고관리 </a>
 						<ul class="uk-nav-sub" hidden="">
-							<li><a href="#">- 오더하기</a></li>
+							<li><a onclick="location.href='manageOrder.do'">- 오더하기</a></li>
 							<li><a href="#">- 오더내역</a></li>
 							<li><a href="#">- 선적현황</a></li>
 							<li><a href="#">- 통관현황</a></li>
@@ -131,14 +131,14 @@
 								</select>
                             </dd>
                         </dl>
-                        <dl class="row col-2">
+<!--                         <dl class="row col-2">
                             <dt>길이 x 폭 <i class="essen"> *</i></dt>
                             <dd>
                                 <input type="text" class="wd80p" name="height">
                                 <span>×</span>
                                 <input type="text" class="wd80p" name="width">
                             </dd>
-                        </dl>
+                        </dl> -->
                         <dl class="row col-2">
                             <dt>안전재고 수량</dt>
                             <dd><input type="text" class="wd210p" name="safety"></dd>
@@ -191,14 +191,14 @@
 								</select>
                             </dd>
                         </dl>
-                        <dl class="row col-2">
+<%--                         <dl class="row col-2">
                             <dt>길이 x 폭 <i class="essen"> *</i></dt>
                             <dd>
                                 <input type="text" class="wd80p" name="height" value="${list[0]['HEIGHT']}">
                                 <span>×</span>
                                 <input type="text" class="wd80p" name="width" value="${list[0]['WIDTH']}">
                             </dd>
-                        </dl>
+                        </dl> --%>
                         <dl class="row col-2">
                             <dt>안전재고 수량</dt>
                             <dd><input type="text" class="wd210p" name="safety" value="${list[0]['SAFETY']}"></dd>

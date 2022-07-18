@@ -56,7 +56,7 @@
 					<li class="uk-parent">
 						<a href="230_warehouse_manage.html">입고관리 </a>
 						<ul class="uk-nav-sub" hidden="">
-							<li><a href="#">- 오더하기</a></li>
+							<li><a onclick="location.href='manageOrder.do'">- 오더하기</a></li>
 							<li><a href="#">- 오더내역</a></li>
 							<li><a href="#">- 선적현황</a></li>
 							<li><a href="#">- 통관현황</a></li>
@@ -158,7 +158,6 @@
 							</c:forEach>	
 							</tbody>
 						</table>
-
 						<!-- pager -->
 						<div class="pager txt-right">
 						    <select name="contentnum" id="contentnum" onchange="page(1)">
@@ -170,8 +169,9 @@
 						    <c:if test="${page.prev}">
                     			<a class="arr prev" href="javascript:page(${page.getStartPage()-1});">이전</a>
                   			</c:if>
+
                   			<c:forEach begin="${page.getStartPage()}" end="${page.getEndPage()}" var="idx">
-                    			<a href="javascript:page(${idx});" <c:if test="${page.pagenum}== ${idx}">class="active"</c:if> >${idx}</a>
+                    			<a href="javascript:page(${idx});" <c:if test="${(page.pagenum+1)}== ${idx}">class="active"</c:if> >${idx}</a>
                   			</c:forEach>             			
 							<c:if test="${page.next}">
                     			<a class="arr next"href="javascript:page(${page.getEndPage()+1});">다음</a>
