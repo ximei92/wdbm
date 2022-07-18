@@ -150,25 +150,31 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public MemberVO checkEmailBy(String userId) {
-		if (isEmail(userId))
+		return memberMapper.findMemberById(userId);
+		/*if (isEmail(userId))
 			return memberMapper.findMemberByEmail(userId);
 		else
-			return memberMapper.findMemberById(userId);
+			return memberMapper.findMemberById(userId);*/
 	}
 
-	private boolean isEmail(String userId) {
+	/**
+	 * userId인지 이메일인지 체크
+	 * @param userId
+	 * @return
+	 */
+	/*private boolean isEmail(String userId) {
 		if (userId.contains("@"))
 			return true;
 		else {
 			return false;
 		}
-	}
+	}*/
 
 	@Override
-	public int modifyPassword(MemberVO member) throws Exception {
+	public void modifyPassword(MemberVO member) throws Exception {
 		String enpassword = DataScrty.encryptPassword(member.getPassword(),member.getId());
-		memberMapper.modfiyPassword(member.getId(), enpassword);
-		return 0;
+		int result = memberMapper.modfiyPassword(member.getId(), enpassword);
+		log.debug("modify passwrod result = {}", result);
 	}
 
 }

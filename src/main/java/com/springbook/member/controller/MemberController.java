@@ -65,11 +65,6 @@ public class MemberController {
 	public ResponseEntity<MemberVO> tryLogin(HttpServletResponse response, MemberVO vo) throws Exception {
 		log.info("vo = {}", vo.toString());
 	return memberService.tryLogin(vo);
-		/*if ( member!= null) {
-			return new ResponseEntity<>(member,HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}*/
 	}
 
 	@PostMapping("/getMemberInfo.do")

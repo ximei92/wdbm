@@ -41,7 +41,7 @@ public interface MemberMapper {
 	
 	MemberVO findMemberById(@Param("userId")String userId);
 
-	MemberVO findMemberByEmail(@Param("email")String email);
+	/*MemberVO findMemberByEmail(@Param("email")String email);*/
 
 	int modfiyPassword(@Param("id")String id, @Param("password")String encodedPassword);
 

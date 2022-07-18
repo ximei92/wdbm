@@ -37,9 +37,23 @@ public interface MemberService {
 
 	int updatePrice(Map<String, Object> map);
 
+	/**
+	 * <h3>회원정보에 등록된 이메일이 있는지 체크</h3>  
+	 * 
+	 * 파라미터가 userId인경우 id로 조회후 등록된 이메일인지 확인 후 member객체 리턴 
+	 * 파라미테가 이메일인 경우 등록된 이메일인지 체크 후 member객체 리턴  
+	 * @param userId
+	 * @return
+	 */
 	MemberVO checkEmailBy(String userId);
 
-	int modifyPassword(MemberVO member) throws Exception;
+	/**
+	 * <h3>비밀번호 수정<h3>
+	 * 
+	 * @param member
+	 * @throws Exception
+	 */
+	void modifyPassword(MemberVO member) throws Exception;
 
 
 }
