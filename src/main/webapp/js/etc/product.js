@@ -124,7 +124,7 @@ function detailNmChange(){
 		success : function(data){
 	    	$("#thickness").append('<option value="">제품두께 선택</option>');
 	    	$("#size").append('<option value="">제품사이즈 선택</option>');
-	    	
+	    	console.log(data);
 		    for (var i in data.thickness) {
 		    	var custom = '';
 		    	if(data.thickness[i].CUSTOM_ORDER == 'Y'){

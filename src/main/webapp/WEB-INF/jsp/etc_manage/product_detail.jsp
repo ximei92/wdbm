@@ -56,7 +56,7 @@
 					<li class="uk-parent">
 						<a href="230_warehouse_manage.html">입고관리 </a>
 						<ul class="uk-nav-sub" hidden="">
-							<li><a href="#">- 오더하기</a></li>
+							<li><a onclick="location.href='manageOrder.do'">- 오더하기</a></li>
 							<li><a href="#">- 오더내역</a></li>
 							<li><a href="#">- 선적현황</a></li>
 							<li><a href="#">- 통관현황</a></li>
@@ -168,8 +168,8 @@
 									${list[status.index]['THICKNESS_NM']}${list[status.index]['SIZE_NM']}-${list[status.index]['PRODUCT_CD']}</a></td>
 									<td>${list[status.index]['HEIGHT']}</td>
 									<td>${list[status.index]['WIDTH']}</td>
-									<c:set var="hebe" value = "${(list[status.index]['HEIGHT']*list[status.index]['WIDTH'])*0.001}"/>
-									<fmt:formatNumber value="${hebe}" pattern=".00" var="hebe"/>
+									<c:set var="hebe" value = "${(list[status.index]['HEIGHT']*list[status.index]['WIDTH'])*0.000001}"/>
+									<fmt:formatNumber value="${hebe}" pattern="0.00" var="hebe"/>
 									<td>${hebe}</td>
 									<td>${list[status.index]['SAFETY']}</td>
 										<fmt:parseDate value="${list[status.index]['REG_DATE']}" pattern="yyyy-MM-dd" var="parseDateTime" />

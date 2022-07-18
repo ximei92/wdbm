@@ -56,7 +56,7 @@
 					<li class="uk-parent">
 						<a href="230_warehouse_manage.html">입고관리 </a>
 						<ul class="uk-nav-sub" hidden="">
-							<li><a href="#">- 오더하기</a></li>
+							<li><a onclick="location.href='manageOrder.do'">- 오더하기</a></li>
 							<li><a href="#">- 오더내역</a></li>
 							<li><a href="#">- 선적현황</a></li>
 							<li><a href="#">- 통관현황</a></li>
@@ -94,7 +94,7 @@
 	            <c:forEach items="${warehouse}" var="warehouse" varStatus="status">                        
 	                <li
 	                <c:if test="${warehouse.warehouseIdx eq warehouseKey}">class="on"</c:if>>
-	                <a onclick="changeWarehouse('${warehouse.warehouseIdx}')" >${warehouse.warehouse}창고</a>
+	                <a onclick="changeWarehouse('${warehouse.warehouseIdx}')" >${warehouse.warehouse}</a>
 	                </li>
 	            </c:forEach>
             </ul>
@@ -141,8 +141,8 @@
 									<fmt:formatNumber value="${list.HEIGHT}" pattern="#,###" var="height" />
 									<fmt:formatNumber value="${list.WIDTH}" pattern="#,###" var="width" />
 									<td>${list.SIZE} (${height} x ${width})</td>
-									<fmt:formatNumber value="${list.TOTAL_STOCK}" pattern="#,###" var="totla_stock" />
-									<td>${totla_stock}</td>
+									<fmt:formatNumber value="${list.TOTAL_STOCK}" pattern="#,###" var="total_stock" />
+									<td><c:if test="${list.TOTAL_STOCK} == null">0</c:if>${total_stock}</td>
 									<c:set var="ctn" value="${(list.TOTAL_STOCK-list.SAFETY)/list.SLICE}"/>
 									<td>${ctn}</td>
 								</tr>

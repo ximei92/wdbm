@@ -470,7 +470,7 @@ public class EtcController {
 
 			List<Map> thicklist = etcService.selectDetailThickness(productIdx);
 			List<Map> sizelist = etcService.selectDetailSize(productIdx);
-			
+
 			Map<String,Object> map = new HashMap<String,Object>();
 			
 			map.put("thickness", thicklist);
@@ -490,7 +490,8 @@ public class EtcController {
 		List<Map> sizelist = etcService.selectDetailSize(name);
 		
 		Map<String,Object> map = new HashMap<String,Object>();
-		
+		System.out.println(thicklist);
+		System.out.println(sizelist);
 		map.put("thickness", thicklist);
 		map.put("size", sizelist);
 		
@@ -632,6 +633,8 @@ public class EtcController {
 	            	tempMap.put("EUBMYEONDONG_NM", csvList.get(i).get(2));
             		tempMap.put("ton", csvList.get(1).get(j));
             		tempMap.put("fee", csvList.get(i).get(j));
+            		System.out.println(tempMap);
+            		System.out.println("tempMap!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             		insertFeeList.add(tempMap);
             	}
 
@@ -652,13 +655,13 @@ public class EtcController {
         }
         System.out.println(insertFeeList);
 
-        int addFeeResult = etcService.addWarehouseFee(insertFeeList);
-        
-        if(addFeeResult < 1){
-        	result = 3;
-        } else if(addWarehouseResult != 1){
-        	result = 2;
-        }
+//        int addFeeResult = etcService.addWarehouseFee(insertFeeList);
+//        
+//        if(addFeeResult < 1){
+//        	result = 3;
+//        } else if(addWarehouseResult != 1){
+//        	result = 2;
+//        }
         
 		return result;
 	}
@@ -706,6 +709,7 @@ public class EtcController {
 	            	tempMap.put("EUBMYEONDONG_NM", csvList.get(i).get(2));
             		tempMap.put("ton", csvList.get(1).get(j));
             		tempMap.put("fee", csvList.get(i).get(j));
+
             		insertFeeList.add(tempMap);
             	}
 
@@ -725,15 +729,15 @@ public class EtcController {
             }
         }
 
-        addFeeResult = etcService.addWarehouseFee(insertFeeList);
+        //addFeeResult = etcService.addWarehouseFee(insertFeeList);
         
 		}
         
-        if(addFeeResult < 2){
-        	result = 3;
-        } else if(updateWarehouseResult != 1){
-        	result = 2;
-        }
+//        if(addFeeResult < 2){
+//        	result = 3;
+//        } else if(updateWarehouseResult != 1){
+//        	result = 2;
+//        }
         
 		return result;
 	}
@@ -761,7 +765,7 @@ public class EtcController {
 	@GetMapping("/addInventoryStock.do")    
 	public String addInventoryStock(Model model) {
 		List<WarehouseVO> warehouse = etcService.getWarehouseList(0, 10000);
-		List<ProductVO> productNameList = etcService.getProductNameList();
+		List<ProductVO> productNameList = etcService.getProductNameListGroup();
 		
 		model.addAttribute("warehouse", warehouse);
 		model.addAttribute("productList", productNameList);
@@ -914,7 +918,7 @@ public class EtcController {
 	@GetMapping(value= "/goInvetoryManage.do")
 	public String goInvetoryManage(Model model,String pagenum, String contentnum, String productIdx, String warehouseIdx, String thickness, String size) {
 		List<WarehouseVO> warehouse = etcService.getWarehouseList(0, 10000);
-		List<ProductVO> productNameList = etcService.getProductNameList();
+		List<ProductVO> productNameList = etcService.getProductNameListGroup();
 		model.addAttribute("warehouse", warehouse);
 		model.addAttribute("productList", productNameList);
 		Page pagemaker = new Page();

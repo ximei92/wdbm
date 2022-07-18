@@ -53,10 +53,11 @@
 							<li><a href="#">- 예약내역</a></li>
 						</ul>
 					</li>
-					<li class="uk-parent">
+
+					<li class="uk-parent uk-open">
 						<a href="230_warehouse_manage.html">입고관리 </a>
 						<ul class="uk-nav-sub" hidden="">
-							<li><a href="#">- 오더하기</a></li>
+							<li  class="uk-open"><a onclick="location.href='manageOrder.do'">- 오더하기</a></li>
 							<li><a href="#">- 오더내역</a></li>
 							<li><a href="#">- 선적현황</a></li>
 							<li><a href="#">- 통관현황</a></li>
@@ -65,7 +66,8 @@
 							<li><a href="#">- 컨테이너 반납현황</a></li>
 						</ul>
 					</li>
-					<li class="uk-parent uk-open">
+
+					<li class="uk-parent">
 						<a href="240_etc_manage.html">기타관리</a>
 						<ul class="uk-nav-sub" hidden="">
 							<li><a href="240_etc_manage.html">- 준공서류 관리</a></li>
@@ -75,7 +77,7 @@
 							<li><a onclick="location.href='goInventoryStatus.do'">- 창고별 재고현황</a></li>
 							<li><a onclick="location.href='safetyManage.do'">- 안전 재고 관리</a></li>
 							<li><a onclick="location.href='productRegists.do'">- 제품 등록 관리</a></li>
-							<li class="uk-open"><a onclick="location.href='creditList.do'">- 여신 관리</a></li>
+							<li><a onclick="location.href='creditList.do'">- 여신 관리</a></li>
 							<li><a onclick="location.href='inquiryList.do'">- 신규가입문의</a></li>
 						</ul>
 					</li>
@@ -94,12 +96,12 @@
 					<article class="inner">
 						<dl class="row col-6">
 							<dt>출항일</dt>
-							<dd><input type="date" class="wd140p"></dd>
+							<dd><input name="etd" id ="etd" type="date" class="wd140p"></dd>
 							<dt>Port</dt>
 							<dd>
-								<select name="" id="" class="wd200p">
+								<select name="port" id="port" class="wd200p">
 									<option value="">출발항 -> 도착항 선택</option>
-									<option value="">QD -> PT</option>
+									<option value="QD//PT">QD -> PT</option>
 								</select>
 							</dd>
 							<dt></dt>
@@ -108,14 +110,25 @@
 						<dl class="row col-6">
 							<dt>제조사</dt>
 							<dd>
-								<select name="" id="" class="wd190p">
+
+								<select name="maker" id="maker" class="wd190p">
 									<option value="">--선택--</option>
+									<c:forEach items="${makerList}" var="makerList" varStatus="status">
+									<c:forTokens items = "${makerList.maker}" delims = "," var = "name">
+         								<option value="${name}" > ${name} (${makerList.companyNm})</option>
+      								</c:forTokens>
+									</c:forEach>									
 								</select>
 							</dd>
 							<dt>창고</dt>
 							<dd>
-								<select name="" id="" class="wd190p">
-									<option value="">100</option>
+								<select name="warehouseIdx" id="warehouseIdx" class="wd210p" required="required">
+									<option value="">--선택--</option>
+									<option value="0">직송</option>
+									<c:forEach items="${warehouse}" var="warehouse" varStatus="status">
+									<option value="${warehouse.warehouseIdx}" > ${warehouse.warehouse}</option>
+									</c:forEach>
+
 								</select>
 							</dd>
 							<dt></dt>
@@ -124,36 +137,39 @@
 						<dl class="row col-6">
 							<dt>제품명</dt>
 							<dd>
-								<select name="" id="" class="wd190p">
-									<option value="">--선택--</option>
+								<select name="productIdx" id="productIdx" class="wd210p" onchange=detailNmChange() required="required">
+									<option value="0">--선택--</option>
+									<c:forEach items="${productList}" var="list" varStatus="status">
+									<option id="productOpt" value="${list.productIdx}"> ${list.productNm}</option>
+									</c:forEach>
 								</select>
 							</dd>
 							<dt>제품 두께</dt>
 							<dd>
-								<select name="" id="" class="wd190p">
-									<option value="">35</option>
+								<select name="thickness" id="thickness" class="wd190p">
+								<option value="">--선택--</option>
 								</select>
 								<span>T</span>
 							</dd>
 							<dt>제품 사이즈</dt>
 							<dd>
-								<select name="" id="" class="wd190p">
-									<option value="">M (1,000 x 1,200)</option>
+								<select name="size" id="size" class="wd190p">
+								<option value="">--선택--</option>
 								</select>
 							</dd>
 						</dl>
 						<dl class="row col-2">
 							<dt>수량</dt>
 							<dd>
-								<input type="text" class="wd120p">
+								<input name="stock" id="stock" type="text" class="wd120p">
 								<span>장</span>
 							</dd>
 						</dl>
 					</article>
 
 					<div class="dl-buttons mt30">
-						<button class="btn bg_color2 small wd120p">추가</button>
-						<button class="btn bg_color1 small wd120p">등록</button>
+						<button class="btn bg_color2 small wd120p" >추가</button>
+						<button class="btn bg_color1 small wd120p" onclick = addOrder()>등록</button>
 					</div>
 				</div>
 
@@ -191,7 +207,8 @@
 							</thead>
 							<tbody>
 								<tr>
-									<td><input type="radio" name="" id=""></td>
+
+								<td><input type="radio" name="" id=""></td>
 									<td>2022-03-21</td>
 									<td>QD - PT</td>
 									<td>HH</td>

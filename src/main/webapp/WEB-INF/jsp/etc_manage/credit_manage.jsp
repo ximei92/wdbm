@@ -57,7 +57,7 @@
 					<li class="uk-parent">
 						<a href="230_warehouse_manage.html">입고관리 </a>
 						<ul class="uk-nav-sub" hidden="">
-							<li><a href="#">- 오더하기</a></li>
+							<li><a onclick="location.href='manageOrder.do'">- 오더하기</a></li>
 							<li><a href="#">- 오더내역</a></li>
 							<li><a href="#">- 선적현황</a></li>
 							<li><a href="#">- 통관현황</a></li>
@@ -104,7 +104,9 @@
 						<!-- button -->
 						<div class="d-flex right wd40 gap10">
 							<button class="btn small bg_color4" id="historyDelete">선택 삭제</button>
+
 							<button class="btn small bg_color2 ico down" onclick='downloadExcel()'>다운로드</button>
+
 							<button class="btn small bg_color1 ico add" onclick="location.href='depositRegist.do'">입금 등록</button>
 						</div>
 					</div>

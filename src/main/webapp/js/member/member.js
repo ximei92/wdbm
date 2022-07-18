@@ -52,10 +52,12 @@ function drawTable(data){
 
 		var tr = '<tr class="'+data.list[i].PRODUCT_NM+'" name="'+data.list[i].PRODUCT_NM+'">';
 		var td1= '<td><input type="checkbox" name="chk" value="Y">';
-        td1 += '<input type="hidden" name="productIdx" value='+data.list[i].PRODUCT_IDX+'></td>';
-        td1 += '<input type="hidden" name="thicknessIdx" value='+data.list[i].THICKNESS_IDX+'></td>';
-        td1 += '<input type="hidden" name="sizeIdx" value='+data.list[i].SIZE_IDX+'></td>';
-        td1 += '<td>'+data.list[i].THICKNESS+data.list[i].SIZE+'-'+data.list[i].PRODUCT_CD+'</td>'; 
+		td1 += '<input type="hidden" name="productIdx" value='+data.list[i].PRODUCT_IDX+'></td>';
+		td1 += '<input type="hidden" name="thickness" value='+data.list[i].THICKNESS_IDX+'></td>';
+		td1 += '<input type="hidden" name="size" value='+data.list[i].SIZE_IDX+'></td>';
+		td1 += '<input type="hidden" name="height" value='+data.list[i].HEIGHT+'></td>';
+		td1 += '<input type="hidden" name="width" value='+data.list[i].WIDTH+'></td>';
+		td1 += '<td>'+data.list[i].THICKNESS+ data.list[i].SIZE+'-'+data.list[i].PRODUCT_CD+'</td>'; 
 		td1 += '<td>'+data.list[i].THICKNESS+'</td>'; 
 		td1 +='<td> '+ data.list[i].SIZE+ ' ('+data.list[i].HEIGHT +'x'+data.list[i].WIDTH+')</td>'; 
 		td1 += '<td><input type="text" class="wd100 txt-right" placeholder="0" name="price"> </td>'; 
@@ -516,7 +518,7 @@ $(document).ready(function(){
 	});
 	
 	//pdf 확장자 체크
-    $("input:file[name='file1']").change(function () {
+	$("input:file[name='file']").change(function () {
 		console.log("file");
 	    var str = $(this).val();
 	    var size = $(this).size();
@@ -536,7 +538,7 @@ $(document).ready(function(){
 	    console.log(fileSize);
 	    if(fileSize > maxSize){
 	    	alert("첨부파일 사이즈는 10MB 이내로 등록 가능합니다.");
-	    	$("input:file[name='file1']").val('');
+	    	$("input:file[name='file']").val('');
 	    	$("input:text[name='filename']").val('');
 	    	return;
 	    }

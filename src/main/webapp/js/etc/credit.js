@@ -218,6 +218,40 @@ function searchHistory(){
 	
 }
 
+function downloadExcel(){
+	var checked = $("input[name=chk]:checked").length;
+	if(checked == 0){
+		alert("다운로드할 내역을 선택해주세요");
+		return;
+	}
+	
+	let chkVal = [];
+	$("input:checkbox[name=chk]").each(function(index){
+		if($(this).is(":checked")==true){
+			var siblings = $(this).parent().siblings();
+			var tempList = [];
+			for(var i =0; i < siblings.length; i++){
+				tempList.push($(siblings).eq(i).text());
+			}
+	    	chkVal.push(tempList);
+	    }
+	});
+
+	$.ajax({
+ 	      type: "POST",
+ 	      url: "downloadDepositExcel.do",
+ 	      dataType:"json",
+ 	      traditional:true,
+     	  data : {"list":chkVal},
+ 	      success: function (data) {
+ 	    	  location.href = "creditList.do";
+ 	      },
+		error : function(){
+			alert("에러가 발생했습니다.");		
+		}
+	});
+	
+}
 
 
 $(document).ready(function(){

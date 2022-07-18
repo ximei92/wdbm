@@ -558,6 +558,8 @@ public class EtcServiceImpl implements EtcService {
 	public int addWarehouseFee(List<Map<String, Object>> insertFeeList) {
 		// TODO Auto-generated method stub
 		Map<String,Object> map = new HashMap<String,Object>();
+		System.out.println(insertFeeList);
+		System.out.println("impleeeeeeeee");
 		map.put("insertFeeList", insertFeeList);
 		return etcMapper.addWarehouseFee(map);
 	}
@@ -595,4 +597,5 @@ public class EtcServiceImpl implements EtcService {
 		// TODO Auto-generated method stub
 		return etcMapper.memberInfoDeposit(keyword);
 	}
+
 }
