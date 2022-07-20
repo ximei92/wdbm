@@ -150,4 +150,11 @@ public interface EtcService {
 
 	Map<String, Object> memberInfoDeposit(String keyword);
 
+	/**
+	 * </h3>JSON DATA를 파싱한다.</h3>
+	 * @param jsonData
+	 * @return
+	 */
+	List<CreditVO> parseJson(String jsonData);
+
 }

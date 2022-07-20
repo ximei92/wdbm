@@ -1,6 +1,5 @@
 "usestrict"
 
-
 /**
  * 체크 확인 
  * 체크된게 없으면 alert
@@ -12,15 +11,13 @@ function isChecked() {
 }
 
 
-
-
 /**
  * 선택된 항목을 리스트로 가져온다
  * 
  * @returns list
  */
 function getSelectedList(){
-	let resultList = [];
+	const resultList = [];
 	$("input:checkbox[name=chk]").each(function(index) {
 		if ($(this).is(":checked") == true) {
 			var siblings = $(this).parent().siblings();
@@ -41,12 +38,14 @@ function getSelectedList(){
 function downloadExcel() {
 	if (isChecked()) {
 		const selectedList = getSelectedList();
+		const jsonData = JSON.stringify(selectedList);
+		$('#jsonData').val(jsonData);
 		
-		
-
-
-
-		
+		const sendUrl = "/credit/excel/down";
+		const f = document.forms['excel-down-form'];
+		f.setAttribute('method','post');
+		f.setAttribute('action',sendUrl);
+		f.submit();
 		
 		
 	} else {
