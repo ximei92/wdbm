@@ -598,4 +598,10 @@ public class EtcServiceImpl implements EtcService {
 		return etcMapper.memberInfoDeposit(keyword);
 	}
 
+	@Override
+	public List<CreditVO> parseJson(String jsonData) {
+		
+		return null;
+	}
+
 }

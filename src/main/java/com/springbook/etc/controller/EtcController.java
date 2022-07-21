@@ -15,18 +15,19 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.springbook.configuration.Page;
 import com.springbook.etc.service.EtcService;
+import com.springbook.etc.vo.CreditVO;
 import com.springbook.etc.vo.JoinAskVO;
 import com.springbook.etc.vo.ProductDetailVO;
 import com.springbook.etc.vo.ProductSizeVO;
@@ -1210,12 +1211,5 @@ public class EtcController {
 		return result;
 	}
 	
-	@PostMapping("/deposit-excel/down")
-	@ResponseBody
-	public ModelAndView downlaodDepositExcel(Map<String, ?> excelData){ 
-		
-		return new ModelAndView(new ExcelXlsxView(),excelData);
-		
-		
-	}
+
 }
