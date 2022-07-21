@@ -41,7 +41,7 @@ function downloadExcel() {
 		const jsonData = JSON.stringify(selectedList);
 		$('#jsonData').val(jsonData);
 		
-		const sendUrl = "/credit/excel/down";
+		const sendUrl = "/credit/excel/";
 		const f = document.forms['excel-down-form'];
 		f.setAttribute('method','post');
 		f.setAttribute('action',sendUrl);

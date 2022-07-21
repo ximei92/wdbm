@@ -1,6 +1,8 @@
 package com.springbook.etc.creditmng.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,6 +42,33 @@ public class CreditMngServiceImpl implements CreditMngService {
 	@Override
 	public Map<String, Object> getCreditExcelData(List<CreditExcelDTO> creditList) {
 		return ExcelWriter.createExcelData(creditList,CreditExcelDTO.class);
+	}
+	
+	@Override
+	public int creditListCount(String keyword, Date startDt, Date endDt) {
+		// TODO Auto-generated method stub
+		Map<String,Object> map = new HashMap<String,Object>();
+
+		map.put("keyword", keyword);
+		map.put("startDt", startDt);
+		map.put("endDt", endDt);
+		
+		return creditMngMapper.creditListCount(map);
+	}
+	
+	@Override
+	public List<Map<String, Object>> getCreditList(int i, int contentnum, String keyword, Date startDt, Date endDt) {
+		// TODO Auto-generated method stub
+		Map<String,Object> map = new HashMap<String,Object>();
+		
+		map.put("i", i);
+		map.put("contentnum", contentnum);
+		map.put("keyword", keyword);
+		map.put("startDt", startDt);
+		map.put("endDt", endDt);
+		System.out.println("ddddd");
+		System.out.println(map);
+		return creditMngMapper.getCreditList(map);
 	}
 
 }
