@@ -1,5 +1,6 @@
 package com.springbook.etc.creditmng.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -12,5 +13,10 @@ public interface CreditMngService {
 	List<CreditExcelDTO> parseJson(String jsonData) throws JsonMappingException, JsonProcessingException;
 
 	Map<String, Object> getCreditExcelData(List<CreditExcelDTO> creditList);
+	
+	int creditListCount(String keyword, Date startDt, Date endDt);
+
+	List<Map<String, Object>> getCreditList(int i, int contentnum, String keyword, Date startDt, Date endDt);
+
 
 }
