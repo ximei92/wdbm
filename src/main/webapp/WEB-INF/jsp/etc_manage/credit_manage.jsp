@@ -157,6 +157,10 @@
 							</c:forEach>						
 							</tbody>
 						</table>
+						<!-- excel-down form -->
+						<form id="excel-down-form" >
+							<input type="hidden" id="jsonData" name="jsonData" value="">
+						</form>
 
 						<!-- pager -->
 						<div class="pager txt-right">
