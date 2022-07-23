@@ -3,15 +3,22 @@ package com.springbook.member.impl;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import com.springbook.member.mapper.MemberMapper;
 import com.springbook.member.service.MemberService;
 import com.springbook.member.vo.MemberVO;
 import com.springbook.security.base64.DataScrty;
+import com.springbook.utill.session.SessionManager;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class MemberServiceImpl implements MemberService {
 
+	private final SessionManager sessionManager;
 	private final MemberMapper memberMapper;
 	private final String DEFUALT_PW = "0000";
 	// private final PasswordEncoder passwordEncoder;
@@ -38,7 +46,8 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public ResponseEntity<MemberVO> tryLogin(MemberVO vo) throws Exception {
+	public ResponseEntity<MemberVO> tryLogin(MemberVO vo,HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
 		String enpassword = DataScrty.encryptPassword(vo.getPassword(),vo.getId());
 		vo.setPassword(enpassword);
 		MemberVO member = memberMapper.tryLogin(vo);
@@ -46,6 +55,7 @@ public class MemberServiceImpl implements MemberService {
 		log.info("member={}",member);
 		if(hasMember(member)){
 			log.debug("성공");
+			sessionManager.createSession(member.getId(), response); 
 			return new ResponseEntity<MemberVO>(member,HttpStatus.OK); 
 		} else {
 			log.debug("실패");
@@ -175,6 +185,35 @@ public class MemberServiceImpl implements MemberService {
 		String enpassword = DataScrty.encryptPassword(member.getPassword(),member.getId());
 		int result = memberMapper.modfiyPassword(member.getId(), enpassword);
 		log.debug("modify passwrod result = {}", result);
+	}
+
+	@Override
+	public String checkSession(HttpServletRequest request, Model model) {
+		String memberId = sessionManager.getSession(request);
+		log.info("memberId = {}",memberId);
+		if(memberId == null){
+			return "index";
+		}
+		
+		MemberVO member = memberMapper.findMemberById(memberId);
+		if(member == null) {
+			return "index";
+		}
+		model.addAttribute("member",member);
+		return "redirect:/memberList.do";
+	}
+
+	@Override
+	public String logout(HttpServletRequest request , HttpServletResponse response) {
+		HttpSession session = request.getSession(false);
+		
+		if(session == null){
+			return "redirect:/";
+		}
+		sessionManager.exprieSession(response);
+		session.invalidate();		
+		
+		return "redirect:/";
 	}
 
 }

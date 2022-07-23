@@ -33,7 +33,7 @@
 					<a href="#">홍길동</a>
 					<p>회사명</p>
 				</div>
-				<a href="#" class="logout">로그아웃</a>
+				<a href="javascript:void(0)" onclick="logout()" id="logout" class="logout">로그아웃</a>
 				<div class="d-flex">
 					<button class="mem-edit" onclick="location.href='003_privacy_info.html'">개인정보</button>
 					<button class="alarm-list">알림 목록</button>

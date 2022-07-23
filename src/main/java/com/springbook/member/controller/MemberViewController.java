@@ -2,6 +2,8 @@ package com.springbook.member.controller;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,7 +22,10 @@ import com.springbook.member.vo.*;
 import com.springbook.service.FileService;
 import com.springbook.vo.FileVO;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Controller
+@Slf4j
 public class MemberViewController {
 	@Autowired
 	private MemberService memberService;
@@ -29,12 +34,15 @@ public class MemberViewController {
 	@Autowired
 	private FileService fileService;
 	
-	@Autowired(required = false)
-	private PasswordEncoder encoder;
-	
 	@GetMapping("/login.do")
 	public String login() {
 		return "login";
+	}
+	
+	
+	@PostMapping("/logout.do")
+	public String logut(HttpServletRequest request,HttpServletResponse response){
+		return memberService.logout(request,response);
 	}
 	
 	@GetMapping(value= "/goMemberRegists.do")
