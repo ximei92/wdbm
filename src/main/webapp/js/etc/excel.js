@@ -42,7 +42,10 @@ function downloadExcel() {
 	if (isChecked()) {
 		const selectedList = getSelectedList();
 		
-		
+		  $.ajax({ type: "POST", url: "/deposit-excel/down", dataType:"json",
+			  traditional:true, data : {"list":selectedList}, success: function (data) {
+			  location.href = "creditList.do"; }, error : function(){
+				  alert("에러가  발생했습니다."); } });	
 
 
 
@@ -53,10 +56,7 @@ function downloadExcel() {
 		alert("다운로드할 내역을 선택해주세요");
 	}
 
-	/*
-	 * $.ajax({ type: "POST", url: "/deposit-excel/down", dataType:"json",
-	 * traditional:true, data : {"list":chkVal}, success: function (data) {
-	 * location.href = "creditList.do"; }, error : function(){ alert("에러가
-	 * 발생했습니다."); } });
-	 */
+	
+
+	 
 }

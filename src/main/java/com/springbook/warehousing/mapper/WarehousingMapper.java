@@ -25,6 +25,28 @@ public interface WarehousingMapper {
 
 	Map<String, Object> getCalCtnInfo(Map<String, Object> map);
 
+	Map<String, Object> getProductInfo(Map<String, Object> map);
+
+	WarehouseVO getWarehouseInfo(String warehouseIdx);
+
+	MemberVO getMemberInfo(String shipperId);
+
+	int insertOrderCtn(Map<String, String> map);
+
+	Map<String, Object> loadClientInfo(String id);
+
+	List<Map<String, Object>> getProductCd();
+
+	List<Map<String, Object>> getOrderList(Map<String, Object> map);
+
+	int getOrderListCount();
+
+	Map<String, Object> getOrderInfo(String idx);
+
+	int updateOrderCtn(Map<String, String> map);
+
+	Map<String, Object> getProductCdInfo(Map<String, Object> map);
+
 
 
 

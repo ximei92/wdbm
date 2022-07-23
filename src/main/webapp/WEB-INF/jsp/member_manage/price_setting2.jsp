@@ -113,7 +113,7 @@
 
 
                     <div class="dl-buttons line">
-						<button class="btn bg_color3 small wd120p">취소</button>
+						<button class="btn bg_color3 small wd120p" id="cancelBtn">취소</button>
 						<button class="btn bg_color1 small wd120p" onclick=savePrice()>저장</button>
 					</div>
 				</div>

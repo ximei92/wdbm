@@ -598,4 +598,15 @@ public class EtcServiceImpl implements EtcService {
 		return etcMapper.memberInfoDeposit(keyword);
 	}
 
+	@Override
+	public int checkProductThickness(ProductThicknessVO vo) {
+		// TODO Auto-generated method stub
+		return etcMapper.checkProductThickness(vo);
+	}
+
+	@Override
+	public int checkProductSize(ProductSizeVO vo) {
+		// TODO Auto-generated method stub
+		return etcMapper.checkProductSize(vo);
+	}
 }

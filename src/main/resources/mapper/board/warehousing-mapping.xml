@@ -23,4 +23,183 @@
 			SIZE = #{size} AND
 			THICKNESS= #{thickness}
 	</select>
+	
+	<!--제품상세정보가져오기 이름포함 -->
+	<select id="getProductInfo" parameterType="map" resultType="map">
+		SELECT
+		DETAIL.*, SIZE.HEIGHT, SIZE.WIDTH ,THICKNESS.THICKNESS AS THICKNESS_NM, PRODUCT.PRODUCT_NM, PRODUCT.PRODUCT_CD, SIZE.SIZE AS SIZE_NM
+		FROM
+		PRODUCT_DETAIL DETAIL
+			INNER JOIN PRODUCT_THICKNESS THICKNESS ON DETAIL.THICKNESS = THICKNESS.THICKNESS_IDX
+			INNER JOIN PRODUCT PRODUCT ON PRODUCT.PRODUCT_IDX = DETAIL.PRODUCT_IDX
+			INNER JOIN PRODUCT_SIZE SIZE ON SIZE.SIZE_IDX = DETAIL.SIZE
+		WHERE 
+		PRODUCT.DEL_YN = 'N'
+		AND PRODUCT.PRODUCT_IDX = #{productIdx}
+		AND THICKNESS.THICKNESS_IDX = #{thickness}
+		AND SIZE.SIZE_IDX = #{size}
+	</select>
+	
+	<!--창고 이름포함 -->
+	<select id="getWarehouseInfo" parameterType="java.lang.String" resultType="com.springbook.etc.vo.WarehouseVO">
+		SELECT 
+			*
+		FROM WAREHOUSE
+			WHERE 
+			WAREHOUSE_IDX = #{warehouseIdx}
+	</select>
+	
+	<!--멤버정보가져오기 이름포함 -->
+	<select id="getMemberInfo" parameterType="java.lang.String" resultType="com.springbook.member.vo.MemberVO">
+		SELECT 
+			*
+		FROM MEMBER
+			WHERE 
+			ID = #{id}
+	</select>
+	
+	<!--단일CTN 추가 -->
+	<insert id="insertOrderCtn" parameterType="map">
+		INSERT INTO MANAGE_ORDER_PRODUCT
+		(
+		etd,
+		dp,
+		ap,
+		maker,
+		maker_id,
+		warehouse_idx,
+		product_idx,
+		size_idx,
+		thickness_idx,
+		stock,
+		etc,
+		client_id,
+		manager,
+		due_ampm,
+		due_hh,
+		due_mm,
+		address1,
+		address2,
+		address3,
+		address_detail,
+		phone,
+		status,
+		reg_date
+		)
+		VALUES
+		(
+		#{etd}, 
+		#{dp},
+		#{ap},
+		#{maker},
+		#{makerId},
+		#{warehouseIdx},
+		#{productIdx},
+		#{sizeIdx},
+		#{thicknessIdx},
+		#{stock},
+		#{etc},
+		#{clientId},
+		#{manager},
+		#{dueAmpm},
+		#{dueHh},
+		#{dueMm},
+		#{address1},
+		#{address2},
+		#{address3},
+		#{addressDetail},
+		#{phone},
+		1,	
+		now()	
+		)
+	</insert>
+
+	<!--제품코드 전체 개수 -->
+	<select id="getProductCd" resultType="map">
+		SELECT
+		DETAIL.*, SIZE.HEIGHT, SIZE.WIDTH ,THICKNESS.THICKNESS AS THICKNESS_NM, PRODUCT.PRODUCT_NM, PRODUCT.PRODUCT_CD, SIZE.SIZE AS SIZE_NM
+		FROM
+		PRODUCT_DETAIL DETAIL
+			INNER JOIN PRODUCT_THICKNESS THICKNESS ON DETAIL.THICKNESS = THICKNESS.THICKNESS_IDX
+			INNER JOIN PRODUCT PRODUCT ON PRODUCT.PRODUCT_IDX = DETAIL.PRODUCT_IDX
+			INNER JOIN PRODUCT_SIZE SIZE ON SIZE.SIZE_IDX = DETAIL.SIZE
+		WHERE 
+		PRODUCT.DEL_YN = 'N'
+	</select>
+	
+	<!--오더 전체 -->
+	<select id="getOrderList" resultType="map" parameterType="Map">
+		SELECT
+		*
+		FROM
+		MANAGE_ORDER_PRODUCT
+		WHERE 
+		DEL_YN = 'N'
+		LIMIT #{i}, #{contentnum}
+	</select>	
+	
+	<!--오더내역 전체 개수 -->
+	<select id="getOrderListCount" resultType="int" parameterType="Map">
+		SELECT
+		COUNT(*)
+		FROM
+		MANAGE_ORDER_PRODUCT
+		WHERE 
+		DEL_YN = 'N'
+	</select>
+	
+	<!-- 상세오더내용조회 -->
+	<select id="getOrderInfo" resultType="map" parameterType="java.lang.String">
+		SELECT
+		*
+		FROM
+		MANAGE_ORDER_PRODUCT
+		WHERE 
+		DEL_YN = 'N'
+		AND MANAGE_ORDER_PRODUCT_IDX = #{idx}
+	</select>
+	
+		<!--단일CTN 추가 -->
+	<update id="updateOrderCtn" parameterType="map">
+		UPDATE MANAGE_ORDER_PRODUCT
+		SET etd = #{etd},
+			dp = #{dp},
+			ap = #{ap},
+			maker = #{maker},
+			maker_id = #{makerId},
+			warehouse_idx = #{warehouseIdx},
+			product_idx = #{productIdx},
+			size_idx = #{sizeIdx},
+			thickness_idx = #{thicknessIdx},
+			stock = #{stock},
+			etc = #{etc},
+			client_id = #{clientId},
+			manager = #{manager},
+			due_ampm = #{dueAmpm},
+			due_hh = #{dueHh},
+			due_mm = #{dueMm},
+			address1 = #{address1},
+			address2 = #{address2},
+			address3 = #{address3},
+			address_detail = #{addressDetail},
+			phone = #{phone},
+			etc = #{etc},
+			mod_date = now()
+    	WHERE MANAGE_ORDER_PRODUCT_IDX = #{orderIdx}
+
+	</update>	
+	
+	<!--제품코드 상세검색 -->
+	<select id="getProductCdInfo" resultType="map">
+		SELECT
+		DETAIL.*, SIZE.HEIGHT, SIZE.WIDTH ,THICKNESS.THICKNESS AS THICKNESS_NM, PRODUCT.PRODUCT_NM, PRODUCT.PRODUCT_CD, SIZE.SIZE AS SIZE_NM
+		FROM
+		PRODUCT_DETAIL DETAIL
+			INNER JOIN PRODUCT_THICKNESS THICKNESS ON DETAIL.THICKNESS = THICKNESS.THICKNESS_IDX
+			INNER JOIN PRODUCT PRODUCT ON PRODUCT.PRODUCT_IDX = DETAIL.PRODUCT_IDX
+			INNER JOIN PRODUCT_SIZE SIZE ON SIZE.SIZE_IDX = DETAIL.SIZE
+		WHERE 
+		PRODUCT.DEL_YN = 'N' AND PRODUCT.PRODUCT_IDX = #{productIdx} AND SIZE.SIZE_IDX = #{size} AND THICKNESS.THICKNESS_IDX = #{thickness}
+	</select>
+
 </mapper>

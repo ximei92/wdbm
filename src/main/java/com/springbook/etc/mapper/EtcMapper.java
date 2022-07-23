@@ -159,4 +159,8 @@ public interface EtcMapper {
 
 	Map<String, Object> memberInfoDeposit(String keyword);
 
+	int checkProductThickness(ProductThicknessVO vo);
+
+	int checkProductSize(ProductSizeVO vo);
+
 }

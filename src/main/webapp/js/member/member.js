@@ -583,4 +583,8 @@ $(document).ready(function(){
 	});
 
 
+	//취소버튼
+	$("#cancelBtn").click(function() {
+		window.history.back();
+	});
 })

@@ -216,8 +216,17 @@
 		ORDER BY B.REG_DATE ASC
 	</select>
 	
+	<!--제품두께중복확인 -->
+	<select id="checkProductThickness" parameterType="com.springbook.etc.vo.ProductThicknessVO" resultType="int">
+		SELECT COUNT(*) FROM PRODUCT_THICKNESS
+		WHERE PRODUCT_IDX = #{productIdx} AND THICKNESS = #{thickness}
+		<if test= "thicknessIdx != 0">
+    	AND	THICKNESS_IDX != #{thicknessIdx}
+   		</if>
+	</select>
+		
 	<!--제품두께추가 -->
-	<insert id="addProductThickness" parameterType="com.springbook.etc.vo.ProductVO">
+	<insert id="addProductThickness" parameterType="com.springbook.etc.vo.ProductThicknessVO">
 		INSERT INTO PRODUCT_THICKNESS
 		(
 		product_Idx, 
@@ -241,7 +250,7 @@
 	</insert>
 
 	<!--제품두께업데이트 -->
-	<update id="updateProductThickness" parameterType="com.springbook.etc.vo.ProductVO">
+	<update id="updateProductThickness" parameterType="com.springbook.etc.vo.ProductThicknessVO">
 		UPDATE
 		PRODUCT_THICKNESS
 		SET product_idx = #{productIdx},
@@ -293,7 +302,16 @@
    		</if> 
 		LIMIT #{i}, #{contentnum}
 	</select>
-			
+
+	<!--제품사이즈중복확인 -->
+	<select id="checkProductSize" parameterType="com.springbook.etc.vo.ProductSizeVO" resultType="int">
+		SELECT COUNT(*) FROM PRODUCT_SIZE
+		WHERE PRODUCT_IDX = #{productIdx} AND SIZE = #{size}
+	    <if test= "sizeIdx != 0">
+    	AND	SIZE_IDX != #{sizeIdx}
+   		</if>
+	</select>
+				
 	<!--제품사이즈추가 -->
 	<insert id="addProductSize" parameterType="com.springbook.etc.vo.ProductSizeVO">
 		INSERT INTO PRODUCT_SIZE

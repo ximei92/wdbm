@@ -57,7 +57,7 @@
 						<a href="230_warehouse_manage.html">입고관리 </a>
 						<ul class="uk-nav-sub" hidden="">
 							<li><a onclick="location.href='manageOrder.do'">- 오더하기</a></li>
-							<li><a href="#">- 오더내역</a></li>
+							<li><a onclick="location.href='orderlist.do'">- 오더내역</a></li>
 							<li><a href="#">- 선적현황</a></li>
 							<li><a href="#">- 통관현황</a></li>
 							<li><a href="#">- CY현황</a></li>
@@ -100,8 +100,8 @@
 					<input type="hidden" id="fileChange" value="N"> <!--파일체인지체크 -->
 					<c:if test="${empty list}">
 						<dl class="row col-2">
-							<dt>창고명</dt>
-							<dd><input type="text" class="wd410p" name="warehouse" id="warehouse"></dd>
+							<dt>창고명<i class="essen">*</i></dt>
+							<dd><input type="text" class="wd410p" name="warehouse" id="warehouse" required="required"></dd>
 						</dl>
 						<dl class="row col-2">
 							<dt class="al-start">배송료 DB테이블 <i class="essen">*</i></dt>
@@ -144,7 +144,7 @@
 					</article>
 
 					<div class="dl-buttons">
-						<button class="btn bg_color3 small wd120p" type="button">취소</button>
+						<button class="btn bg_color3 small wd120p" type="button" id="cancelBtn">취소</button>
 						<button class="btn bg_color1 small wd120p ml10" type="submit">저장</button>
 					</div>
 				</div>
