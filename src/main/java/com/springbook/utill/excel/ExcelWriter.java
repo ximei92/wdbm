@@ -62,7 +62,7 @@ public class ExcelWriter {
 	 */
 	private String encodeFileName(String fileName) {
 		try {
-			return URLEncoder.encode(fileName,"UTF-8");
+			return URLEncoder.encode(fileName+".xlsx","UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 			throw new RuntimeException("file name is not exist");
@@ -78,7 +78,7 @@ public class ExcelWriter {
 	private void setFileNameWithHeader(String fileName, HttpServletResponse response) {
 		  response.reset();
 		  response.setHeader("Set-Cookie", "fileDownload=true; path=/");
-		  response.setContentType("application/download;charset=utf-8");
+		  response.setContentType("application/download;charset=UTF-8");
 		  response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
 		  response.setHeader("Content-Transfer-Encoding", "binary");
 	}
