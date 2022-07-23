@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- mapper DTD 선언 -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.springbook.mapper.CommonMapper">
+
+	<select id="getDate" resultType="com.springbook.vo.DateVO">
+		SELECT	DATE_FORMAT(NOW(),'%Y-%m-%d') AS TODAY
+			,	CASE	DAYOFWEEK(CURDATE())
+						WHEN '1' then '일'
+			   			WHEN '2' then '월'
+			   			WHEN '3' then '화'
+			   			WHEN '4' then '수'
+			   			WHEN '5' then '목'
+			   			WHEN '6' then '금'
+			   			WHEN '7' then '토'
+		   		 END AS TODAY_DAY
+		   	, 	DATE_FORMAT((date_add(now(), interval + 1 DAY)),'%Y-%m-%d') AS TODAY_ONE 
+			, 	DATE_FORMAT((date_add(now(), interval + 30 DAY)),'%Y-%m-%d') AS ADD_TODAY 
+	</select>
+	
+	<select id="getProductNm" resultType="com.springbook.vo.ProductVO">
+		SELECT	PRODUCT_IDX
+			,	PRODUCT_NM
+		  FROM	product
+		 WHERE	DEL_YN = 'N'
+		ORDER BY PRODUCT_IDX ASC
+	</select>
+	
+	<select id="getProductSize" parameterType="com.springbook.vo.ProductVO" resultType="com.springbook.vo.ProductVO">
+		SELECT	SIZE_IDX
+			,	PRODUCT_IDX
+			,	SIZE
+			,	HEIGHT
+			,	WIDTH
+			,	CUSTOM_ORDER
+			,	CASE WHEN CUSTOM_ORDER = 'Y' 
+					 THEN '(주문제작)' 
+					 ELSE '' 
+				 END	AS CUSTOM_ORDER_NM
+		  FROM	product_size
+		 WHERE	DEL_YN = 'N'
+		   AND	PRODUCT_IDX = #{PRODUCT_IDX}
+		 ORDER BY PRODUCT_IDX ASC
+	</select>
+		
+	<select id="getProductThickness" parameterType="com.springbook.vo.ProductVO" resultType="com.springbook.vo.ProductVO">
+		SELECT	THICKNESS_IDX
+			,	PRODUCT_IDX
+			,	THICKNESS
+			,	TEST_INSTITUTE
+			,	TEST_NUM
+			,	FILE_ID
+			,	CUSTOM_ORDER
+			,	CASE WHEN CUSTOM_ORDER = 'Y' 
+					 THEN '(주문제작)' 
+					 ELSE '' 
+				 END	AS CUSTOM_ORDER_NM
+		  FROM	product_thickness
+		 WHERE	DEL_YN = 'N'
+		   AND	PRODUCT_IDX = #{PRODUCT_IDX}
+		 ORDER BY PRODUCT_IDX ASC
+	</select>	
+	
+	<select id="getSido" resultType="com.springbook.vo.JusoVO">
+		SELECT	*
+		  FROM 	juso
+		  GROUP BY SIDO_NM
+		 ORDER BY SORT ASC
+	</select>
+	
+	<select id="getSigungu" parameterType="com.springbook.vo.JusoVO" resultType="com.springbook.vo.JusoVO">
+		SELECT	DISTINCT SIGUNGU_NM
+		  FROM 	juso
+		 WHERE	SIDO_NM = #{sidoNm}
+		 ORDER BY SIGUNGU_NM ASC
+	</select>	
+	
+	<select id="getEubmyeondong" parameterType="com.springbook.vo.JusoVO" resultType="com.springbook.vo.JusoVO">
+		SELECT	EUBMYEONDONG_NM 
+		  FROM 	juso
+		 WHERE	SIDO_NM = #{sidoNm}
+		   AND	SIGUNGU_NM = #{sigunguNm}
+		 ORDER BY EUBMYEONDONG_NM ASC
+	</select>				    
+	
+</mapper>

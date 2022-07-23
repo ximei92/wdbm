@@ -242,36 +242,75 @@ function registsThickness(fileId, fileNm){
 
 	if(update =='update'){
 		$.ajax({
-			url: "updateProductThickness.do",
+			url: "checkProductThickness.do",
 			data: formData,
 			type: "POST",
 	       	processData: false,
 	   	    contentType: false,
 			success : function(data){
-				alert("저장에 성공했습니다.");
-				checkUnload = false;
-				location.href = "productThickness.do";
+				if(data > 0){
+					alert("중복인 두께입니다.");
+					event.preventDefault();
+					return;
+				} else{
+					$.ajax({
+						url: "updateProductThickness.do",
+						data: formData,
+						type: "POST",
+				       	processData: false,
+				   	    contentType: false,
+						success : function(data){
+							alert("저장에 성공했습니다.");
+							checkUnload = false;
+							location.href = "productThickness.do";
+						},
+						error : function(){
+							alert("에러가 발생했습니다.");		
+						}
+					});	
+				}
 			},
 			error : function(){
 				alert("에러가 발생했습니다.");		
 			}
 		});		
+	
 	} else {
 		$.ajax({
-			url: "addProductThickness.do",
+			url: "checkProductThickness.do",
 			data: formData,
 			type: "POST",
 	       	processData: false,
 	   	    contentType: false,
 			success : function(data){
-				alert("저장에 성공했습니다.");
-				checkUnload = false;
-				location.href = "productThickness.do";
+				if(data > 0){
+					alert("이미 생성된 두께입니다.");
+					event.preventDefault();
+					return;
+				} else{
+					$.ajax({
+						url: "addProductThickness.do",
+						data: formData,
+						type: "POST",
+				       	processData: false,
+				   	    contentType: false,
+						success : function(data){
+							alert("저장에 성공했습니다.");
+							checkUnload = false;
+							location.href = "productThickness.do";
+						},
+						error : function(){
+							alert("에러가 발생했습니다.");		
+						}
+					});
+				}
 			},
 			error : function(){
 				alert("에러가 발생했습니다.");		
 			}
 		});
+
+
 	}
 	checkUnload = false;
 }
@@ -386,34 +425,68 @@ $(document).ready(function(){
 		var form = $("form").serialize();
 		if(update == 'update'){
 			$.ajax({
-				url: "updateProductSize.do",
+				url: "checkProductSize.do",
 				data: form,
 				type: "POST",
 				dataType: "json",
 				success : function(data){
-					alert("저장에 성공했습니다.");
-					checkUnload = false;
-					location.href = "productSize.do";
+					if(data>0){
+						alert("중복된 사이즈입니다.");
+						return;
+					} else {
+						$.ajax({
+							url: "updateProductSize.do",
+							data: form,
+							type: "POST",
+							dataType: "json",
+							success : function(data){
+								alert("저장에 성공했습니다.");
+								checkUnload = false;
+								location.href = "productSize.do";
+							},
+							error : function(){
+								alert("에러가 발생했습니다.");		
+							}
+						});		
+					}
 				},
 				error : function(){
 					alert("에러가 발생했습니다.");		
 				}
 			});			
+	
 		} else {
 			$.ajax({
-				url: "addProductSize.do",
+				url: "checkProductSize.do",
 				data: form,
 				type: "POST",
 				dataType: "json",
 				success : function(data){
-					alert("저장에 성공했습니다.");
-					checkUnload = false;
-					location.href = "productSize.do";
+					if(data>0){
+						alert("중복된 사이즈입니다.");
+						return;
+					} else {
+						$.ajax({
+							url: "addProductSize.do",
+							data: form,
+							type: "POST",
+							dataType: "json",
+							success : function(data){
+								alert("저장에 성공했습니다.");
+								checkUnload = false;
+								location.href = "productSize.do";
+							},
+							error : function(){
+								alert("에러가 발생했습니다.");		
+							}
+						});
+					}
 				},
 				error : function(){
 					alert("에러가 발생했습니다.");		
 				}
 			});
+
 		}
 		checkUnload = false;
 	});
@@ -641,6 +714,12 @@ $(document).ready(function(){
 	    	return;
 	    }
 	    
+	});
+	
+
+	//취소버튼
+	$("#cancelBtn").click(function() {
+		window.history.back();
 	});
 	
 })

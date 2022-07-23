@@ -56,6 +56,7 @@ function downloadExcel() {
 	if (isChecked()) {
 		const selectedList = getSelectedList();
 		
+
 		const jsonData = JSON.stringify(selectedList);
 		console.log("jsonData=",jsonData);
 		$('#jsonData').val(jsonData);
@@ -69,8 +70,6 @@ function downloadExcel() {
 	} else {
 		alert("다운로드할 내역을 선택해주세요");
 	}
-	
 
-
-	 
 }
+

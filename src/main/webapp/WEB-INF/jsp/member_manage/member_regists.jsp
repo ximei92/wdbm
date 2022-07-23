@@ -57,7 +57,7 @@
 						<a href="230_warehouse_manage.html">입고관리 </a>
 						<ul class="uk-nav-sub" hidden="">
 							<li><a onclick="location.href='manageOrder.do'">- 오더하기</a></li>
-							<li><a href="#">- 오더내역</a></li>
+							<li><a onclick="location.href='orderlist.do'">- 오더내역</a></li>
 							<li><a href="#">- 선적현황</a></li>
 							<li><a href="#">- 통관현황</a></li>
 							<li><a href="#">- CY현황</a></li>
@@ -388,7 +388,7 @@
 						</c:if>
 	
 						<div class="dl-buttons">
-							<button class="btn bg_color3 small wd120p" type="button">취소</button>
+							<button class="btn bg_color3 small wd120p" type="button" id="cancelBtn">취소</button>
 							<button class="btn bg_color1 small wd120p" type="submit">저장</button>
 						</div>
 					</div>

@@ -35,7 +35,7 @@ function historyList(idx){
 }
 
 
-/*한페이지당 게시물 */
+/*거래처선택 모달 검색 */
 function page(idx){
 	//모달화면 초기화
 	console.log(idx);
@@ -218,40 +218,40 @@ function searchHistory(){
 	
 }
 
-function downloadExcel(){
-	var checked = $("input[name=chk]:checked").length;
-	if(checked == 0){
-		alert("다운로드할 내역을 선택해주세요");
-		return;
-	}
-	
-	let chkVal = [];
-	$("input:checkbox[name=chk]").each(function(index){
-		if($(this).is(":checked")==true){
-			var siblings = $(this).parent().siblings();
-			var tempList = [];
-			for(var i =0; i < siblings.length; i++){
-				tempList.push($(siblings).eq(i).text());
-			}
-	    	chkVal.push(tempList);
-	    }
-	});
-
-	$.ajax({
- 	      type: "POST",
- 	      url: "downloadDepositExcel.do",
- 	      dataType:"json",
- 	      traditional:true,
-     	  data : {"list":chkVal},
- 	      success: function (data) {
- 	    	  location.href = "creditList.do";
- 	      },
-		error : function(){
-			alert("에러가 발생했습니다.");		
-		}
-	});
-	
-}
+//function downloadExcel(){
+//	var checked = $("input[name=chk]:checked").length;
+//	if(checked == 0){
+//		alert("다운로드할 내역을 선택해주세요");
+//		return;
+//	}
+//	
+//	let chkVal = [];
+//	$("input:checkbox[name=chk]").each(function(index){
+//		if($(this).is(":checked")==true){
+//			var siblings = $(this).parent().siblings();
+//			var tempList = [];
+//			for(var i =0; i < siblings.length; i++){
+//				tempList.push($(siblings).eq(i).text());
+//			}
+//	    	chkVal.push(tempList);
+//	    }
+//	});
+//
+//	$.ajax({
+// 	      type: "POST",
+// 	      url: "downloadDepositExcel.do",
+// 	      dataType:"json",
+// 	      traditional:true,
+//     	  data : {"list":chkVal},
+// 	      success: function (data) {
+// 	    	  location.href = "creditList.do";
+// 	      },
+//		error : function(){
+//			alert("에러가 발생했습니다.");		
+//		}
+//	});
+//	
+//}
 
 
 $(document).ready(function(){
@@ -312,5 +312,11 @@ $(document).ready(function(){
 			});
 		}
 
+	});
+	
+
+	//취소버튼
+	$("#cancelBtn").click(function() {
+		window.history.back();
 	});
 })

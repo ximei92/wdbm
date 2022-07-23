@@ -576,9 +576,22 @@ public class EtcServiceImpl implements EtcService {
 	}
 
 	@Override
+	public int checkProductThickness(ProductThicknessVO vo) {
+		// TODO Auto-generated method stub
+		return etcMapper.checkProductThickness(vo);
+	}
+
+	@Override
+	public int checkProductSize(ProductSizeVO vo) {
+		// TODO Auto-generated method stub
+		return etcMapper.checkProductSize(vo);
+	}
+  
+	@Override
 	public List<CreditVO> parseJson(String jsonData) {
 		
 		return null;
 	}
+
 
 }

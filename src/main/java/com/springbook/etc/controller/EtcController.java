@@ -71,9 +71,7 @@ public class EtcController {
 		} else {
 	        ccontentnum = Integer.parseInt(contentnum);	
 		}
-		System.out.println(cpagenum+"///"+ccontentnum);
-		System.out.println("cunrtPa");
-		System.out.println(pagemaker.getCurrentblock());
+
 		pagemaker.setTotalcount(etcService.inquiryListCount(keyword)); // mapper 전체 게시글 개수를 지정한다
         pagemaker.setPagenum(cpagenum-1);   // 현재 페이지를 페이지 객체에 지정한다 -1 을 해야 쿼리에서 사용할수 있다
         pagemaker.setContentnum(ccontentnum); // 한 페이지에 몇개씩 게시글을 보여줄지 지정한다.
@@ -120,8 +118,6 @@ public class EtcController {
 	@PostMapping("/updateInquiry.do")
 	@ResponseBody
 	public int updateInquiry(String info, String idx) {
-		System.out.println(info);
-		System.out.println(idx);
 		int result = etcService.updateInquiry(info, idx);
 
 		System.out.println(result);
@@ -260,6 +256,15 @@ public class EtcController {
 		return "etc_manage/product_thickness";
 	}
 
+	//두께 중복확인
+	@PostMapping("/checkProductThickness.do")
+	@ResponseBody
+	public int checkProductThickness(ProductThicknessVO vo) {
+
+		int result = etcService.checkProductThickness(vo);
+		return result;
+	}
+	
 	//두께 등록
 	@PostMapping("/addProductThickness.do")
 	@ResponseBody
@@ -371,6 +376,16 @@ public class EtcController {
 		}
 
 		return "/etc_manage/size_regist";
+	}
+	
+	//사이즈 중복확인
+	@PostMapping("/checkProductSize.do")
+	@ResponseBody
+	public int checkProductSize(ProductSizeVO vo) {
+System.out.println("SSSSIIIIIIZZZZZEEEEE");
+System.out.println(vo);
+		int result = etcService.checkProductSize(vo);
+		return result;
 	}
 	
 	//사이즈 등록
@@ -628,10 +643,9 @@ public class EtcController {
 	            	tempMap.put("SIDO_NM", csvList.get(i).get(0));
 	            	tempMap.put("SIGUNGU_NM", csvList.get(i).get(1));
 	            	tempMap.put("EUBMYEONDONG_NM", csvList.get(i).get(2));
-            		tempMap.put("ton", csvList.get(1).get(j));
+            		tempMap.put("ton", csvList.get(0).get(j));
             		tempMap.put("fee", csvList.get(i).get(j));
-            		System.out.println(tempMap);
-            		System.out.println("tempMap!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
             		insertFeeList.add(tempMap);
             	}
 
@@ -652,13 +666,13 @@ public class EtcController {
         }
         System.out.println(insertFeeList);
 
-//        int addFeeResult = etcService.addWarehouseFee(insertFeeList);
-//        
-//        if(addFeeResult < 1){
-//        	result = 3;
-//        } else if(addWarehouseResult != 1){
-//        	result = 2;
-//        }
+        int addFeeResult = etcService.addWarehouseFee(insertFeeList);
+        
+        if(addFeeResult < 1){
+        	result = 3;
+        } else if(addWarehouseResult != 1){
+        	result = 2;
+        }
         
 		return result;
 	}
@@ -704,9 +718,9 @@ public class EtcController {
 	            	tempMap.put("SIDO_NM", csvList.get(i).get(0));
 	            	tempMap.put("SIGUNGU_NM", csvList.get(i).get(1));
 	            	tempMap.put("EUBMYEONDONG_NM", csvList.get(i).get(2));
-            		tempMap.put("ton", csvList.get(1).get(j));
+            		tempMap.put("ton", csvList.get(0).get(j).replace("톤",""));
             		tempMap.put("fee", csvList.get(i).get(j));
-
+System.out.println(tempMap);
             		insertFeeList.add(tempMap);
             	}
 
@@ -726,15 +740,15 @@ public class EtcController {
             }
         }
 
-        //addFeeResult = etcService.addWarehouseFee(insertFeeList);
+        addFeeResult = etcService.addWarehouseFee(insertFeeList);
         
 		}
         
-//        if(addFeeResult < 2){
-//        	result = 3;
-//        } else if(updateWarehouseResult != 1){
-//        	result = 2;
-//        }
+        if(addFeeResult < 2){
+        	result = 3;
+        } else if(updateWarehouseResult != 1){
+        	result = 2;
+        }
         
 		return result;
 	}

@@ -148,11 +148,16 @@ public interface EtcService {
 
 	Map<String, Object> memberInfoDeposit(String keyword);
 
+	int checkProductThickness(ProductThicknessVO vo);
+
+	int checkProductSize(ProductSizeVO vo);
+
 	/**
 	 * </h3>JSON DATA를 파싱한다.</h3>
 	 * @param jsonData
 	 * @return
 	 */
 	List<CreditVO> parseJson(String jsonData);
+
 
 }

@@ -58,7 +58,7 @@
 						<a href="230_warehouse_manage.html">입고관리 </a>
 						<ul class="uk-nav-sub" hidden="">
 							<li  class="uk-open"><a onclick="location.href='manageOrder.do'">- 오더하기</a></li>
-							<li><a href="#">- 오더내역</a></li>
+							<li><a onclick="location.href='orderlist.do'">- 오더내역</a></li>
 							<li><a href="#">- 선적현황</a></li>
 							<li><a href="#">- 통관현황</a></li>
 							<li><a href="#">- CY현황</a></li>
@@ -110,12 +110,11 @@
 						<dl class="row col-6">
 							<dt>제조사</dt>
 							<dd>
-
 								<select name="maker" id="maker" class="wd190p">
 									<option value="">--선택--</option>
 									<c:forEach items="${makerList}" var="makerList" varStatus="status">
 									<c:forTokens items = "${makerList.maker}" delims = "," var = "name">
-         								<option value="${name}" > ${name} (${makerList.companyNm})</option>
+         								<option value="${makerList.id}" > ${name} (${makerList.companyNm})</option>
       								</c:forTokens>
 									</c:forEach>									
 								</select>
@@ -128,7 +127,6 @@
 									<c:forEach items="${warehouse}" var="warehouse" varStatus="status">
 									<option value="${warehouse.warehouseIdx}" > ${warehouse.warehouse}</option>
 									</c:forEach>
-
 								</select>
 							</dd>
 							<dt></dt>
@@ -168,7 +166,7 @@
 					</article>
 
 					<div class="dl-buttons mt30">
-						<button class="btn bg_color2 small wd120p" >추가</button>
+						<button class="btn bg_color2 small wd120p" onClick= addSubOrder()>추가</button>
 						<button class="btn bg_color1 small wd120p" onclick = addOrder()>등록</button>
 					</div>
 				</div>
@@ -179,7 +177,7 @@
 					<div class="bbs">
 						<h3 class="normal">주문리스트</h3>
 						<div class="d-flex right gap10 mb16">
-							<button class="btn bg_color4 small">선택삭제</button>
+							<button class="btn bg_color4 small" onclick=deleteRow()>선택삭제</button>
 						</div>
 						<table class="b-list">
 							<caption></caption>
@@ -206,73 +204,12 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
-
-								<td><input type="radio" name="" id=""></td>
-									<td>2022-03-21</td>
-									<td>QD - PT</td>
-									<td>HH</td>
-									<td>인천창고</td>
-									<td>
-										<div class="tb-prd-info center wd190p">
-											<span class="wd12">KS</span>
-											<span class="color-violet wd15">30T</span>
-											<span class="color-green">M(1,000 * 1,200)</span>
-										</div>
-									</td>
-									<td>2파렛 5장</td>
-									<td>1CTN</td>
-								</tr>
-								<tr>
-									<td><input type="radio" name="" id=""></td>
-									<td>2022-03-21</td>
-									<td>QD - PT</td>
-									<td>HH</td>
-									<td>인천창고</td>
-									<td>
-										<div class="tb-prd-info center wd190p">
-											<span class="wd12">KS</span>
-											<span class="color-violet wd15">30T</span>
-											<span class="color-green">M(1,000 * 1,200)</span>
-										</div>
-									</td>
-									<td>2파렛 5장</td>
-									<td>1CTN</td>
-								</tr>
-								<tr>
-									<td><input type="radio" name="" id=""></td>
-									<td rowspan="2">2022-03-21</td>
-									<td rowspan="2">QD - PT</td>
-									<td rowspan="2">HH</td>
-									<td rowspan="2" class="line">직송</td>
-									<td>
-										<div class="tb-prd-info center wd190p">
-											<span class="wd12">KS</span>
-											<span class="color-violet wd15">30T</span>
-											<span class="color-green">M(1,000 * 1,200)</span>
-										</div>
-									</td>
-									<td>2파렛 5장</td>
-									<td>1CTN</td>
-								</tr>
-								<tr>
-									<td><input type="radio" name="" id=""></td>
-									<td>
-										<div class="tb-prd-info center wd190p">
-											<span class="wd12">KS</span>
-											<span class="color-violet wd15">30T</span>
-											<span class="color-green">M(1,000 * 1,200)</span>
-										</div>
-									</td>
-									<td>2파렛 5장</td>
-									<td>1CTN</td>
-								</tr>
 							</tbody>
 						</table>
 					</div>
 
 					<div class="dl-buttons mt50">
-						<button class="btn bg_color1 small wd120p">주문</button>
+						<button class="btn bg_color1 small wd120p" onClick=moveOrderPage()>주문</button>
 					</div>
 				</div>
 
