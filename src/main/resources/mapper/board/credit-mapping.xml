@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- mapper DTD 선언 -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.springbook.etc.creditmng.mapper.CreditMngMapper">
+
+
+	<!--여신관리 개수조회-->
+	<select id="creditListCount" resultType="int" parameterType="Map">
+		SELECT 
+		COUNT(*)
+		FROM
+		DEPOSIT_HISTORY
+		<if test= "keyword != null and !keyword.equals('')">
+    	WHERE COMPANY_NM LIKE CONCAT("%",#{keyword},"%")
+   		</if>
+   		<if test= "keyword != null and !keyword.equals('') and !keyword.equals('') and startDt != null and !startDt.equals('') and endDt != null and !endDt.equals('')">
+    	AND DATE(DEP_DATE) BETWEEN #{startDt} AND #{endDt}
+   		</if>
+   		<if test= "keyword != null and keyword.equals('') and startDt != null and endDt != null">
+    	WHERE DATE(DEP_DATE) BETWEEN #{startDt} AND #{endDt}
+   		</if>
+	</select>
+
+	<!--여신관리 페이징포함 조회 -->
+ 	<select id="getCreditList" resultType="Map" parameterType="Map">
+		SELECT T.SEQ,T.DEP_DATE,T.ID, DEP, T.COMPANY_NM, T.CREDIT_AMOUNT,T.IDX,
+		    SUM(T.DEP) OVER(PARTITION BY T.ID ORDER BY T.SEQ) AS TOTAL_DEP,
+		    SUM(T.OD) OVER(PARTITION BY T.ID ORDER BY T.SEQ) AS TOTAL_ORDER
+		FROM(
+		    SELECT 
+		        ROW_NUMBER() OVER() AS SEQ,
+		 member.CREDIT_AMOUNT, member.COMPANY_NM , member.ID,
+		       HISTORY.DEP_MOUNT AS DEP, HISTORY.DEP_DATE, HISTORY.IDX,
+		       HISTORY.ORDER_MOUNT AS OD
+					FROM
+				DEPOSIT_HISTORY HISTORY
+				INNER JOIN MEMBER MEMBER ON MEMBER.ID = HISTORY.MEMBER_ID
+		<if test= "keyword != null and !keyword.equals('')">
+    	WHERE MEMBER.COMPANY_NM LIKE CONCAT("%",#{keyword},"%")
+   		</if>
+   		<if test= "keyword != null and !keyword.equals('') and startDt != null and !startDt.equals('') and endDt != null and !endDt.equals('')">
+    	AND DATE(DEP_DATE) BETWEEN #{startDt} AND #{endDt}
+   		</if>
+   		<if test= "keyword != null and keyword.equals('') and startDt != null and endDt != null">
+    	WHERE DATE(DEP_DATE) BETWEEN #{startDt} AND #{endDt}
+   		</if>				
+		    GROUP BY HISTORY.IDX,MEMBER.ID
+			ORDER BY HISTORY.DEP_DATE DESC
+		) T
+		ORDER BY T.DEP_DATE DESC
+		LIMIT #{i}, #{contentnum}
+
+	</select>
+
+</mapper>

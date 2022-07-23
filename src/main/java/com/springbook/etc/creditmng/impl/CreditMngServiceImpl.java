@@ -34,9 +34,7 @@ public class CreditMngServiceImpl implements CreditMngService {
 	@Override
 	public List<CreditExcelDTO> parseJson(String jsonData) throws JsonMappingException, JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper();
-		List<CreditExcelDTO> resultList = mapper.readValue(
-				jsonData, new TypeReference<ArrayList<CreditExcelDTO>>(){});
-		return resultList;
+		return mapper.readValue(jsonData, new TypeReference<ArrayList<CreditExcelDTO>>(){});
 	}
 
 	@Override

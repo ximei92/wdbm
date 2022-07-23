@@ -18,23 +18,6 @@ function isChecked() {
  */
 function getSelectedList(){
 	const resultList = [];
-	$("input:checkbox[name=chk]").each(function(index) {
-		if ($(this).is(":checked") == true) {
-			var siblings = $(this).parent().siblings();
-			var tempList = [];
-			for (var i = 0; i < siblings.length; i++) {
-				tempList.push($$td.eq(i).text());
-			}
-			resultList.push(tempList);
-		}
-	});
-	
-	return resultList;
-}
-
-
-function getSelectedList2(){
-	const resultList = [];
 	$("input:checkbox[name=chk]:checked").each(function(index) {
 			const $td = $(this).parent().siblings();
 			
@@ -66,36 +49,23 @@ function getSelectedList2(){
 }
 
 
-
 /**
  * 엑셀 다운로드 함수
  */
 function downloadExcel() {
 	if (isChecked()) {
-		const selectedList = getSelectedList2();
+		const selectedList = getSelectedList();
 		
 		const jsonData = JSON.stringify(selectedList);
 		console.log("jsonData=",jsonData);
 		$('#jsonData').val(jsonData);
 		
-		/*const sendUrl = "/credit/excel/";
+		const sendUrl = "/credit/excel/";
 		const f = document.forms['excel-down-form'];
 		f.setAttribute('method','post');
 		f.setAttribute('action',sendUrl);	
 		f.submit();
-		*/
-		$.ajax({
-			type : "POST",
-			url : "/credit/excel",
-			contentType : "application/json; charset=utf-8",
-			data : jsonData,
-			success : function(data) {
-				alert('다운로드 완료!'); 
-			},
-			error : function() {
-				alert("에러가 발생했습니다.");
-			}
-		});
+
 	} else {
 		alert("다운로드할 내역을 선택해주세요");
 	}
