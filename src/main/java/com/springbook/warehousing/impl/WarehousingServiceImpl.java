@@ -108,6 +108,12 @@ public class WarehousingServiceImpl implements WarehousingService {
 		return warehousingMapper.getProductCdInfo(map);
 	}
 
+	@Override
+	public int cancelOrderCtn(String orderIdx) {
+		// TODO Auto-generated method stub
+		return warehousingMapper.cancelOrderCtn(orderIdx);
+	}
+
 
 	
 }

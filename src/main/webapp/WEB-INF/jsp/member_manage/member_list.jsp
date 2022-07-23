@@ -42,7 +42,7 @@
 			<!-- s:aside -->
 			<nav id="aside">
 				<ul class="uk-nav-default uk-nav-parent-icon uk-nav member" uk-nav="">
-					<li><a href="210_dashboard.html">대시보드</a></li>
+					<li><a onclick="location.href='goDashboard.do'">대시보드</a></li>
 					<li class="uk-parent">
 						<a href="220_order_manage.html">주문관리 </a>
 						<ul class="uk-nav-sub" hidden="">
@@ -56,8 +56,8 @@
 						<ul class="uk-nav-sub" hidden="">
 							<li><a onclick="location.href='manageOrder.do'">- 오더하기</a></li>
 							<li><a onclick="location.href='orderlist.do'">- 오더내역</a></li>
-							<li><a href="#">- 선적현황</a></li>
-							<li><a href="#">- 통관현황</a></li>
+							<li><a onclick="location.href=goShipmentStatus.do'">- 선적현황</a></li>
+							<li><a onclick="location.href=goCustomsStatus.do'">- 통관현황</a></li>
 							<li><a href="#">- CY현황</a></li>
 							<li><a href="#">- 입고현황</a></li>
 							<li><a href="#">- 컨테이너 반납현황</a></li>

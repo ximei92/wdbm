@@ -44,7 +44,7 @@
 			<!-- s:aside -->
 			<nav id="aside">
 				<ul class="uk-nav-default uk-nav-parent-icon uk-nav member" uk-nav="">
-					<li><a href="210_dashboard.html">대시보드</a></li>
+					<li><a onclick="location.href='goDashboard.do'">대시보드</a></li>
 					<li class="uk-parent">
 						<a href="220_order_manage.html">주문관리 </a>
 						<ul class="uk-nav-sub" hidden="">
@@ -57,10 +57,10 @@
 					<li class="uk-parent uk-open">
 						<a href="230_warehouse_manage.html">입고관리 </a>
 						<ul class="uk-nav-sub" hidden="">
-							<li  class="uk-open"><a onclick="location.href='manageOrder.do'">- 오더하기</a></li>
+							<li><a onclick="location.href='manageOrder.do'">- 오더하기</a></li>
 							<li class="uk-open"><a onclick="location.href='orderlist.do'">- 오더내역</a></li>
-							<li><a href="#">- 선적현황</a></li>
-							<li><a href="#">- 통관현황</a></li>
+							<li><a onclick="location.href=goShipmentStatus.do'">- 선적현황</a></li>
+							<li><a onclick="location.href=goCustomsStatus.do'">- 통관현황</a></li>
 							<li><a href="#">- CY현황</a></li>
 							<li><a href="#">- 입고현황</a></li>
 							<li><a href="#">- 컨테이너 반납현황</a></li>
@@ -155,7 +155,7 @@
                     <div class="bbs">
                         <h3 class="normal">주문리스트</h3>
                         <div class="d-flex right gap10 mb16">
-                            <button class="btn bg_color4 small">발주취소</button>
+                            <button class="btn bg_color4 small" onclick=cancelOrder()>발주취소</button>
                             <button class="btn bg_color1 small ico edit" id="editButton"
                                 onclick=editOrder()>발주변경</button>
                         </div>

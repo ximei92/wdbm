@@ -202,4 +202,12 @@
 		PRODUCT.DEL_YN = 'N' AND PRODUCT.PRODUCT_IDX = #{productIdx} AND SIZE.SIZE_IDX = #{size} AND THICKNESS.THICKNESS_IDX = #{thickness}
 	</select>
 
+	<!--오더하기 발주취고 -->
+	<update id="cancelOrderCtn" parameterType="java.lang.String">
+		UPDATE MANAGE_ORDER_PRODUCT
+		SET del_yn = 'Y',
+			mod_date = now()
+    	WHERE MANAGE_ORDER_PRODUCT_IDX = #{orderIdx}
+	</update>
+	
 </mapper>
