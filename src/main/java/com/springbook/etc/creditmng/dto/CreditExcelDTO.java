@@ -40,11 +40,11 @@ public class CreditExcelDTO implements ExcelDTO {
 	private String totalDepAmt; // 총 입금액
 	
 	@ExcelColumn(headerName = "주문 가능 금액", columnWidth = 3000)
-	private String orderAvailableAmt; // 주문가능금액
+	private String availableAmt; // 주문가능금액
 
 	@Override
 	public List<String> mapToList() {
-		return Arrays.asList(depDate, companyNm, depAmt, creditSetAmt, totalOrderAmt, totalDepAmt, orderAvailableAmt);
+		return Arrays.asList(depDate, companyNm, depAmt, creditSetAmt, totalOrderAmt, totalDepAmt, availableAmt);
 	}
 
 }
