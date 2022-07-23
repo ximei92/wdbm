@@ -158,8 +158,7 @@
 							</tbody>
 						</table>
 						<!-- excel-down form -->
-						<form id="excel-down-form">
-							<input id="jsonData" name="jsonData" type="hidden" value="">
+						<form id="excel-down-form"id="jsonData" name="jsonData" type="hidden" value="">
 						</form>
 
 						<!-- pager -->
