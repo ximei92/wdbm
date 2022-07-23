@@ -45,6 +45,8 @@ public interface WarehousingMapper {
 
 	int updateOrderCtn(Map<String, String> map);
 
+	int cancelOrderCtn(String orderIdx);
+
 	Map<String, Object> getProductCdInfo(Map<String, Object> map);
 
 

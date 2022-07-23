@@ -38,6 +38,8 @@ public interface WarehousingService {
 
 	Map<String, Object> getProductCdInfo(Map<String, Object> map);
 
+	int cancelOrderCtn(String orderIdx);
+
 	
 
 }
