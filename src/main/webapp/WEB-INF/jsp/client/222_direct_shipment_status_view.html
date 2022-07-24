@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>WORLD 물류관리 시스템</title>
+	<link rel="stylesheet" href="../css/base.css">
+	<script src="../js/jquery-1.9.1.min.js"></script>
+	<script src="../js/uikit.min.js"></script>
+	<script src="../js/layout.js"></script>
+	<script defer src="../js/script.js"></script>
+</head>
+
+<body>
+	<div id="wrap">
+		<!-- header -->
+		<header id="header">
+			<h1>
+				<a href="#">
+					<img src="../images/logo.png" alt="월드비엠 물류관리 시스템">
+					<span>WORLD 물류관리 시스템</span>
+				</a>
+			</h1>
+			<div class="profile-wrap">
+				<div class="info">
+					<a href="#">홍길동</a>
+					<p>회사명</p>
+				</div>
+				<a href="#" class="logout">로그아웃</a>
+				<div class="d-flex">
+					<button class="mem-edit" onclick="location.href='003_privacy_info.html'">개인정보</button>
+					<button class="alarm-list">알림 목록</button>
+				</div>
+			</div>
+			<!-- s:aside -->
+			<nav id="aside">
+				<ul class="uk-nav-default uk-nav-parent-icon uk-nav member" uk-nav="">
+					<li><a href="210_dashboard.html">대시보드</a></li>
+					<li class="uk-parent uk-open">
+						<a href="220_order_manage.html">주문관리 </a>
+						<ul class="uk-nav-sub" hidden="">
+							<li><a href="220_order_manage.html">- 재고조회</a></li>
+							<li><a href="221_order_status.html">- 주문현황</a></li>
+							<li class="uk-open"><a href="222_direct_shipment_status.html">- 직송현황</a></li>
+							<li><a href="223_reservation_history.html">- 예약내역</a></li>
+						</ul>
+					</li>
+					<li class="uk-parent">
+						<a href="230_warehouse_manage.html">입고관리 </a>
+						<ul class="uk-nav-sub" hidden="">
+							<li><a href="#">- 오더하기</a></li>
+							<li><a href="#">- 오더내역</a></li>
+							<li><a href="#">- 선적현황</a></li>
+							<li><a href="#">- 통관현황</a></li>
+							<li><a href="#">- CY현황</a></li>
+							<li><a href="#">- 입고현황</a></li>
+							<li><a href="#">- 컨테이너 반납현황</a></li>
+						</ul>
+					</li>
+					<li class="uk-parent">
+						<a href="240_etc_manage.html">기타관리</a>
+						<ul class="uk-nav-sub" hidden="">
+							<li><a href="240_etc_manage.html">- 준공서류 관리</a></li>
+							<li><a href="241_all_warehouse.html">- 전체 출/입고 현황</a></li>
+							<li><a href="247_warehouse_manage.html">- 창고관리</a></li>
+							<li><a href="242_inventory_manage.html">- 창고별 재고관리</a></li>
+							<li><a href="243_inventory_status.html">- 창고별 재고현황</a></li>
+							<li><a href="244_increased_safety.html">- 안전 재고 관리</a></li>
+							<li><a href="245_product_regist.html">- 제품 등록 관리</a></li>
+							<li><a href="246_credit_manage.html">- 여신 관리</a></li>
+							<li><a href="247_new_sub_inquiry.html">- 신규가입문의</a></li>
+						</ul>
+					</li>
+					<li><a href="250_member_manage.html">회원관리 </a></li>
+				</ul>
+			</nav>
+			<!-- e:aside -->
+		</header>
+
+		<!-- s:container -->
+		<div id="container">
+			<h2 class="normal">직송현황</h2>
+			<div id="content">
+				<!-- search box -->
+				<div class="cont-box pt19">
+					<div class="h3-title blue">
+						<h3 class="normal"><i class="s-order"></i>상세보기</h3>
+					</div>
+
+					<!-- 발주 정보 -->
+					<div class="rows dl-box">
+						<h4 class="dl-box-h4">발주 정보</h4>
+						<article class="inner-p wd90">
+							<dl class="row col-2">
+								<dt>거래처명</dt>
+								<dd>㈜ 에코포라인</dd>
+							</dl>
+							<dl class="row col-2">
+								<dt>납기일</dt>
+								<dd> <input type="date" class="wd140p disable"> </dd>
+							</dl>
+							<dl class="row col-2">
+								<dt>시간</dt>
+								<dd>
+									<select title="" class="wd100p disable">
+										<option value="">오전 </option>
+									</select>
+									<input type="text" class="wd50p disable">
+									<span>시</span>
+									<input type="text" class="wd50p disable">
+									<span>분</span>
+								</dd>
+							</dl>
+							<dl class="row col-2">
+								<dt class="al-start">주소</dt>
+								<dd>
+									<input type="text" class="wd270p disable">
+									<input type="text" class="wd270p disable">
+								</dd>
+							</dl>
+							<dl class="row col-2">
+								<dt>현장 전화번호</dt>
+								<dd> <input type="text" class="wd210p disable"> </dd>
+							</dl>
+							<dl class="row col-2">
+								<dt class="al-start">제품</dt>
+								<dd>
+									<div class="bbs pd0 wd800p">
+										<table class="tb-inner">
+											<colgroup>
+												<col>
+												<col>
+												<col class="wd30">
+												<col>
+												<col>
+												<col>
+											</colgroup>
+											<thead>
+												<tr>
+													<th>법인</th>
+													<th>제품코드</th>
+													<th>제품정보</th>
+													<th>수량(장) / ㎡</th>
+													<th>파렛/장</th>
+													<th>제품금액(원)</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>WW</td>
+													<td>30S-1</td>
+													<td>
+														<div class="tb-prd-info center">
+															<span class="color-violet wd15">300T</span>
+															<span class="color-green">M(1,000 * 1,200)</span>
+														</div>
+													</td>
+													<td>356 / 527.04</td>
+													<td>5파렛 5장</td>
+													<td class="txt-right">1,000,000</td>
+												</tr>
+												<tr>
+													<td>WW</td>
+													<td>30S-1</td>
+													<td>
+														<div class="tb-prd-info center">
+															<span class="color-violet wd15">300T</span>
+															<span class="color-green">M(1,000 * 1,200)</span>
+														</div>
+													</td>
+													<td>356 / 527.04</td>
+													<td rowspan="2">5파렛 5장</td>
+													<td rowspan="2" class="txt-right">1,000,000</td>
+												</tr>
+												<tr>
+													<td>WW</td>
+													<td>30S-1</td>
+													<td>
+														<div class="tb-prd-info center">
+															<span class="color-violet wd15">300T</span>
+															<span class="color-green">M(1,000 * 1,200)</span>
+														</div>
+													</td>
+													<td>356 / 527.04</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</dd>
+							</dl>
+							<dl class="row col-2">
+								<dt>발주금액</dt>
+								<dd>
+									<input type="text" class="wd200p txt-right disable" value="100,000,000">
+									<span>원</span>
+								</dd>
+							</dl>
+							<dl class="row col-2">
+								<dt>차량정보 </dt>
+								<dd> <input type="text" class="wd410p disable"> </dd>
+							</dl>
+							<dl class="row col-2">
+								<dt>실운임</dt>
+								<dd>
+									<input type="text" class="wd200p txt-right disable" value="100,000,000">
+									<span>원</span>
+								</dd>
+							</dl>
+							<dl class="row col-2">
+								<dt>확정운반비</dt>
+								<dd>
+									<input type="text" class="wd200p txt-right" value="100,000,000">
+									<span>원</span>
+								</dd>
+							</dl>
+
+							<dl class="row col-2">
+								<dt class="al-start">메모</dt>
+								<dd>
+									<textarea name="" id="" placeholder="예) 5톤축차 진입불가" class="wd380p"></textarea>
+								</dd>
+							</dl>
+							<dl class="row col-2">
+								<dt>발주서</dt>
+								<dd>
+									<input type="text" class="wd270p disable">
+									<button class="btn bg_color2 small ico down">다운로드</button>
+								</dd>
+							</dl>
+							<dl class="row col-2">
+								<dt>인수증</dt>
+								<dd>
+									<input type="text" class="wd270p disable">
+									<button class="btn bg_color2 small ico down">다운로드</button>
+								</dd>
+							</dl>
+						</article>
+					</div>
+
+
+
+					<div class="dl-buttons">
+						<button class="btn bg_color3 small wd120p">취소</button>
+						<button class="btn bg_color1 small wd120p">저장</button>
+					</div>
+				</div>
+
+			</div>
+		</div>
+		<!-- s:container -->
+	</div>
+</body>
+
+</html>

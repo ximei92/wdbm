@@ -637,6 +637,7 @@
 		size, 
 		stock,
 		reason,
+		gubun,
 		reg_date
 		)
 		VALUES
@@ -647,6 +648,7 @@
 		#{size},
 		#{stock}, 
 		#{reason},
+		'1',
 		now()		
 		)
 	</insert>
@@ -801,6 +803,7 @@
 		INNER JOIN PRODUCT C ON C.PRODUCT_IDX = A.PRODUCT_IDX
 		INNER JOIN PRODUCT_SIZE D ON D.SIZE_IDX = A.SIZE
 		INNER JOIN WAREHOUSE E ON E.WAREHOUSE_IDX = A.WAREHOUSE_IDX
+		WHERE A.GUBUN = '1'
 	</select>
 
 	<!--창고별재관리 조건별 개수 -->
@@ -813,14 +816,12 @@
 		INNER JOIN PRODUCT C ON C.PRODUCT_IDX = A.PRODUCT_IDX
 		INNER JOIN PRODUCT_SIZE D ON D.SIZE_IDX = A.SIZE
 		INNER JOIN WAREHOUSE E ON E.WAREHOUSE_IDX = A.WAREHOUSE_IDX
-		<if test= " !'null0'.equals(productIdx) or !'null0'.equals(warehouseIdx)">
-		WHERE
-		</if>
+		WHERE A.GUBUN = '1'
 		<if test= "!'null0'.equals(productIdx)">
-		C.PRODUCT_IDX= #{productIdx}
+		AND C.PRODUCT_IDX= #{productIdx}
 		</if>
 		<if test= "'null0'.equals(productIdx) and !'null0'.equals(warehouseIdx)">
-		E.WAREHOUSE_IDX = #{warehouseIdx}
+		AND E.WAREHOUSE_IDX = #{warehouseIdx}
 		</if>
 		<if test= " !'null0'.equals(productIdx) and !'null0'.equals(warehouseIdx)">
 		AND E.WAREHOUSE_IDX = #{warehouseIdx}
@@ -843,14 +844,12 @@
 		INNER JOIN PRODUCT C ON C.PRODUCT_IDX = A.PRODUCT_IDX
 		INNER JOIN PRODUCT_SIZE D ON D.SIZE_IDX = A.SIZE
 		INNER JOIN WAREHOUSE E ON E.WAREHOUSE_IDX = A.WAREHOUSE_IDX
-		<if test= " !'null0'.equals(productIdx) or !'null0'.equals(warehouseIdx)">
-		WHERE
-		</if>
+		WHERE A.GUBUN = '1'
 		<if test= "!'null0'.equals(productIdx)">
-		C.PRODUCT_IDX = #{productIdx}
+		AND C.PRODUCT_IDX = #{productIdx}
 		</if>
 		<if test= "'null0'.equals(productIdx) and !'null0'.equals(warehouseIdx)">
-		E.WAREHOUSE_IDX = #{warehouseIdx}
+		AND E.WAREHOUSE_IDX = #{warehouseIdx}
 		</if>
 		<if test= " !'null0'.equals(productIdx) and !'null0'.equals(warehouseIdx)">
 		AND E.WAREHOUSE_IDX = #{warehouseIdx}
@@ -914,6 +913,7 @@
 		INNER JOIN PRODUCT C ON C.PRODUCT_IDX = A.PRODUCT_IDX
 		INNER JOIN PRODUCT_SIZE D ON D.SIZE_IDX = A.SIZE
 		INNER JOIN WAREHOUSE E ON E.WAREHOUSE_IDX = A.WAREHOUSE_IDX
+		WHERE A.GUBUN = '1'		
 		ORDER BY A.REG_DATE DESC
 		LIMIT #{i}, #{contentnum}
 	</select>	

@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- mapper DTD 선언 -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.springbook.client.mapper.ClientMapper">
+	<select id="getWarehouse" resultType="com.springbook.client.vo.ClientVO">
+		SELECT	WAREHOUSE_IDX
+			, 	warehouse 
+			,	FILE_ID
+		  FROM 	warehouse
+		 WHERE 	DEL_YN = 'N'
+		 ORDER BY WAREHOUSE_IDX ASC
+	</select>	
+	
+	<select id="getWarehouseNm" parameterType="String" resultType="String">
+		SELECT	WAREHOUSE
+		  FROM 	warehouse
+		 WHERE 	DEL_YN = 'N'
+		   AND	WAREHOUSE_IDX = #{warehouseIdx}
+		 ORDER BY WAREHOUSE_IDX ASC
+	</select>
+	
+	<select id="getStock" parameterType="com.springbook.client.vo.ClientVO" resultType="int">
+		SELECT	SUM(STOCK) AS STOCK
+		  FROM	warehouse_inventory
+		 WHERE	1=1
+		   AND	WAREHOUSE_IDX = #{warehouseIdx}
+		   AND	PRODUCT_IDX = #{productIdx}
+		   AND	THICKNESS = #{thickness}
+		   AND	SIZE = #{size}
+		 GROUP BY	WAREHOUSE_IDX, PRODUCT_IDX, THICKNESS, SIZE
+	</select>
+	
+	<select id="getProductThicknessNm" parameterType="String" resultType="String">
+		SELECT	THICKNESS
+		  FROM	product_thickness
+		 WHERE	THICKNESS_IDX = #{thicknessIdx}
+	</select>
+	
+	<select id="getProductSizeNm" parameterType="String" resultType="String">
+		SELECT	SIZE
+		  FROM	product_size
+		 WHERE	SIZE_IDX = #{sizeIdx}
+	</select>	    
+   	
+   	<select id="getProductSizeH" parameterType="String" resultType="double">
+		SELECT	HEIGHT*WIDTH/1000000
+		  FROM	product_size
+		 WHERE	SIZE_IDX = #{sizeIdx}
+	</select>
+   	<select id="getTon" parameterType="com.springbook.client.vo.ClientVO" resultType="String">
+		<![CDATA[
+		SELECT 	TON
+		  FROM	product_load_qt
+		 WHERE	1=1
+		   AND	PRODUCT_NM = #{productNm}
+		   AND	MIN < #{PQT}
+		   AND	MAX >= #{PQT}
+		]]>
+	</select>
+	
+	<select id="getFeeCnt" parameterType="com.springbook.client.vo.ClientVO" resultType="int">
+		<![CDATA[
+		SELECT	COUNT(*) AS CNT 
+		  FROM 	warehouse_fee
+		 WHERE	1=1
+		   AND	WAREHOUSE_IDX = #{warehouseIdx}
+		   AND	SIDO_NM = #{sidoNm}
+		   AND	IFNULL(SIGUNGU_NM,'') = #{sigunguNm}
+		   AND	IFNULL(EUBMYEONDONG_NM,'') = #{eubmyeondongNm}
+		   AND	TON = #{ton}
+		]]>
+	</select>
+	
+	<select id="getFee" parameterType="com.springbook.client.vo.ClientVO" resultType="String">
+		<![CDATA[
+		SELECT	FEE+1 as FEE 
+		  FROM 	warehouse_fee
+		 WHERE	1=1
+		   AND	WAREHOUSE_IDX = #{warehouseIdx}
+		   AND	SIDO_NM = #{sidoNm}
+		   AND	IFNULL(SIGUNGU_NM,'') = #{sigunguNm}
+		   AND	IFNULL(EUBMYEONDONG_NM,'') = #{eubmyeondongNm}
+		   AND	TON = #{ton}
+		]]>
+	</select>
+	
+	<select id="getSearchResult2" parameterType="com.springbook.client.vo.ClientVO" resultType="com.springbook.client.vo.ClientVO">
+		<![CDATA[
+		SELECT	WAREHOUSE_IDX, WAREHOUSE_NM, PRODUCT_IDX, PRODUCT_NM, THICKNESS_IDX, THICKNESS, THICKNESS_CUSTOM_ORDER
+			,	SIZE_IDX, SIZE, WIDTH, HEIGHT, FORMAT((WIDTH*HEIGHT*ORDER_QT/1000000),2) AS HB
+			, 	SIZE_CUSTOM_ORDER, ORDER_QT, STOCK
+			,	IF(THICKNESS_CUSTOM_ORDER = 'N' AND SIZE_CUSTOM_ORDER = 'N', IF(ORDER_QT <= STOCK, 'Y','N'),'N') AS ORDER_YN
+			,	(SELECT TON FROM product_load_qt WHERE PRODUCT_NM = CONCAT(TS.THICKNESS2,TS.SIZE) AND MIN < TS.ORDER_QT AND MAX >= TS.ORDER_QT) AS TON
+		  FROM	(    
+				SELECT	T.WAREHOUSE_IDX
+					,	(SELECT	WAREHOUSE FROM warehouse WHERE DEL_YN = 'N' AND WAREHOUSE_IDX = T.WAREHOUSE_IDX) AS WAREHOUSE_NM
+					, 	T.PRODUCT_IDX
+					,	(SELECT	PRODUCT_NM FROM product WHERE DEL_YN = 'N' AND PRODUCT_IDX = T.PRODUCT_IDX) AS PRODUCT_NM
+					, 	T.THICKNESS_IDX
+					,	(SELECT	concat(THICKNESS,'T') FROM product_thickness WHERE DEL_YN = 'N' AND THICKNESS_IDX = T.THICKNESS_IDX) AS THICKNESS
+					,	(SELECT	THICKNESS FROM product_thickness WHERE DEL_YN = 'N' AND THICKNESS_IDX = T.THICKNESS_IDX) AS THICKNESS2
+					,	(SELECT	CUSTOM_ORDER FROM product_thickness WHERE DEL_YN = 'N' AND THICKNESS_IDX = T.THICKNESS_IDX) AS THICKNESS_CUSTOM_ORDER
+					, 	T.SIZE_IDX
+					,	(SELECT	SIZE FROM product_size WHERE DEL_YN = 'N' AND SIZE_IDX = T.SIZE_IDX) AS SIZE
+					,	(SELECT	WIDTH FROM product_size WHERE DEL_YN = 'N' AND SIZE_IDX = T.SIZE_IDX) AS WIDTH
+					,	(SELECT	HEIGHT FROM product_size WHERE DEL_YN = 'N' AND SIZE_IDX = T.SIZE_IDX) AS HEIGHT
+					,	(SELECT	CUSTOM_ORDER FROM product_size WHERE DEL_YN = 'N' AND SIZE_IDX = T.SIZE_IDX) AS SIZE_CUSTOM_ORDER
+					, 	T.ORDER_QT
+					, 	IFNULL(S.STOCK,0) AS STOCK
+				  FROM	(
+						${productQuery}
+						) T
+				  LEFT 
+				 OUTER 
+				  JOIN	(
+				  		SELECT	WAREHOUSE_IDX
+						  	, 	PRODUCT_IDX
+							, 	THICKNESS
+							, 	SIZE
+							, 	SUM(STOCK) AS STOCK
+				  		  FROM	warehouse_inventory wi
+				 		 GROUP BY	WAREHOUSE_IDX, PRODUCT_IDX, THICKNESS, SIZE
+				 		) S
+				 	ON	T.WAREHOUSE_IDX = S.WAREHOUSE_IDX
+				   AND	T.PRODUCT_IDX = S.PRODUCT_IDX
+				   AND	T.THICKNESS_IDX = S.THICKNESS
+				   AND	T.SIZE_IDX = S.SIZE
+				) TS
+		]]>
+	</select>
+	
+	<select id="getSearchResult" parameterType="com.springbook.client.vo.ClientVO" resultType="com.springbook.client.vo.ClientVO">
+		<![CDATA[
+		SELECT	TS.WAREHOUSE_IDX, TS.WAREHOUSE_NM, TS.PRODUCT_IDX, TS.PRODUCT_NM, TS.THICKNESS_IDX, TS.THICKNESS
+			,	TS.SIZE_IDX, TS.SIZE, TS.WIDTH, TS.HEIGHT, FORMAT((TS.WIDTH*TS.HEIGHT*TS.ORDER_QT/1000000),2) AS HB
+			, 	TS.ORDER_QT, TS.STOCK, TS.THICKNESS_CUSTOM_ORDER, TS.SIZE_CUSTOM_ORDER
+			,	IF(TS.THICKNESS_CUSTOM_ORDER = 'N' AND TS.SIZE_CUSTOM_ORDER = 'N', IF(TS.ORDER_QT <= TS.STOCK, 'Y','N'),'N') AS ORDER_YN1
+			,	TOD.ORDER_YN AS ORDER_YN2
+			,	(SELECT TON FROM product_load_qt WHERE PRODUCT_NM = CONCAT(TS.THICKNESS2,TS.SIZE) AND MIN < TS.ORDER_QT AND MAX >= TS.ORDER_QT) AS TON
+			,	TD.TODAY15
+			,	IF(TOD.ORDER_YN = 'N', IF( TD.TODAY15 > #{dueDt}, CONCAT(TD.TODAY15,' 이후 납품가능'),'즉시 발주가능'),'즉시 발주가능') AS ORDER_TX
+			,	IF(TOD.ORDER_YN = 'N', IF( TD.TODAY15 > #{dueDt}, 'N','Y'),'Y') AS ORDER_YN3
+			,	TCO.TON2
+			,	TCO.COST_YN
+			,	TCO.ORDER_QT2
+		  FROM	(    
+				SELECT	T.WAREHOUSE_IDX
+					,	(SELECT	WAREHOUSE FROM warehouse WHERE DEL_YN = 'N' AND WAREHOUSE_IDX = T.WAREHOUSE_IDX) AS WAREHOUSE_NM
+					, 	T.PRODUCT_IDX
+					,	(SELECT	PRODUCT_NM FROM product WHERE DEL_YN = 'N' AND PRODUCT_IDX = T.PRODUCT_IDX) AS PRODUCT_NM
+					, 	T.THICKNESS_IDX
+					,	(SELECT	concat(THICKNESS,'T') FROM product_thickness WHERE DEL_YN = 'N' AND THICKNESS_IDX = T.THICKNESS_IDX) AS THICKNESS
+					,	(SELECT	THICKNESS FROM product_thickness WHERE DEL_YN = 'N' AND THICKNESS_IDX = T.THICKNESS_IDX) AS THICKNESS2
+					,	(SELECT	CUSTOM_ORDER FROM product_thickness WHERE DEL_YN = 'N' AND THICKNESS_IDX = T.THICKNESS_IDX) AS THICKNESS_CUSTOM_ORDER
+					, 	T.SIZE_IDX
+					,	(SELECT	SIZE FROM product_size WHERE DEL_YN = 'N' AND SIZE_IDX = T.SIZE_IDX) AS SIZE
+					,	(SELECT	WIDTH FROM product_size WHERE DEL_YN = 'N' AND SIZE_IDX = T.SIZE_IDX) AS WIDTH
+					,	(SELECT	HEIGHT FROM product_size WHERE DEL_YN = 'N' AND SIZE_IDX = T.SIZE_IDX) AS HEIGHT
+					,	(SELECT	CUSTOM_ORDER FROM product_size WHERE DEL_YN = 'N' AND SIZE_IDX = T.SIZE_IDX) AS SIZE_CUSTOM_ORDER
+					, 	T.ORDER_QT
+					, 	IFNULL(S.STOCK,0) AS STOCK
+				  FROM	(
+						${productQuery} 
+						) T
+				  LEFT 
+				 OUTER 
+				  JOIN	(
+				  		SELECT	WAREHOUSE_IDX
+						  	, 	PRODUCT_IDX
+							, 	THICKNESS
+							, 	SIZE
+							, 	SUM(STOCK) AS STOCK
+				  		  FROM	warehouse_inventory wi
+				 		 GROUP BY	WAREHOUSE_IDX, PRODUCT_IDX, THICKNESS, SIZE
+				 		) S
+				 	ON	T.WAREHOUSE_IDX = S.WAREHOUSE_IDX
+				   AND	T.PRODUCT_IDX = S.PRODUCT_IDX
+				   AND	T.THICKNESS_IDX = S.THICKNESS
+				   AND	T.SIZE_IDX = S.SIZE
+				) AS TS
+			,	(
+				SELECT	WAREHOUSE_IDX, MIN(ORDER_YN) AS ORDER_YN
+				  FROM	(
+						SELECT	WAREHOUSE_IDX, THICKNESS_CUSTOM_ORDER
+							, 	SIZE_CUSTOM_ORDER, ORDER_QT, STOCK
+							,	IF(THICKNESS_CUSTOM_ORDER = 'N' AND SIZE_CUSTOM_ORDER = 'N', IF(ORDER_QT <= STOCK, 'Y','N'),'N') AS ORDER_YN
+						  FROM	(    
+								SELECT	T.WAREHOUSE_IDX
+									,	(SELECT	CUSTOM_ORDER FROM product_thickness WHERE DEL_YN = 'N' AND THICKNESS_IDX = T.THICKNESS_IDX) AS THICKNESS_CUSTOM_ORDER
+									, 	T.SIZE_IDX
+									,	(SELECT	CUSTOM_ORDER FROM product_size WHERE DEL_YN = 'N' AND SIZE_IDX = T.SIZE_IDX) AS SIZE_CUSTOM_ORDER
+									, 	T.ORDER_QT
+									, 	IFNULL(S.STOCK,0) AS STOCK
+								  FROM	(
+										${productQuery} 
+										) T
+								  LEFT 
+								 OUTER 
+								  JOIN	(
+								  		SELECT	WAREHOUSE_IDX
+										  	, 	PRODUCT_IDX
+											, 	THICKNESS
+											, 	SIZE
+											, 	SUM(STOCK) AS STOCK
+								  		  FROM	warehouse_inventory wi
+								 		 GROUP BY	WAREHOUSE_IDX, PRODUCT_IDX, THICKNESS, SIZE
+								 		) S
+								 	ON	T.WAREHOUSE_IDX = S.WAREHOUSE_IDX
+								   AND	T.PRODUCT_IDX = S.PRODUCT_IDX
+								   AND	T.THICKNESS_IDX = S.THICKNESS
+								   AND	T.SIZE_IDX = S.SIZE
+								) TS
+						) TTS
+					GROUP BY	WAREHOUSE_IDX
+				) AS TOD
+			,	(
+				SELECT	CASE	WHEN DAYOFWEEK(DATE_ADD(NOW(), interval + 15 DAY)) = '1' THEN DATE_FORMAT(DATE_ADD(NOW(), interval + 16 DAY),'%Y-%m-%d')
+					   			ELSE DATE_FORMAT(DATE_ADD(NOW(), interval + 15 DAY),'%Y-%m-%d')
+				   		 END AS TODAY15
+				) AS TD 
+			,	(
+				SELECT	COUNT(*), WAREHOUSE_IDX, THICKNESS, TCC.SIZE, TCC.ORDER_QT2
+					,	(SELECT TON FROM product_load_qt WHERE PRODUCT_NM = CONCAT(TCC.THICKNESS,TCC.SIZE) AND MIN < TCC.ORDER_QT2 AND MAX >= TCC.ORDER_QT2) AS TON2
+					,	CASE	WHEN COUNT(*) > 1 THEN 'N'
+								ELSE 'Y'
+						 END	AS COST_YN	
+				  FROM	(
+						SELECT	WAREHOUSE_IDX
+							,	THICKNESS, SIZE
+							,	SUM(ORDER_QT) AS ORDER_QT2
+						  FROM	(
+								SELECT	T.WAREHOUSE_IDX
+									,	(SELECT	THICKNESS FROM product_thickness WHERE DEL_YN = 'N' AND THICKNESS_IDX = T.THICKNESS_IDX) AS THICKNESS
+									,	(SELECT	SIZE FROM product_size WHERE DEL_YN = 'N' AND SIZE_IDX = T.SIZE_IDX) AS SIZE
+									, 	T.ORDER_QT
+								  FROM	(
+										${productQuery} 
+										) T
+								) AS TC
+						 GROUP	BY WAREHOUSE_IDX, THICKNESS, SIZE
+						) TCC
+				  GROUP BY WAREHOUSE_IDX
+				) AS TCO
+		 WHERE	TS.WAREHOUSE_IDX = TOD.WAREHOUSE_IDX
+		   AND	TS.WAREHOUSE_IDX = TCO.WAREHOUSE_IDX
+		]]>
+	</select>
+	
+	<select id="getTonInfo" parameterType="com.springbook.client.vo.ClientVO" resultType="com.springbook.client.vo.ClientVO">
+		<![CDATA[
+		SELECT	COUNT(*), WAREHOUSE_IDX, THICKNESS, TCC.SIZE, TCC.ORDER_QT2
+			,	(SELECT TON FROM product_load_qt WHERE PRODUCT_NM = CONCAT(TCC.THICKNESS,TCC.SIZE) AND MIN < TCC.ORDER_QT2 AND MAX >= TCC.ORDER_QT2) AS TON2
+			,	CASE	WHEN COUNT(*) > 1 THEN 'N'
+						ELSE 'Y'
+				 END	AS COST_YN	
+		  FROM	(
+				SELECT	WAREHOUSE_IDX
+					,	THICKNESS, SIZE
+					,	SUM(ORDER_QT) AS ORDER_QT2
+				  FROM	(
+						SELECT	T.WAREHOUSE_IDX
+							,	(SELECT	THICKNESS FROM product_thickness WHERE DEL_YN = 'N' AND THICKNESS_IDX = T.THICKNESS_IDX) AS THICKNESS
+							,	(SELECT	SIZE FROM product_size WHERE DEL_YN = 'N' AND SIZE_IDX = T.SIZE_IDX) AS SIZE
+							, 	T.ORDER_QT
+						  FROM	(
+								${productQuery}
+								) T
+						) AS TC
+				 GROUP	BY WAREHOUSE_IDX, THICKNESS, SIZE
+				) TCC
+		  GROUP BY WAREHOUSE_IDX
+		]]>
+	</select>
+	
+	<select id="getTotalPrice" parameterType="com.springbook.client.vo.ClientVO" resultType="String">
+		<![CDATA[
+		SELECT	IFNULL(SUM(ORDER_QT*price), 0) AS TPRICE
+		  FROM	(
+				SELECT	T.WAREHOUSE_IDX
+					, 	T.ORDER_QT
+					,	(SELECT	price FROM price WHERE PRODUCT_IDX = T.PRODUCT_IDX AND THICKNESS = T.THICKNESS_IDX AND SIZE = T.SIZE_IDX) AS PRICE
+				  FROM	(
+						${productQuery}
+						) T
+				) TT
+		  GROUP BY	WAREHOUSE_IDX
+		]]>
+	</select>
+	
+	<select id="getPrice" parameterType="com.springbook.client.vo.ClientVO" resultType="com.springbook.client.vo.ClientVO">
+		<![CDATA[
+		SELECT	WAREHOUSE_IDX, WAREHOUSE_NM, PRODUCT_IDX, PRODUCT_NM, THICKNESS_IDX, THICKNESS, SIZE_IDX, SIZE, WIDTH, HEIGHT, ORDER_QT, price
+			,	FORMAT((WIDTH*HEIGHT*ORDER_QT/1000000),2) AS HB
+			,	IFNULL(ORDER_QT*price, 0) AS TPRICE
+		  FROM	(
+				SELECT	T.WAREHOUSE_IDX
+					,	(SELECT	WAREHOUSE FROM warehouse WHERE DEL_YN = 'N' AND WAREHOUSE_IDX = T.WAREHOUSE_IDX) AS WAREHOUSE_NM
+					, 	T.PRODUCT_IDX
+					,	(SELECT	PRODUCT_NM FROM product WHERE DEL_YN = 'N' AND PRODUCT_IDX = T.PRODUCT_IDX) AS PRODUCT_NM
+					, 	T.THICKNESS_IDX
+					,	(SELECT	concat(THICKNESS,'T') FROM product_thickness WHERE DEL_YN = 'N' AND THICKNESS_IDX = T.THICKNESS_IDX) AS THICKNESS
+				
+					, 	T.SIZE_IDX
+					,	(SELECT	SIZE FROM product_size WHERE DEL_YN = 'N' AND SIZE_IDX = T.SIZE_IDX) AS SIZE
+					,	(SELECT	WIDTH FROM product_size WHERE DEL_YN = 'N' AND SIZE_IDX = T.SIZE_IDX) AS WIDTH
+					,	(SELECT	HEIGHT FROM product_size WHERE DEL_YN = 'N' AND SIZE_IDX = T.SIZE_IDX) AS HEIGHT
+					, 	T.ORDER_QT
+					,	(SELECT	price FROM price WHERE PRODUCT_IDX = T.PRODUCT_IDX AND THICKNESS = T.THICKNESS_IDX AND SIZE = T.SIZE_IDX) AS PRICE
+				  FROM	(
+						${productQuery}
+						) T
+				) TT
+		]]>
+	</select>
+
+</mapper>	

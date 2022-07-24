@@ -40,6 +40,8 @@ public interface WarehousingService {
 
 	int cancelOrderCtn(String orderIdx);
 
+	int insertOrderMultiCtn(List<Map<String, Object>> paramList);
+
 	
 
 }

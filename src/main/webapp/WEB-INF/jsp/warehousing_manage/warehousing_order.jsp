@@ -48,6 +48,7 @@
 					<li class="uk-parent">
 						<a href="220_order_manage.html">주문관리 </a>
 						<ul class="uk-nav-sub" hidden="">
+							<li><a onclick="location.href='goOrderManage.do'">- 재고조회</a></li>
 							<li><a href="#">- 주문현황</a></li>
 							<li><a href="#">- 직송현황</a></li>
 							<li><a href="#">- 예약내역</a></li>
@@ -166,7 +167,7 @@
 					</article>
 
 					<div class="dl-buttons mt30">
-						<button class="btn bg_color2 small wd120p" onClick= addSubOrder()>추가</button>
+						<button class="btn bg_color2 small wd120p" onClick = addSubOrder()>추가</button>
 						<button class="btn bg_color1 small wd120p" onclick = addOrder()>등록</button>
 					</div>
 				</div>
