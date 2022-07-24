@@ -89,17 +89,33 @@ public class DashbaordController {
 	@GetMapping("/goDashboardSales.do")    
 	public String goDashboardSales(Model model) {
 		
-
-
 		return "dashboard/dashboard_sales";
 	}	
 	
 	@GetMapping("/goDashboardSalesPart.do")    
 	public String goDashboardSalesPart(Model model) {
 		
-
-
 		return "dashboard/dashboard_sales_part";
 	}	
+	
+	
+
+	//주문현황 이동
+	@GetMapping("/goMasterInfoEdit.do")    
+	public String goMasterInfoEdit(Model model) {
+		List<JusoVO> sidoList = null;
+		try {
+			sidoList = commonService.getSido();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		List<ProductVO> productNameList = etcService.getProductNameListGroup();
+
+		model.addAttribute("productList", productNameList);
+		model.addAttribute("sidoList", sidoList);
+		
+		return "dashboard/master_info_edit";
+	}
 }
 

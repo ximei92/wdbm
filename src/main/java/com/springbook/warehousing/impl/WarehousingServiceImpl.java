@@ -114,6 +114,12 @@ public class WarehousingServiceImpl implements WarehousingService {
 		return warehousingMapper.cancelOrderCtn(orderIdx);
 	}
 
+	@Override
+	public int insertOrderMultiCtn(List<Map<String, Object>> paramList) {
+		// TODO Auto-generated method stub
+		return warehousingMapper.insertOrderMultiCtn(paramList);
+	}
+
 
 	
 }

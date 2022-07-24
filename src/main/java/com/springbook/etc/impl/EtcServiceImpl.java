@@ -342,7 +342,17 @@ public class EtcServiceImpl implements EtcService {
 		return etcMapper.getSafetyList(map);
 	}
 
+	@Override
+	public int creditListCount(String keyword, Date startDt, Date endDt) {
+		// TODO Auto-generated method stub
+		Map<String,Object> map = new HashMap<String,Object>();
 
+		map.put("keyword", keyword);
+		map.put("startDt", startDt);
+		map.put("endDt", endDt);
+		
+		return etcMapper.creditListCount(map);
+	}
 
 	@Override
 	public List<MemberVO> memberList() {
@@ -460,7 +470,20 @@ public class EtcServiceImpl implements EtcService {
 		return etcMapper.updateDepositHistory(map);
 	}
 
-
+	@Override
+	public List<Map<String, Object>> getCreditList(int i, int contentnum, String keyword, Date startDt, Date endDt) {
+		// TODO Auto-generated method stub
+		Map<String,Object> map = new HashMap<String,Object>();
+		
+		map.put("i", i);
+		map.put("contentnum", contentnum);
+		map.put("keyword", keyword);
+		map.put("startDt", startDt);
+		map.put("endDt", endDt);
+		System.out.println("ddddd");
+		System.out.println(map);
+		return etcMapper.getCreditList(map);
+	}
 
 	@Override
 	public int updateProductSize(ProductSizeVO vo) {
@@ -586,12 +609,4 @@ public class EtcServiceImpl implements EtcService {
 		// TODO Auto-generated method stub
 		return etcMapper.checkProductSize(vo);
 	}
-  
-	@Override
-	public List<CreditVO> parseJson(String jsonData) {
-		
-		return null;
-	}
-
-
 }

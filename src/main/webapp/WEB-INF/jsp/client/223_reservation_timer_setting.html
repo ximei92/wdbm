@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>WORLD 물류관리 시스템</title>
+    <link rel="stylesheet" href="../css/base.css">
+    <script src="../js/jquery-1.9.1.min.js"></script>
+    <script src="../js/uikit.min.js"></script>
+    <script src="../js/layout.js"></script>
+    <script defer src="../js/script.js"></script>
+</head>
+
+<body>
+    <div id="wrap">
+        <!-- header -->
+        <header id="header">
+            <h1>
+                <a href="#">
+                    <img src="../images/logo.png" alt="월드비엠 물류관리 시스템">
+                    <span>WORLD 물류관리 시스템</span>
+                </a>
+            </h1>
+            <div class="profile-wrap">
+                <div class="info">
+                    <a href="#">홍길동</a>
+                    <p>회사명</p>
+                </div>
+                <a href="#" class="logout">로그아웃</a>
+                <div class="d-flex">
+                    <button class="mem-edit" onclick="location.href='003_privacy_info.html'">개인정보</button>
+                    <button class="alarm-list">알림 목록</button>
+                </div>
+            </div>
+            <!-- s:aside -->
+            <nav id="aside">
+                <ul class="uk-nav-default uk-nav-parent-icon uk-nav member" uk-nav="">
+                    <li><a href="210_dashboard.html">대시보드</a></li>
+                    <li class="uk-parent uk-open">
+                        <a href="220_order_manage.html">주문관리 </a>
+                        <ul class="uk-nav-sub" hidden="">
+                            <li><a href="220_order_manage.html">- 재고조회</a></li>
+                            <li><a href="221_order_status.html">- 주문현황</a></li>
+                            <li><a href="222_direct_shipment_status.html">- 직송현황</a></li>
+                            <li class="uk-open"><a href="223_reservation_history.html">- 예약내역</a></li>
+                        </ul>
+                    </li>
+                    <li class="uk-parent">
+                        <a href="230_warehouse_manage.html">입고관리 </a>
+                        <ul class="uk-nav-sub" hidden="">
+                            <li><a href="230_warehouse_manage.html">- 오더하기</a></li>
+                            <li><a href="#">- 오더내역</a></li>
+                            <li><a href="#">- 선적현황</a></li>
+                            <li><a href="#">- 통관현황</a></li>
+                            <li><a href="#">- CY현황</a></li>
+                            <li><a href="#">- 입고현황</a></li>
+                            <li><a href="#">- 컨테이너 반납현황</a></li>
+                        </ul>
+                    </li>
+                    <li class="uk-parent">
+                        <a href="240_etc_manage.html">기타관리</a>
+                        <ul class="uk-nav-sub" hidden="">
+                            <li><a href="240_etc_manage.html">- 준공서류 관리</a></li>
+                            <li><a href="241_all_warehouse.html">- 전체 출/입고 현황</a></li>
+                            <li><a href="247_warehouse_manage.html">- 창고관리</a></li>
+                            <li><a href="242_inventory_manage.html">- 창고별 재고관리</a></li>
+                            <li><a href="243_inventory_status.html">- 창고별 재고현황</a></li>
+                            <li><a href="244_increased_safety.html">- 안전 재고 관리</a></li>
+                            <li><a href="245_product_regist.html">- 제품 등록 관리</a></li>
+                            <li><a href="246_credit_manage.html">- 여신 관리</a></li>
+                            <li><a href="247_new_sub_inquiry.html">- 신규가입문의</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="250_member_manage.html">회원관리 </a></li>
+                </ul>
+            </nav>
+            <!-- e:aside -->
+        </header>
+
+        <!-- s:container -->
+        <div id="container">
+            <h2 class="normal">예약내역</h2>
+            <div id="content">
+                <div class="cont-box pt19">
+                    <div class="h3-title blue">
+                        <h3 class="normal"><i class="s-order"></i>타이머 설정</h3>
+                    </div>
+
+                    <!-- 타이머 설정 -->
+                    <div class="rows dl-box">
+                        <h4 class="dl-box-h4">설정 정보</h4>
+                        <article class="inner-p">
+                            <dl class="row col-2">
+                                <dt>타이머설정 <i class="essen">*</i></dt>
+                                <dd>
+                                    <select title="" class="wd210p">
+                                        <option value="">--선택--</option>
+                                        <option value="">1시간</option>
+                                    </select>
+                                </dd>
+                            </dl>
+                        </article>
+                    </div>
+
+                    <div class="dl-buttons">
+                        <button class="btn bg_color3 small wd120p">취소</button>
+                        <button class="btn bg_color1 small wd120p">저장</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- s:container -->
+    </div>
+</body>
+
+</html>

@@ -49,6 +49,8 @@ public interface WarehousingMapper {
 
 	Map<String, Object> getProductCdInfo(Map<String, Object> map);
 
+	int insertOrderMultiCtn(List<Map<String, Object>> paramList);
+
 
 
 

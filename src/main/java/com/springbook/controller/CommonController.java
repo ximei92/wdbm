@@ -145,69 +145,7 @@ public class CommonController {
 		return modelAndView;
 	}
 	
-	@RequestMapping(value="/order.do")
-	public String order(@ModelAttribute HashMap<String, String> paramMap, ModelMap model, HttpServletRequest request) throws Exception {
-		
-		model.addAttribute("menuPath", "/client/101_order");
-		
-		return "worldBmOther/client/clientContents";
-	}
-	
-	@RequestMapping(value="/orderHistory.do")
-	public String orderHistory(@ModelAttribute HashMap<String, String> paramMap, ModelMap model, HttpServletRequest request) throws Exception {
-		
-		model.addAttribute("menuPath", "/client/110_order_history");
-		
-		return "worldBmOther/client/clientContents";
-	}
-	
-	@RequestMapping(value="/orderHistoryView.do")
-	public String orderHistoryView(@ModelAttribute HashMap<String, String> paramMap, ModelMap model, HttpServletRequest request) throws Exception {
-		
-		model.addAttribute("menuPath", "/client/111_order_history_view");
-		
-		return "worldBmOther/client/clientContents";
-	}
-	
-	@RequestMapping(value="/directOrder.do")
-	public String directOrder(@ModelAttribute HashMap<String, String> paramMap, ModelMap model, HttpServletRequest request) throws Exception {
-		
-		model.addAttribute("menuPath", "/client/120_direct_order");
-		
-		return "worldBmOther/client/clientContents";
-	}
-	
-	@RequestMapping(value="/directOrderView.do")
-	public String directOrderView(@ModelAttribute HashMap<String, String> paramMap, ModelMap model, HttpServletRequest request) throws Exception {
-		
-		model.addAttribute("menuPath", "/client/121_direct_order_view");
-		
-		return "worldBmOther/client/clientContents";
-	}
-	
-	@RequestMapping(value="/reservationHistory.do")
-	public String reservationHistory(@ModelAttribute HashMap<String, String> paramMap, ModelMap model, HttpServletRequest request) throws Exception {
-		
-		model.addAttribute("menuPath", "/client/130_reservation_history");
-		
-		return "worldBmOther/client/clientContents";
-	}
-	
-	@RequestMapping(value="/completionDocuments.do")
-	public String completionDocuments(@ModelAttribute HashMap<String, String> paramMap, ModelMap model, HttpServletRequest request) throws Exception {
-		
-		model.addAttribute("menuPath", "/client/140_completion_documents");
-		
-		return "worldBmOther/client/clientContents";
-	}
-	
-	@RequestMapping(value="/completionDocumentsView.do")
-	public String completionDocumentsView(@ModelAttribute HashMap<String, String> paramMap, ModelMap model, HttpServletRequest request) throws Exception {
-		
-		model.addAttribute("menuPath", "/client/141_completion_documents_view");
-		
-		return "worldBmOther/client/clientContents";
-	}
+
 		
 
 }

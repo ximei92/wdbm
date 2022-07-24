@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -55,7 +57,7 @@ public class MemberServiceImpl implements MemberService {
 		log.info("member={}",member);
 		if(hasMember(member)){
 			log.debug("성공");
-			sessionManager.createSession(member.getId(), response); 
+
 			return new ResponseEntity<MemberVO>(member,HttpStatus.OK); 
 		} else {
 			log.debug("실패");

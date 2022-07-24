@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>WORLD 물류관리 시스템</title>
+	<link rel="stylesheet" href="../css/base.css">
+	<script src="../js/jquery-1.9.1.min.js"></script>
+	<script src="../js/uikit.min.js"></script>
+	<script src="../js/layout.js"></script>
+	<script defer src="../js/script.js"></script>
+</head>
+
+<body>
+	<div id="wrap">
+		<!-- header -->
+		<header id="header">
+			<h1>
+				<a href="#">
+					<img src="../images/logo.png" alt="월드비엠 물류관리 시스템">
+					<span>WORLD 물류관리 시스템</span>
+				</a>
+			</h1>
+			<div class="profile-wrap">
+				<div class="info">
+					<a href="#">홍길동</a>
+					<p>회사명</p>
+				</div>
+				<a href="#" class="logout">로그아웃</a>
+				<div class="d-flex">
+					<button class="mem-edit" onclick="location.href='003_privacy_info.html'">개인정보</button>
+					<button class="alarm-list">알림 목록</button>
+				</div>
+			</div>
+			<!-- s:aside -->
+			<nav id="aside">
+				<ul class="uk-nav-default uk-nav-parent-icon uk-nav member" uk-nav="">
+					<li><a href="210_dashboard.html">대시보드</a></li>
+					<li class="uk-parent uk-open">
+						<a href="220_order_manage.html">주문관리 </a>
+						<ul class="uk-nav-sub" hidden="">
+							<li class="uk-open"><a href="220_order_manage.html">- 재고조회</a></li>
+							<li><a href="221_order_status.html">- 주문현황</a></li>
+							<li><a href="222_direct_shipment_status.html">- 직송현황</a></li>
+							<li><a href="223_reservation_history.html">- 예약내역</a></li>
+						</ul>
+					</li>
+					<li class="uk-parent">
+						<a href="230_warehouse_manage.html">입고관리 </a>
+						<ul class="uk-nav-sub" hidden="">
+							<li><a href="#">- 오더하기</a></li>
+							<li><a href="#">- 오더내역</a></li>
+							<li><a href="#">- 선적현황</a></li>
+							<li><a href="#">- 통관현황</a></li>
+							<li><a href="#">- CY현황</a></li>
+							<li><a href="#">- 입고현황</a></li>
+							<li><a href="#">- 컨테이너 반납현황</a></li>
+						</ul>
+					</li>
+					<li class="uk-parent">
+						<a href="240_etc_manage.html">기타관리</a>
+						<ul class="uk-nav-sub" hidden="">
+							<li><a href="240_etc_manage.html">- 준공서류 관리</a></li>
+							<li><a href="241_all_warehouse.html">- 전체 출/입고 현황</a></li>
+							<li><a href="247_warehouse_manage.html">- 창고관리</a></li>
+							<li><a href="242_inventory_manage.html">- 창고별 재고관리</a></li>
+							<li><a href="243_inventory_status.html">- 창고별 재고현황</a></li>
+							<li><a href="244_increased_safety.html">- 안전 재고 관리</a></li>
+							<li><a href="245_product_regist.html">- 제품 등록 관리</a></li>
+							<li><a href="246_credit_manage.html">- 여신 관리</a></li>
+							<li><a href="247_new_sub_inquiry.html">- 신규가입문의</a></li>
+						</ul>
+					</li>
+					<li><a href="250_member_manage.html">회원관리 </a></li>
+				</ul>
+			</nav>
+			<!-- e:aside -->
+		</header>
+
+		<!-- s:container -->
+		<div id="container">
+			<h2 class="normal">재고조회</h2>
+			<div id="content">
+				<!-- search box -->
+				<div class="cont-box">
+					<article class="inner">
+						<dl class="row col-4">
+							<dt>납기일</dt>
+							<dd><input type="date"></dd>
+							<dt>시간 선택 <a href="#none" class="alert ico-a">알림</a></dt>
+							<dd>
+								<select title="" class="190p">
+									<option value="">당착 최대한 빨리</option>
+									<option value="">오전 06:00</option>
+									<option value="">오전 06:30</option>
+									<option value="">오전 07:00</option>
+									<option value="">오전 07:30</option>
+									<option value="">오전 08:00</option>
+									<option value="">오전 08:30</option>
+									<option value="">오전 09:00(대기료 발생)</option>
+									<option value="">오전 09:30(대기료 발생)</option>
+									<option value="">오전 11:00</option>
+									<option value="">오전 11:30</option>
+									<option value="">오전 12:00</option>
+									<option value="">오전 12:30</option>
+									<option value="">오후 01:00</option>
+									<option value="">오후 01:30</option>
+									<option value="">오후 02:00</option>
+									<option value="">오후 02:30</option>
+									<option value="">오후 03:00</option>
+									<option value="">오후 03:30</option>
+									<option value="">오후 04:00</option>
+									<option value="">오후 04:30</option>
+									<option value="">직접입력(협의후 입력)</option>
+								</select>
+								<select title="" class="wd80p disable">
+									<option value="">오전 </option>
+									<option value="">오후 </option>
+								</select>
+								<input type="text" class="wd40p disable">
+								<span>시</span>
+								<input type="text" class="wd40p disable">
+								<span>분</span>
+							</dd>
+						</dl>
+						<dl class="row col-2">
+							<dt>주소</dt>
+							<dd>
+								<select name="" id="" class="wd190p">
+									<option value="">시도 선택</option>
+								</select>
+								<select name="" id="" class="wd190p">
+									<option value="">시군구 선택</option>
+								</select>
+								<select name="" id="" class="wd190p">
+									<option value="">읍면동 선택</option>
+								</select>
+								<input type="text" class="wd33" placeholder="상세주소">
+							</dd>
+						</dl>
+						<dl class="row col-2">
+							<dt>자차사용 여부</dt>
+							<dd>
+								<p class="d-flex wd100 gap10">
+									<input type="radio">
+									<label for="">사용</label>
+									<input type="radio">
+									<label for="">사용하지 않음</label>
+								</p>
+							</dd>
+						</dl>
+					</article>
+
+					<article class="inner">
+						<dl class="row col-4">
+							<dt>제품종류</dt>
+							<dd>
+								<select name="" id="" class="wd210p">
+									<option value="">--선택--</option>
+									<option value="">KS</option>
+									<option value="">비KS</option>
+									<option value="">심재</option>
+								</select>
+							</dd>
+							<dt>제품 두께</dt>
+							<dd>
+								<select name="" id="" class="wd210p">
+									<option value="">30T</option>
+								</select>
+							</dd>
+						</dl>
+						<dl class="row col-4">
+							<dt>제품 사이즈</dt>
+							<dd>
+								<select name="" id="" class="wd210p">
+									<option value="">S (600 x 1,200)</option>
+								</select>
+							</dd>
+							<dt>제품 수량</dt>
+							<dd>
+								<input type="text" class="wd210p txt-right" value="0">
+								<span>장</span>
+								<button class="btn ico bg_color1 add small ml70">제품추가</button>
+							</dd>
+						</dl>
+					</article>
+
+					<article class="inner pd0">
+						<!-- 결과 내용이 없을경우
+						<p class="txt-center pd50">검색결과를 추가하세요.</p> -->
+
+						<!-- 결과 내용이 있을경우 -->
+						<ul class="search-list">
+							<li>
+								<span>KS</span>
+								<span></span>
+								<span>M(1,000 x 1,200)</span>
+								<span>400 장</span>
+								<a href="#" class="btn-del">삭제</a>
+							</li>
+							<li>
+								<span>KS</span>
+								<span></span>
+								<span>M(1,000 x 1,200)</span>
+								<span>400 장</span>
+								<a href="#" class="btn-del">삭제</a>
+							</li>
+							<li>
+								<span>KS</span>
+								<span>40 T</span>
+								<span>M(1,000 x 1,200)</span>
+								<span>400 장</span>
+								<a href="#" class="btn-del">삭제</a>
+							</li>
+						</ul>
+					</article>
+
+					<div class="dl-buttons">
+						<button class="btn bg_color3 small wd120p">초기화</button>
+						<button class="btn bg_color1 small wd120p">검색</button>
+					</div>
+				</div>
+
+				<!-- search result box -->
+				<div class="cont-box mt30">
+					<div class="h3-title result">
+						<h3 class="normal"><i class="s-result"></i>검색결과</h3>
+						<span class="ml40">2022-04-12 오전 06:00</span>
+						<span>서울시 서초구 서초동 111-1 </span>
+					</div>
+					<p class="color-blue font-s12 mt10 pl30">※ 주문제작시 전체금액의 30% 계약금 발생됩니다.</p>
+
+					<!-- table -->
+					<div class="bbs mt24">
+						<table class="b-list">
+							<caption></caption>
+							<colgroup>
+								<col class="wd10">
+								<col class="wd20">
+								<col>
+								<col>
+								<col class="wd20">
+								<col>
+								<col class="wd10">
+							</colgroup>
+							<thead>
+								<tr>
+									<th scope="col">창고</th>
+									<th scope="col">제품정보</th>
+									<th scope="col">수량(장)/㎡ </th>
+									<th scope="col">총 재고 (장)</th>
+									<th scope="col">납품 가능일</th>
+									<th scope="col">예상운반비 (원)</th>
+									<th scope="col">발주</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th rowspan="2" scope="row">평택창고</th>
+									<td>
+										<div class="tb-prd-info center">
+											<span class="wd12">KS</span>
+											<span class="color-violet wd15">30T</span>
+											<span class="color-green">M(1,000 * 1,200)</span>
+										</div>
+									</td>
+									<td>400 / 100.00</td>
+									<td><span class="color-blue">500</span></td>
+									<td rowspan="2">즉시 발주가능 </td>
+									<td rowspan="2" class="txt-right">120,000 </td>
+									<td rowspan="2">
+										<button class="btn small2 bg_color1 wd85"
+											onclick="location.href='220_order_manage_view.html'">발주</button>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<div class="tb-prd-info center">
+											<span class="wd12">KS</span>
+											<span class="color-violet wd15">30T</span>
+											<span class="color-green">M(1,000 * 1,200)</span>
+										</div>
+									</td>
+									<td>400 / 100.00</td>
+									<td><span class="color-blue">500</span></td>
+								</tr>
+								<tr>
+									<th rowspan="2" scope="row">인천창고</th>
+									<td>
+										<div class="tb-prd-info center">
+											<span class="wd12">KS</span>
+											<span class="color-violet wd15">30T</span>
+											<span class="color-green">M(1,000 * 1,200)</span>
+										</div>
+									</td>
+									<td>400 / 100.00</td>
+									<td><span class="color-blue">500</span></td>
+									<td rowspan="2">22.4.30 이후 납품 가능 </td>
+									<td rowspan="2" class="txt-right">120,000 </td>
+									<td rowspan="2">
+										<button class="btn small2 bg_color1 wd85">발주</button>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<div class="tb-prd-info center">
+											<span class="wd12">비KS</span>
+											<span class="color-violet wd15">30T</span>
+											<span class="color-green">M(1,000 * 1,200)</span>
+										</div>
+									</td>
+									<td>400 / 100.00</td>
+									<td><span class="color-blue">500</span></td>
+								</tr>
+							</tbody>
+						</table>
+
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- s:container -->
+	</div>
+</body>
+
+</html>
