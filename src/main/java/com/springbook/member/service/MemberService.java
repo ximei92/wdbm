@@ -3,11 +3,7 @@ package com.springbook.member.service;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 
 import com.springbook.member.vo.MemberVO;
 
@@ -17,7 +13,7 @@ public interface MemberService {
 
 	int insertMember(MemberVO vo) throws Exception;
 
-	ResponseEntity<MemberVO> tryLogin(MemberVO vo, HttpServletRequest request, HttpServletResponse response) throws Exception;
+	ResponseEntity<MemberVO> tryLogin(MemberVO vo) throws Exception;
 
 	int memberListCount(String type, String keyword);
 
@@ -58,18 +54,6 @@ public interface MemberService {
 	 * @throws Exception
 	 */
 	void modifyPassword(MemberVO member) throws Exception;
-
-	/**
-	 * 세션 체크 
-	 * 세션을 체크해 세션이 있으면 자동로그인, 없으면 로그인 페이지를 보여준다.
-	 *   
-	 * @param request
-	 * @param model
-	 * @return
-	 */
-	String checkSession(HttpServletRequest request, Model model);
-
-	String logout(HttpServletRequest request, HttpServletResponse response);
 
 
 }

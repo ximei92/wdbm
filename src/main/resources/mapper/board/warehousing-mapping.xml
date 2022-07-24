@@ -210,4 +210,65 @@
     	WHERE MANAGE_ORDER_PRODUCT_IDX = #{orderIdx}
 	</update>
 	
+	<!--멀티 CTN 추가 -->
+	<insert id="insertOrderMultiCtn" parameterType="java.util.List">
+
+		INSERT INTO MANAGE_ORDER_PRODUCT
+		(
+		etd,
+		dp,
+		ap,
+		maker,
+		maker_id,
+		warehouse_idx,
+		product_idx,
+		size_idx,
+		thickness_idx,
+		stock,
+		etc,
+		client_id,
+		manager,
+		due_ampm,
+		due_hh,
+		due_mm,
+		address1,
+		address2,
+		address3,
+		address_detail,
+		phone,
+		status,
+		reg_date
+		)
+		VALUES
+    	<foreach collection="list" item="item" separator=",">	
+    			(	
+		#{item.etd}, 
+		#{item.dp},
+		#{item.ap},
+		#{item.maker},
+		#{item.makerId},
+		#{item.warehouseIdx},
+		#{item.productIdx},
+		#{item.size},
+		#{item.thickness},
+		#{item.stock},
+		#{item.etc},
+		#{item.clientId},
+		#{item.manager},
+		#{item.dueAmpm},
+		#{item.dueHh},
+		#{item.dueMm},
+		#{item.address1},
+		#{item.address2},
+		#{item.address3},
+		#{item.addressDetail},
+		#{item.phone},
+		1,	
+		now()
+				)
+		</foreach>
+
+	</insert>
+
+	
 </mapper>

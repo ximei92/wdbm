@@ -33,7 +33,7 @@
 					<a href="#">홍길동</a>
 					<p>회사명</p>
 				</div>
-				<a href="javascript:void(0)" onclick="logout()" id="logout" class="logout">로그아웃</a>
+				<a href="#" class="logout">로그아웃</a>
 				<div class="d-flex">
 					<button class="mem-edit" onclick="location.href='003_privacy_info.html'">개인정보</button>
 					<button class="alarm-list">알림 목록</button>
@@ -46,6 +46,7 @@
 					<li class="uk-parent">
 						<a href="220_order_manage.html">주문관리 </a>
 						<ul class="uk-nav-sub" hidden="">
+							<li><a onclick="location.href='goOrderManage.do'">- 재고조회</a></li>
 							<li><a href="#">- 주문현황</a></li>
 							<li><a href="#">- 직송현황</a></li>
 							<li><a href="#">- 예약내역</a></li>
