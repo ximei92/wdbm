@@ -1,3 +1,12 @@
+function logout(){
+	console.log('로그아웃');
+	let f = document.createElement('form');
+	f.setAttribute('method','post');
+	f.setAttribute('action','/logout.do');
+	document.body.appendChild(f);
+	f.submit();
+}
+
 function detailSearch(){
 	var	type = $("#search_item").val();
 	var keyword = $("#keyword").val();
