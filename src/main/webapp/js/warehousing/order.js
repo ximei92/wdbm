@@ -198,62 +198,103 @@ function deleteRow(){
 
 //주문상세페이지 넘어가기
 function moveOrderPage(){
-	$("input[name='radio']").each(function(index, element) {
-	    if(element.checked){
-	     if($("tbody").find("tr:nth-child("+(index+1)+") td[rowspan='2']").length > 1){
-	    	//첫번째row값
-	    	 if($("input[name='ctn_']")[index+1] == undefined ){
-	    		 alert("오더할 CTN을 채워주세요.");
-	    	 }
-	    	 
-//		   	 var productIdx = $("input[name='productIdx_']")[index].value;
-//		   	 var thickness = $("input[name='thickness_']")[index].value;
-//		   	 var size = $("input[name='size_']")[index].value;
-		   	 var maker = $("input[name='shipperId_']")[index].value;
-		   	 var makerNm = $("input[name='makerNm_']")[index].value;
-		   	 var warehouseIdx = $("input[name='warehouseIdx_']")[index].value;
-//		   	 var stock = $("input[name='stock_']")[index].value;
-		   	 var etd = $("input[name='etd_']")[index].value;
-		   	 var port = $("input[name='port_']")[index].value;
-//		   	 var ctn = $("input[name='ctn_']")[index].value;
-		   	
-		   	 //두번째row값
-		   	 var productIdx = $("input[name='productIdx_']")[index].value +"//" +$("input[name='productIdx_']")[index+1].value;
-		   	 var thickness = $("input[name='thickness_']")[index].value+"//" +$("input[name='thickness_']")[index+1].value;
-		   	 var size = $("input[name='size_']")[index].value+"//" +$("input[name='size_']")[index+1].value;
-		   	 var stock = $("input[name='stock_']")[index].value+"//" +$("input[name='stock_']")[index+1].value;
-		   	 var ctn = $("input[name='ctn_']")[index].value+"//" +$("input[name='ctn_']")[index+1].value;
 
-		   	 //직송아닌경우
-		   	if(warehouseIdx != 0 ){
-		   		location.href="orderListDetail.do?productIdx="+productIdx+"&thickness="+thickness+"&size="+size+"&shipperId="+maker+"&warehouseIdx="+warehouseIdx+"&stock="+stock+"&etd="+etd+"&maker="+makerNm+"&ctn="+ctn+"&port="+port;	
-		   	} else {
-		   		location.href="orderListDetailDirect.do?productIdx="+productIdx+"&thickness="+thickness+"&size="+size+"&shipperId="+maker+"&warehouseIdx="+warehouseIdx+"&stock="+stock+"&etd="+etd+"&maker="+makerNm+"&ctn="+ctn+"&port="+port;	
-		   	}
+	var list = [];	
+	var tr = $("tbody tr");
+//	$("input[name='radio']").each(function(index, element) {
+	$(tr).each(function(index, element) {
+console.log($(tr).eq(index).find("td[rowspan='2']").length);
+console.log("inde===="+index);
+	     if($(tr).eq(index).find("td[rowspan='2']").length > 1){
+		    	//첫번째row값
+//	    	 if($("input[name='ctn_']")[index+1] == undefined ){
+//	    		 alert("오더할 CTN을 채워주세요.");
+//	    		 return;
+//	    	 }
+console.log(tr.eq(index).children("td").length);
+			if(tr.eq(index).children("td").length == 8 ){
+				console.log("1에들으움");
+			   	 var maker = $("input[name='shipperId_']")[index].value;
+			   	 var makerNm = $("input[name='makerNm_']")[index].value;
+			   	 var warehouseIdx = $("input[name='warehouseIdx_']")[index].value;
+			   	 var etd = $("input[name='etd_']")[index].value;
+			   	 var port = $("input[name='port_']")[index].value;
+			   	
+			   	 //두번째row값
+			   	 var productIdx = $("input[name='productIdx_']")[index].value +"//" +$("input[name='productIdx_']")[index+1].value;
+			   	 var thickness = $("input[name='thickness_']")[index].value+"//" +$("input[name='thickness_']")[index+1].value;
+			   	 var size = $("input[name='size_']")[index].value+"//" +$("input[name='size_']")[index+1].value;
+			   	 var stock = $("input[name='stock_']")[index].value+"//" +$("input[name='stock_']")[index+1].value;
+			   	 var ctn = $("input[name='ctn_']")[index].value+"//" +$("input[name='ctn_']")[index+1].value;
+
+			   	 var tempMap = {"productIdx":productIdx,
+			   			 		"thickness":thickness,
+			   			 		"size":size, 
+			   			 		"makerId":maker,
+			   			 		"warehouseIdx":warehouseIdx,
+			   			 		"stock":stock,
+			   			 		"etd":etd,
+			   			 		"maker":makerNm,
+			   			 		"ctn":ctn,
+			   			 		"dp":port.split("//")[0],
+			   			 		"ap":port.split("//")[1]};
+				list.push(tempMap);
+			}
+
 
 	     } else {
-		 
-		   	 var productIdx = $("input[name='productIdx_']")[index].value;
-		   	 var thickness = $("input[name='thickness_']")[index].value;
-		   	 var size = $("input[name='size_']")[index].value;
-		   	 var maker = $("input[name='shipperId_']")[index].value;
-		   	 var makerNm = $("input[name='makerNm_']")[index].value;
-		   	 var warehouseIdx = $("input[name='warehouseIdx_']")[index].value;
-		   	 var stock = $("input[name='stock_']")[index].value;
-		   	 var etd = $("input[name='etd_']")[index].value;
-		   	 var ctn = $("input[name='ctn_']")[index].value;
-		   	 var port = $("input[name='port_']")[index].value;
+	    	 if(tr.eq(index).children("td").length == 8 ){
+		    	 console.log("22222222")
+			   	 var productIdx = $("input[name='productIdx_']")[index].value;
+			   	 var thickness = $("input[name='thickness_']")[index].value;
+			   	 var size = $("input[name='size_']")[index].value; 
+			   	 var maker = $("input[name='shipperId_']")[index].value;
+			   	 var makerNm = $("input[name='makerNm_']")[index].value;
+			   	 var warehouseIdx = $("input[name='warehouseIdx_']")[index].value;
+			   	 var stock = $("input[name='stock_']")[index].value;
+			   	 var etd = $("input[name='etd_']")[index].value;
+			   	 var ctn = $("input[name='ctn_']")[index].value;
+			   	 var port = $("input[name='port_']")[index].value;
+			   	
+			   	 var tempMap = {"productIdx":productIdx,
+		   			 		"thickness":thickness,
+		   			 		"size":size, 
+		   			 		"makerId":maker,
+		   			 		"warehouseIdx":warehouseIdx,
+		   			 		"stock":stock,
+		   			 		"etd":etd,
+		   			 		"maker":makerNm,
+		   			 		"ctn":ctn,
+		   			 		"dp":port.split("//")[0],
+		   			 		"ap":port.split("//")[1]};
+			   	 
+			   	list.push(tempMap);
 		   	
-		   	 //직송아닌경우
-		   	if(warehouseIdx != 0 ){
-		   		location.href="orderListDetail.do?productIdx="+productIdx+"&thickness="+thickness+"&size="+size+"&shipperId="+maker+"&warehouseIdx="+warehouseIdx+"&stock="+stock+"&etd="+etd+"&maker="+makerNm+"&ctn="+ctn+"&port="+port;	
-		   	} else {
-		   		location.href="orderListDetailDirect.do?productIdx="+productIdx+"&thickness="+thickness+"&size="+size+"&shipperId="+maker+"&warehouseIdx="+warehouseIdx+"&stock="+stock+"&etd="+etd+"&maker="+makerNm+"&ctn="+ctn+"&port="+port;	
-		   	}
-	     }
+	    	 } else if (tr.eq(index).children("td").length == 2  ){
+	    		 //갈라진 두번째 row 일경우는 continue(이미 윗줄에서 추가됨);
+				return; 
+			}
 
-		}
+	     }
 	});
+	console.log(list);
+	console.log(typeof(list));
+	
+	var paramList = {
+			   "paramList" : JSON.stringify(list)
+			}
+	$.ajax({
+		url: "insertOrderMultiCtn.do",
+		data : paramList,
+		type: "POST",
+		success : function(data){
+			alert("주문이 완료되었습니다");
+			location.href="orderlist.do";	
+		},
+		error : function(){
+			alert("에러가 발생했습니다.");		
+		}
+	});	
 }
 
 function editOrder(){
@@ -893,15 +934,11 @@ $(document).ready(function(){
 			 var size = $("input[name='size_idx']").eq(index).val();
 			 var thickness = $("input[name='thickness_idx']").eq(index).val();
 			 var result = calCtn(productIdx, thickness,size,stock);
-			 console.log("result");
-			 console.log(size+"---"+thickness);
 	 		 $.ajax({
 					url: "calCtn.do",
 					data: {"productIdx":productIdx, "thickness":thickness, "size":size},
 					type: "POST",
 					success : function(data){
-						console.log(data);
-						console.log("ajxa 결과")
 						ctn = (stock/data.SLICE);
 						amount = parseInt(stock/data.PALLET);
 						palletReminder = stock%data.PALLET;

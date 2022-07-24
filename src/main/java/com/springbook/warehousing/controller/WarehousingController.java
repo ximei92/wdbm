@@ -36,6 +36,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.yaml.snakeyaml.events.MappingEndEvent;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springbook.configuration.Page;
 import com.springbook.etc.service.EtcService;
 import com.springbook.etc.vo.CreditVO;
@@ -502,15 +506,44 @@ public class WarehousingController {
 	
 	@PostMapping("/insertOrderCtn.do")    
 	@ResponseBody
-	public int insertOrderCtn(Model model, @RequestParam Map<String, String> map) {
+	public int insertOrderCtn(Model model, @RequestParam Map<String, String>  map) {
 
-		System.out.println(map.get("update"));
 		int result = 0 ;
 		if(map.get("update").equals("1")){
 			result = warehousingService.updateOrderCtn(map);
 		} else if(map.get("update").equals("0")){
 			result = warehousingService.insertOrderCtn(map);
 		}
+		
+		return result;
+	}
+	
+	@PostMapping("/insertOrderMultiCtn.do")    
+	@ResponseBody
+	public int insertOrderMultiCtn(Model model, @RequestParam Map<String, Object>  parameters) {
+	      String json = parameters.get("paramList").toString();
+	      ObjectMapper mapper = new ObjectMapper();
+	      List<Map<String, Object>> paramList = null;
+		try {
+			paramList = mapper.readValue(json, new TypeReference<ArrayList<Map<String, Object>>>(){});
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	      
+	      
+		System.out.println(paramList);
+
+		int result = 0 ;
+		result = warehousingService.insertOrderMultiCtn(paramList);
+//		if(map.get("update").equals("1")){
+//			result = warehousingService.updateOrderCtn(map);
+//		} else if(map.get("update").equals("0")){
+//			
+//		}
 		return result;
 	}
 	
