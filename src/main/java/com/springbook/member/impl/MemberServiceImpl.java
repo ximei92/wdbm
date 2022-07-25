@@ -106,7 +106,7 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public List<MemberVO> getTypeProductList(int i, int contentnum, String keyword) {
+	public List<Map<String, Object>> getTypeProductList(int i, int contentnum, String keyword) {
 		// TODO Auto-generated method stub
 		Map<String, Object> map = new HashMap<String, Object>();
 
@@ -120,6 +120,8 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public int typeProductListCount(String keyword) {
 		// TODO Auto-generated method stub
+		System.out.println("imple");
+		System.out.println(keyword);
 		return memberMapper.typeProductListCount(keyword);
 	}
 
@@ -214,6 +216,15 @@ public class MemberServiceImpl implements MemberService {
 		session.invalidate();		
 		
 		return "redirect:/";
+	}
+
+	@Override
+	public String getClientPrice(Map<String, Object> map, String id) {
+		// TODO Auto-generated method stub
+		System.out.println(map);
+//		System.out.println(id.);
+		System.out.println("getClientPrice");
+		return null;
 	}
 
 }

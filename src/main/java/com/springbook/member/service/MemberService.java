@@ -25,7 +25,7 @@ public interface MemberService {
 
 	MemberVO getMemberInfo(String id);
 
-	List<MemberVO> getTypeProductList(int i, int contentnum, String keyword);
+	List<Map<String, Object>> getTypeProductList(int i, int contentnum, String keyword);
 
 	int typeProductListCount(String keyword);
 
@@ -70,6 +70,9 @@ public interface MemberService {
 	String checkSession(HttpServletRequest request, Model model);
 
 	String logout(HttpServletRequest request, HttpServletResponse response);
+
+	//고객가격조회
+	String getClientPrice(Map<String, Object> map, String id);
 
 
 }

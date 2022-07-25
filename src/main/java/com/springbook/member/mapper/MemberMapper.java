@@ -27,7 +27,7 @@ public interface MemberMapper {
 
 	int typeProductListCount(String keyword);
 
-	List<MemberVO> getTypeProductList(Map<String, Object> map);
+	List<Map<String, Object>> getTypeProductList(Map<String, Object> map);
 
 	int addPrice(Map<String, Object> map);
 
