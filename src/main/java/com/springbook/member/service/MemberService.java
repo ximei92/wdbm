@@ -21,7 +21,7 @@ public interface MemberService {
 
 	MemberVO getMemberInfo(String id);
 
-	List<MemberVO> getTypeProductList(int i, int contentnum, String keyword);
+	List<Map<String, Object>> getTypeProductList(int i, int contentnum, String keyword);
 
 	int typeProductListCount(String keyword);
 
@@ -54,6 +54,21 @@ public interface MemberService {
 	 * @throws Exception
 	 */
 	void modifyPassword(MemberVO member) throws Exception;
+
+	/**
+	 * 세션 체크 
+	 * 세션을 체크해 세션이 있으면 자동로그인, 없으면 로그인 페이지를 보여준다.
+	 *   
+	 * @param request
+	 * @param model
+	 * @return
+	 */
+	String checkSession(HttpServletRequest request, Model model);
+
+	String logout(HttpServletRequest request, HttpServletResponse response);
+
+	//고객가격조회
+	String getClientPrice(Map<String, Object> map, String id);
 
 
 }

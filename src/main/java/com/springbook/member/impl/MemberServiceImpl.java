@@ -102,7 +102,7 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public List<MemberVO> getTypeProductList(int i, int contentnum, String keyword) {
+	public List<Map<String, Object>> getTypeProductList(int i, int contentnum, String keyword) {
 		// TODO Auto-generated method stub
 		Map<String, Object> map = new HashMap<String, Object>();
 
@@ -116,6 +116,8 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public int typeProductListCount(String keyword) {
 		// TODO Auto-generated method stub
+		System.out.println("imple");
+		System.out.println(keyword);
 		return memberMapper.typeProductListCount(keyword);
 	}
 
@@ -181,6 +183,44 @@ public class MemberServiceImpl implements MemberService {
 		String enpassword = DataScrty.encryptPassword(member.getPassword(),member.getId());
 		int result = memberMapper.modfiyPassword(member.getId(), enpassword);
 		log.debug("modify passwrod result = {}", result);
+	}
+
+	@Override
+	public String checkSession(HttpServletRequest request, Model model) {
+		String memberId = sessionManager.getSession(request);
+		log.info("memberId = {}",memberId);
+		if(memberId == null){
+			return "index";
+		}
+		
+		MemberVO member = memberMapper.findMemberById(memberId);
+		if(member == null) {
+			return "index";
+		}
+		model.addAttribute("member",member);
+		return "redirect:/memberList.do";
+	}
+
+	@Override
+	public String logout(HttpServletRequest request , HttpServletResponse response) {
+		HttpSession session = request.getSession(false);
+		
+		if(session == null){
+			return "redirect:/";
+		}
+		sessionManager.exprieSession(response);
+		session.invalidate();		
+		
+		return "redirect:/";
+	}
+
+	@Override
+	public String getClientPrice(Map<String, Object> map, String id) {
+		// TODO Auto-generated method stub
+		System.out.println(map);
+//		System.out.println(id.);
+		System.out.println("getClientPrice");
+		return null;
 	}
 
 }
