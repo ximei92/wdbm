@@ -92,6 +92,7 @@ public interface EtcService {
 
 	List<Map<String, Object>> getSafetyList(int i, int contentnum, String key);
 
+	int creditListCount(String keyword, Date startDt, Date endDt);
 
 	List<MemberVO> memberList();
 
@@ -113,6 +114,7 @@ public interface EtcService {
 
 	int updateDepositHistory(Map<String, Object> map);
 
+	List<Map<String, Object>> getCreditList(int i, int contentnum, String keyword, Date startDt, Date endDt);
 
 	int updateProductSize(ProductSizeVO vo);
 
@@ -151,13 +153,5 @@ public interface EtcService {
 	int checkProductThickness(ProductThicknessVO vo);
 
 	int checkProductSize(ProductSizeVO vo);
-
-	/**
-	 * </h3>JSON DATA를 파싱한다.</h3>
-	 * @param jsonData
-	 * @return
-	 */
-	List<CreditVO> parseJson(String jsonData);
-
 
 }

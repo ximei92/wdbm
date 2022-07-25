@@ -19,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 public class EmailController {
 	
 	private final EmailService emailService;
+	private final MemberService memberService;
 	/**
 	 * 이메일 전송  
 	 * 
@@ -26,7 +27,7 @@ public class EmailController {
 	 * @return
 	 * @throws Exception 
 	 */
-	@PostMapping("/send")
+	@PostMapping("/send/")
 	public void sendMail(@RequestBody MemberVO member) throws Exception{
 		log.info("sendMail, member={}", member);
 		emailService.resetPassword(member);

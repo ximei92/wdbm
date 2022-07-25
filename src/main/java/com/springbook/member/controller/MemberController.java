@@ -6,10 +6,11 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.springbook.configuration.Page;
 import com.springbook.member.service.MemberService;
 import com.springbook.member.vo.MemberVO;
+import com.springbook.service.FileService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,14 +31,12 @@ import lombok.extern.slf4j.Slf4j;
 public class MemberController {
 	@Autowired
 	private MemberService memberService;
-	
 
-	
-	@GetMapping("/")
-	public String LoginHome(HttpServletRequest request, Model model){
-		return memberService.checkSession(request,model); 
-		
-	}
+	@Autowired
+	private FileService fileService;
+
+	@Autowired(required = false)
+	private PasswordEncoder encoder;
 
 	@PostMapping("/checkId.do")
 	@ResponseBody
@@ -62,10 +62,9 @@ public class MemberController {
 
 	@PostMapping("/tryLogin.do")
 	@ResponseBody
-	public ResponseEntity<MemberVO> tryLogin(HttpServletRequest request,HttpServletResponse response, MemberVO vo) throws Exception {
+	public ResponseEntity<MemberVO> tryLogin(HttpServletResponse response, MemberVO vo) throws Exception {
 		log.info("vo = {}", vo.toString());
-		
-	return memberService.tryLogin(vo,request,response);
+	return memberService.tryLogin(vo);
 	}
 
 	@PostMapping("/getMemberInfo.do")
