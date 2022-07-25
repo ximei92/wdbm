@@ -25,6 +25,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class MemberServiceImpl implements MemberService {
 
+
+	private final SessionManager sessionManager; 
 	private final MemberMapper memberMapper;
 	private final String DEFUALT_PW = "0000";
 	// private final PasswordEncoder passwordEncoder;
