@@ -3,11 +3,7 @@ package com.springbook.member.service;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 
 import com.springbook.member.vo.MemberVO;
 
@@ -17,7 +13,7 @@ public interface MemberService {
 
 	int insertMember(MemberVO vo) throws Exception;
 
-	ResponseEntity<MemberVO> tryLogin(MemberVO vo, HttpServletRequest request, HttpServletResponse response) throws Exception;
+	ResponseEntity<MemberVO> tryLogin(MemberVO vo) throws Exception;
 
 	int memberListCount(String type, String keyword);
 
